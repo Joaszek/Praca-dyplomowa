@@ -2,35 +2,35 @@
 
 \section{Wprowadzenie}
 
-W ostatnich latach technologia blockchain zyskała na znaczeniu, stając się fundamentem rozwoju rynków finansowych oraz innowacji w obszarze kryptowalut. Blockchain, początkowo kojarzony głównie z Bitcoinem, obecnie znajduje szerokie zastosowanie w wielu dziedzinach, od logistyki po usługi bankowe. Jest on technologią rozproszoną, umożliwiającą bezpieczne i przejrzyste przechowywanie oraz przesyłanie danych bez potrzeby pośredników. Dzięki takim cechom jak decentralizacja i niezaprzeczalność danych, blockchain przyciąga uwagę zarówno instytucji finansowych, jak i indywidualnych użytkowników.
+W ostatnich latach technologia blockchain zyskała na znaczeniu, stając się fundamentem rozwoju rynków finansowych oraz innowacji w obszarze kryptowalut. Blockchain, początkowo kojarzony głównie z Bitcoinem, obecnie znajduje szerokie zastosowanie w wielu dziedzinach, od logistyki po usługi bankowe. Jest on technologią rozproszoną, umożliwiającą bezpieczne i~przejrzyste przechowywanie oraz przesyłanie danych bez potrzeby pośredników. Dzięki takim cechom jak decentralizacja i niezaprzeczalność danych, blockchain przyciąga uwagę zarówno instytucji finansowych, jak i indywidualnych użytkowników.
 
 Jedną z najważniejszych zalet blockchaina jest możliwość eliminacji problemu zaufania pomiędzy stronami transakcji. Dzięki transparentności rejestru, blockchain pozwala na przeprowadzanie transakcji między stronami, które nie muszą sobie wzajemnie ufać. Każda operacja jest potwierdzana i zapisywana w sposób niezmienny, co eliminuje ryzyko oszustwa lub manipulacji danymi. Oprócz alternatywnych metod przechowywania danych, blockchain staje się kluczowym elementem w budowaniu zaufania w transakcjach finansowych.
 
-Mimo potencjału technologii, użytkownicy często napotykają trudności w dostępie do danych z różnych blockchainów oraz ich interpretacji. Istniejące narzędzia, takie jak Etherscan dla Ethereum czy Solscan dla Solany, są dedykowane konkretnym sieciom, co ogranicza ich uniwersalność. W odpowiedzi na te braki, celem niniejszej pracy jest stworzenie platformy, która zapewni użytkownikom nie tylko dostęp do wiedzy, ale także możliwość bezpośredniego sprawdzania danych z blockchainów, takich jak aktualne transakcje, stan kont oraz informacje o stanie sieci.
+
+% TO DO: przydałoby się tutaj wstawić jakiś rysunek poglądowy, np. dotyczący blockchaina (wprowadzenie powinno nieco przybliżać dziedzinę, w jakiej osadzona jest praca)
+% TO DO: przy okazji można byłoby wstawić jakieś cytowania (w tej chwili brak jakichkolwiek cytowań)
+% TO DO: wprowadzenie lepiej wygląda, jak ma co najmniej jedną stronę
+
+Mimo potencjału technologii, użytkownicy często napotykają trudności w dostępie do danych z różnych blockchainów oraz ich interpretacji. Istniejące narzędzia, takie jak Etherscan dla Ethereum czy Solscan dla Solany, są przypisane konkretnym sieciom, co ogranicza ich uniwersalność. 
+% TO DO: można dodać jakieś zrzuty z ekranu z tych aplikacji (jeśli są dostępne)
+W odpowiedzi na te braki dobrym pomysłem byłoby stworzenie platformy zapewniającej użytkownikom nie tylko dostęp do wiedzy, ale także pozwalającej na bezpośrednie sprawdzania danych z blockchainów, takich jak aktualne transakcje, stan kont oraz informacje o stanie sieci. Pomysł ten stał się podstawą do zdefiniowania tematu niniejszej pracy.
+
 
 \section{Cel i zakres pracy}
+Celem niniejszej pracy inżynierskiej jest zaprojektowanie i zaimplementowanie platformy internetowej przeznaczonej dla użytkowników kryptowalut i technologii blockchain. Ma ona służyć nie tylko poszerzaniu wiedzy, ale także otworzyć dostęp do funkcji pozwalających na bezpośrednie sprawdzanie danych z różnych sieci blockchain bez potrzeby korzystania ze specjalizowanych narzędzi przypisanych do poszczególnych sieci.
 
-Celem niniejszej pracy inżynierskiej jest zaprojektowanie i stworzenie platformy internetowej, która będzie adresowana do użytkowników kryptowalut i technologii blockchain, oferując im zarówno możliwość poszerzania wiedzy, jak i dostęp do narzędzi umożliwiających bezpośrednie sprawdzanie danych z różnych sieci blockchain. Platforma ma na celu wsparcie dla trzech głównych blockchainów: Bitcoin, Ethereum i Solana, umożliwiając użytkownikom wybór interesującej ich sieci oraz uzyskanie dostępu do aktualnych danych na jej temat.
-
-Platforma umożliwi użytkownikom:
-
-\begin{enumerate} \item \textbf{Przeglądanie szczegółowych informacji o wybranych blockchainach}, takich jak dane bloków, transakcji i kont. \item \textbf{Bezpośrednie sprawdzanie danych z sieci blockchain} poprzez integrację z API, np. Alchemy, co pozwoli na weryfikację stanu kont, przeglądanie historii transakcji oraz monitorowanie stanu sieci (np. liczba aktywnych węzłów, bieżące opłaty transakcyjne). \item \textbf{Symulację transakcji na blockchainie Solana}, co ułatwi użytkownikom zrozumienie procesu przesyłania środków w rzeczywistej sieci. \item \textbf{Dostęp do przewidywań cen kryptowalut z wykorzystaniem modeli sztucznej inteligencji}, co umożliwi lepsze planowanie inwestycji. \item \textbf{Konwersję walut tradycyjnych na kryptowaluty oraz odwrotnie}, co pozwoli na szybkie obliczenia związane z inwestycjami. \end{enumerate}
-
-Głównym powodem wyboru tego tematu była chęć pogłębienia wiedzy na temat struktury różnych blockchainów oraz dostarczenie narzędzia, które umożliwi użytkownikom bezpośrednią interakcję z danymi tych sieci. W szczególności, platforma ma ułatwić analizę różnic między blockchainami pod względem struktury bloków oraz funkcjonowania kont użytkowników. Dzięki integracji z Alchemy, użytkownicy będą mogli wykonywać zapytania do blockchainów w czasie rzeczywistym, co umożliwi im monitorowanie i analizowanie bieżących danych bez potrzeby korzystania z dedykowanych narzędzi dla poszczególnych sieci.
-
-\section{Aspekt inżynierski}
+Platforma ma wspierać trzy główne blockchainy: Bitcoin, Ethereum i Solana, pozwalając użytkownikom na wybór interesującej ich sieci oraz uzyskanie dostępu do aktualnych danych na jej temat. W szczególności powinna ułatwić analizę różnic między blockchainami pod względem struktury bloków oraz funkcjonowania kont użytkowników, oferując funkcje do monitorowania i analizowanie bieżących danych. Dokładniej, platforma powinna umożliwiać:
+\begin{itemize}
+\item \textbf{przeglądanie szczegółowych informacji o wybranych blockchainach}, takich jak dane bloków, transakcji i kont; 
+\item \textbf{bezpośrednie sprawdzanie danych z sieci blockchain} poprzez integrację z API, np.\ Alchemy (co pozwoli na weryfikację stanu kont, przeglądanie historii transakcji oraz monitorowanie stanu sieci  w czasie rzeczywistym, np.\ monitorowanie liczby aktywnych węzłów czy bieżącej opłaty transakcyjnej);
+\item \textbf{symulację transakcji na blockchainie Solana}, co ułatwi użytkownikom zrozumienie procesu przesyłania środków w rzeczywistej sieci;
+\item \textbf{dostęp do przewidywań cen kryptowalut z wykorzystaniem modeli sztucznej inteligencji}, co wyrobić ma dobre nawyki oraz pozwolić na lepsze planowanie inwestycji;
+\item \textbf{konwersję walut tradycyjnych na kryptowaluty oraz odwrotnie}, co pozwoli na szybkie obliczenia związane z inwestycjami. 
+\end{itemize}
 
 Realizacja projektu wymaga zastosowania zaawansowanych technologii i narzędzi programistycznych, co nadaje pracy charakter inżynierski. Frontend platformy zostanie zbudowany w technologii React, co zapewni dynamiczny i responsywny interfejs użytkownika, umożliwiający łatwe przeglądanie danych oraz wykonywanie operacji. Backend, stworzony przy użyciu frameworka Spring Boot, będzie odpowiedzialny za integrację z zewnętrznymi API oraz przetwarzanie danych blockchainowych w sposób bezpieczny i wydajny. Wdrożenie platformy odbędzie się z wykorzystaniem rozwiązań chmurowych, takich jak Amazon Web Services (AWS), co zapewni elastyczność, skalowalność i niezawodność systemu.
 
 Szczególny nacisk zostanie położony na bezpieczeństwo przetwarzania i przesyłania danych blockchainowych. Platforma będzie wykorzystywać szyfrowanie danych, co zapewni ochronę wrażliwych informacji użytkowników oraz ich transakcji. Dzięki temu użytkownicy będą mogli wykonywać operacje na blockchainie bez obaw o bezpieczeństwo swoich danych.
-
-\section{Zakres funkcjonalny platformy}
-
-Platforma będzie oferować użytkownikom szeroki zakres funkcji, umożliwiając im nie tylko naukę, ale także interakcję z rzeczywistymi danymi blockchainowymi:
-
-\begin{enumerate} \item \textbf{Sprawdzanie danych z blockchainów}: użytkownicy będą mogli przeglądać aktualne informacje o transakcjach, stanie kont i opłatach w wybranych blockchainach. Dzięki integracji z Alchemy, platforma będzie zapewniała bezpośredni dostęp do danych blockchainowych w czasie rzeczywistym. \item \textbf{Symulacja transakcji na blockchainie Solana}: platforma umożliwi użytkownikom przeprowadzenie symulowanych transakcji, co pozwoli na lepsze zrozumienie mechanizmów przesyłania środków bez ryzyka utraty realnych środków. \item \textbf{Przewidywanie cen kryptowalut}: z wykorzystaniem modeli sztucznej inteligencji użytkownicy będą mogli uzyskać prognozy dotyczące cen kryptowalut, co pomoże im w podejmowaniu decyzji inwestycyjnych. \item \textbf{Dostęp do materiałów edukacyjnych}: platforma będzie zawierać linki do kursów wideo, artykułów oraz innych materiałów edukacyjnych, które pozwolą użytkownikom poszerzać wiedzę na temat technologii blockchain. \item \textbf{Konwersja walut i kryptowalut}: funkcja konwertera ułatwi przeliczenia pomiędzy walutami tradycyjnymi a kryptowalutami, co jest istotne dla inwestorów. \end{enumerate}
-
-Platforma wyróżniać się będzie możliwością \textbf{wyboru konkretnego blockchaina do analiz i operacji}, co odróżnia ją od istniejących serwisów, takich jak Etherscan (skoncentrowanego na Ethereum) czy Solscan (dedykowanego Solanie). Dzięki integracji z API użytkownicy będą mieli dostęp do bieżących danych o transakcjach i stanie blockchainów, co zwiększy wartość informacyjną platformy i pozwoli na podejmowanie bardziej świadomych decyzji inwestycyjnych.
 
 \section{Układ pracy} W niniejszej pracy omówione zostaną następujące zagadnienia:
 W rozdziale drugim zostaną przedstawione: analiza wymagań, architektura systemu, Komponenty systemu, Interakcje między komponentami, Wymagania aplikacji, Przykłady użycia aplikacji, Wymagania niefunkcjonalne
