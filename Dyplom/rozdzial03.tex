@@ -1,1 +1,36 @@
-\chapter{Implementacja} 
+\chapter{Implementacja}
+
+\section{Wprowadzenie}
+
+Implementacja systemu obejmowała realizację założeń i wymagań opisanych we wcześniejszych częściach pracy. System został zaprojektowany jako aplikacja wielowarstwowa, składająca się z dwóch głównych komponentów: frontendu i backendu. Dodatkowo w systemie uwzględniono warstwę bazy danych oraz integrację z zewnętrznymi API dostarczającymi dane blockchainowe.
+
+Główne cele implementacji to:
+\begin{itemize}
+    \item Umożliwienie użytkownikom przeglądania danych blockchainowych (Bitcoin, Ethereum, Solana) w czasie rzeczywistym.
+    \item Zapewnienie funkcji analitycznych, takich jak przewidywanie cen kryptowalut z wykorzystaniem modeli AI.
+    \item Obsługa operacji na NFT, w tym wyświetlanie kolekcji, tokenów i ich statystyk.
+    \item Zagwarantowanie wysokiego poziomu bezpieczeństwa, dzięki autoryzacji opartej na OAuth2 i tokenach JWT.
+\end{itemize}
+
+\subsection{Wybór technologii i narzędzi}
+Wybór technologii został dokonany na podstawie wymagań funkcjonalnych, wydajnościowych i skalowalności systemu:
+\begin{itemize}
+    \item \textbf{Backend}: Spring Boot 3 i Java 21 zapewniają wysoką wydajność, bezpieczeństwo oraz łatwość integracji z bazą danych PostgreSQL i zewnętrznymi API. Moduły backendu zostały wzbogacone o skrypty blockchainowe realizowane w Node.js, co umożliwiło obsługę zaawansowanych funkcji, takich jak symulacje transakcji.
+    \item \textbf{Frontend}: React został wykorzystany do stworzenia dynamicznego i interaktywnego interfejsu użytkownika. Biblioteka axios umożliwiła efektywną komunikację z backendem za pomocą REST API.
+    \item \textbf{Baza danych}: PostgreSQL pozwala na trwałe przechowywanie danych użytkowników, kategorii kryptowalut, danych historycznych oraz informacji związanych z NFT.
+    \item \textbf{Konteneryzacja}: Docker umożliwił uruchomienie każdego komponentu systemu (frontend, backend, baza danych, skrypty Node.js) w odrębnym środowisku, co zwiększyło izolację i elastyczność.
+\end{itemize}
+
+\subsection{Struktura systemu}
+System został podzielony na następujące główne komponenty:
+\begin{itemize}
+    \item \textbf{Backend}: Pełni funkcję centralnego punktu przetwarzania danych. Integruje dane z zewnętrznych API (np. Etherscan, CoinMarketCap) oraz bazy danych PostgreSQL. Obsługuje logikę biznesową, taką jak przetwarzanie danych NFT, zarządzanie użytkownikami oraz przewidywanie cen kryptowalut. Wykorzystuje wzorzec MVC (Model-View-Controller) dla lepszej separacji odpowiedzialności.
+    \item \textbf{Frontend}: Odpowiada za prezentację danych użytkownikowi. Składa się z widoków takich jak przeglądanie danych blockchainowych, analizy rynkowe oraz zarządzanie kolekcjami NFT. Komunikacja z backendem realizowana jest za pomocą protokołu HTTP w formacie JSON.
+    \item \textbf{Baza danych}: Przechowuje dane użytkowników, transakcji, kolekcji NFT i inne informacje trwałe. Została zaprojektowana z wykorzystaniem relacyjnego modelu danych. Obsługuje CRUD poprzez interfejsy Spring Data JPA.
+    \item \textbf{Integracja z API blockchainów}: Backend dynamicznie pobiera dane o transakcjach, blokach i tokenach z API dostawców takich jak Etherscan, CoinMarketCap i Solana RPC. Dane te są używane do generowania analiz, aktualizacji i wizualizacji w interfejsie użytkownika.
+\end{itemize}
+
+\section{Architektura systemu}
+
+Obecnie projekt nie jest w pełni zgodny z założeniami architektury heksagonalnej, lecz wykazuje pewne cechy charakterystyczne dla tego podejścia. System jest zorganizowany w sposób wielowarstwowy, z wyraźnym podziałem na frontend (React), backend (Spring Boot) i warstwę danych (PostgreSQL). Logika biznesowa backendu jest częściowo oddzielona od infrastruktury, co widoczne jest w użyciu interfejsów, takich jak \texttt{CrudRepository}. Niemniej jednak brak pełnej abstrakcji dla integracji z zewnętrznymi API (np. Etherscan, CoinMarketCap) oraz bezpośrednie powiązania komponentów ograniczają możliwości pełnego wdrożenia wzorca Portów i Adapterów. Aby dostosować system do architektury heksagonalnej, konieczne byłoby wprowadzenie interfejsów dla każdej warstwy infrastrukturalnej, takich jak dostawcy danych blockchainowych i moduły dostępu do danych, co umożliwiłoby łatwą wymianę adapterów oraz poprawiło testowalność. Taka zmiana uczyniłaby projekt bardziej elastycznym, skalowalnym i zgodnym z zasadami projektowania heksagonalnego.
+
