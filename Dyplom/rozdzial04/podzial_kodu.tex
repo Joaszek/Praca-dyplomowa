@@ -1,0 +1,76 @@
+\section{Podzia³ struktury kodu}
+
+Struktura kodu aplikacji zosta³a zaprojektowana w sposób modularny, aby zapewniæ jej czytelnoœæ, ³atwoœæ utrzymania oraz mo¿liwoœæ rozbudowy. G³ówne elementy systemu zosta³y podzielone na logiczne modu³y, takie jak konfiguracja, warstwa dostêpu do danych, logika biznesowa oraz warstwa integracji z zewnêtrznymi interfejsami API. Poni¿ej opisano najwa¿niejsze elementy struktury kodu.
+
+\subsection{G³ówne pakiety projektu}
+
+Kod Ÿród³owy backendu znajduje siê w katalogu \texttt{src/main/java}, który zawiera podzia³ na nastêpuj¹ce pakiety:
+\begin{itemize}
+    \item \texttt{org.example.backend.config} --- zawiera konfiguracje aplikacji, w tym ustawienia dotycz¹ce bazy danych oraz integracji z zewnêtrznymi us³ugami API.
+    \item \texttt{org.example.backend.model} --- definiuje modele danych, które reprezentuj¹ struktury przechowywane w bazie danych, takie jak u¿ytkownicy, transakcje czy kategorie kryptowalut.
+    \item \texttt{org.example.backend.repository} --- warstwa dostêpu do danych, zawieraj¹ca interfejsy do komunikacji z baz¹ PostgreSQL za pomoc¹ Spring Data JPA.
+    \item \texttt{org.example.backend.service} --- implementuje logikê biznesow¹ aplikacji, w tym obs³ugê zapytañ do zewnêtrznych API oraz przetwarzanie danych.
+    \item \texttt{org.example.backend.controller} --- warstwa prezentacji, która udostêpnia koñcówki API REST dla klienta frontendowego.
+\end{itemize}
+
+\subsection{Kluczowe pliki projektu}
+
+\paragraph{Plik \texttt{application.properties}.} Plik ten zawiera konfiguracje aplikacji, takie jak dane dostêpowe do bazy danych, klucze API oraz konfiguracjê bezpieczeñstwa RSA. Przyk³adowa zawartoœæ:
+
+\begin{verbatim}
+spring.datasource.url=jdbc:postgresql://localhost:5432/mydatabase
+spring.datasource.username=myuser
+spring.datasource.password=mypassword
+etherscan.api.url=https://api.etherscan.io/api
+newsapi.apiKey=1a9b847d2fa84e3e804728b51984e58a
+\end{verbatim}
+
+\paragraph{Plik \texttt{docker-compose.yml}.} Definiuje œrodowisko kontenerowe dla aplikacji, w tym serwis backendowy, bazê danych PostgreSQL oraz narzêdzie pgAdmin. Struktura pliku jest nastêpuj¹ca:
+\begin{verbatim}
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    ports:
+      - "5432:5432"
+\end{verbatim}
+
+\subsection{Organizacja kodu backendu}
+
+Backend zosta³ zaimplementowany w jêzyku \texttt{Java} z wykorzystaniem frameworka Spring Boot. Poni¿ej znajduje siê przyk³ad klasy startowej aplikacji:
+
+\begin{verbatim}
+@SpringBootApplication
+@EnableConfigurationProperties(RSAKeyRecord.class)
+public class BackendApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(BackendApplication.class, args);
+    }
+}
+\end{verbatim}
+
+\subsection{Hierarchia folderów}
+
+Hierarchia folderów projektu wygl¹da nastêpuj¹co:
+\begin{verbatim}
+backend/
+??? src/
+?   ??? main/
+?   ?   ??? java/
+?   ?   ?   ??? org/example/backend/
+?   ?   ?       ??? config/
+?   ?   ?       ??? model/
+?   ?   ?       ??? repository/
+?   ?   ?       ??? service/
+?   ?   ?       ??? controller/
+?   ?   ??? resources/
+?   ?       ??? application.properties
+??? Dockerfile
+??? docker-compose.yml
+??? README.md
+\end{verbatim}
+
+Struktura ta pozwala na przejrzyste oddzielenie poszczególnych warstw aplikacji, co u³atwia zarówno jej rozwój, jak i utrzymanie.
