@@ -1,0 +1,121 @@
+\subsection{Folder \texttt{solanaScripts} – działanie, wywoływanie, Dockerfile i biblioteki}
+
+Folder \texttt{solanaScripts} zawiera skrypty odpowiedzialne za interakcję z blockchainem Solany. Skrypty te są wykorzystywane do wykonywania operacji związanych z blockchainem, takich jak tworzenie konta, wykonywanie operacji airdrop oraz symulowanie transakcji.
+
+\subsubsection{Działanie folderu \texttt{solanaScripts}}
+
+Folder \texttt{solanaScripts} zawiera skrypty napisane w języku JavaScript, które są odpowiedzialne za komunikację z blockchainem Solany. Skrypty te wykorzystują bibliotekę \texttt{@solana/web3.js}, która umożliwia interakcję z blockchainem Solany. Skrypty w tym folderze są wywoływane przez backend aplikacji, gdy użytkownik wysyła odpowiednie zapytanie.
+
+Struktura folderu \texttt{solanaScripts} może wyglądać następująco:
+
+\begin{verbatim}
+solanaScripts/
+|-- airdrop.js  # Skrypt do wykonania operacji airdrop
+|-- createTransaction.js  # Skrypt do symulowania transakcji
+|-- create.js  # Skrypt do stworzenia konta
+\end{verbatim}
+
+\subsubsection{Wywoływanie skryptów z aplikacji}
+
+Skrypty w folderze \texttt{solanaScripts} są wywoływane z aplikacji backendowej w momencie, gdy użytkownik wysyła odpowiednie zapytanie. Aplikacja backendowa  wysyła zapytanie do kontenera Nodejs, który korzystając z biblioteki \texttt{'@solana/web3.js'} uruchamia odpowiednie skrypty Solany.
+
+Przykład na podstawie skryptu \texttt{airdrop}:
+
+\begin{verbatim}
+const { Connection, clusterApiUrl, PublicKey, LAMPORTS_PER_SOL } = require('@solana/web3.js');
+
+const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
+
+async function requestAirdrop(publicKeyBase58) {
+    try {
+        const publicKey = new PublicKey(publicKeyBase58);
+
+        const airdropSignature = await connection.requestAirdrop(
+            publicKey,
+            1 * LAMPORTS_PER_SOL
+        );
+
+        await connection.confirmTransaction(airdropSignature, 'confirmed');
+
+        console.log(JSON.stringify({
+            publicKey: publicKeyBase58,
+            message: 'Airdrop of 1 SOL completed',
+            transactionSignature: airdropSignature
+        }));
+    } catch (error) {
+        console.error('Airdrop failed:', error);
+        console.log(JSON.stringify({
+            publicKey: publicKeyBase58,
+            message: 'Airdrop failed',
+            error: error.message
+        }));
+    }
+}
+
+const publicKeyBase58 = process.argv[2];
+if (!publicKeyBase58) {
+    console.error('Please provide a public key as an argument.');
+    process.exit(1);
+}
+
+requestAirdrop(publicKeyBase58);
+
+\end{verbatim}
+
+\subsubsection{Dockerfile – budowanie obrazu dla skryptów Solany}
+
+Skrypty w folderze \texttt{solanaScripts} są częścią aplikacji uruchamianej w kontenerze Docker. Aby zapewnić, że skrypty Solany będą działać w odpowiednim środowisku, został stworzony plik \texttt{Dockerfile}, który buduje odpowiedni obraz Docker.
+
+Plik \texttt{Dockerfile}:
+
+\begin{verbatim}
+FROM node:18
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 3001
+
+CMD ["npm", "start"]
+\end{verbatim}
+
+1. \texttt{FROM node:18-slim} – używa obrazu bazowego Node.js w wersji 18, który jest lekki i odpowiedni do uruchamiania skryptów JavaScript.
+2. \texttt{WORKDIR /app} – ustawia katalog roboczy w kontenerze na \texttt{/app}.
+3. \texttt{COPY package.json ./} – kopiuje pliki konfiguracyjne npm, które zawierają zależności do zainstalowania.
+4. \texttt{RUN npm install} – instaluje zależności zapisane w \texttt{package.json}.
+5. \texttt{COPY . .} – kopiuje foldery do katalogu roboczego w kontenerze.
+6. \texttt{CMD ["npm", "run"]} – uruchamia serwer do słuchania na zapytania.
+
+Kontener jest budowany wraz z kontenerem frontend, backend oraz bazą danych za pomocą komendy:
+
+\begin{verbatim}
+docker compose up --build
+\end{verbatim}
+
+\subsubsection{Biblioteki używane w skryptach Solany}
+
+Skrypty w folderze \texttt{solanaScripts} korzystają z kilku ważnych bibliotek, które umożliwiają interakcję z blockchainem Solany oraz przetwarzanie danych:
+
+- **\texttt{@solana/web3.js}**: Jest to oficjalna biblioteka JavaScript do interakcji z blockchainem Solany. 
+  
+  Przykład użycia tej biblioteki do stworzenia konta:
+  \begin{verbatim}
+const { Keypair } = require('@solana/web3.js');
+
+function createSolanaAccount() {
+    const newAccount = Keypair.generate();
+
+    const publicKey = newAccount.publicKey.toBase58();
+
+    const secretKey = Buffer.from(newAccount.secretKey).toString('base64');
+
+    console.log(JSON.stringify({ publicKey, secretKey }));
+}
+
+createSolanaAccount();
+  \end{verbatim}

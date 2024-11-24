@@ -1,0 +1,178 @@
+\section{Struktura pliku Dockerfile}
+
+Plik \texttt{Dockerfile} zawiera instrukcje, które definiują sposób budowy obrazu Docker dla aplikacji. Poniżej opisano strukturę pliku \texttt{Dockerfile}, z uwzględnieniem najważniejszych instrukcji, bazujących na dwufazowej budowie obrazu.
+
+\subsection{Podstawowy obraz}
+
+Pierwszym krokiem w pliku \texttt{Dockerfile} jest zdefiniowanie obrazu bazowego. W pracy używany jest obraz \texttt{amazoncorretto:21-alpine} w pierwszej fazie budowy, który zawiera OpenJDK 21, a także obraz \texttt{ubuntu:24.04} w drugiej fazie. Obraz \texttt{amazoncorretto:21-alpine} jest używany do budowy aplikacji w kontenerze, a \texttt{ubuntu:24.04} do uruchamiania jej w drugim etapie. Obraz bazowy jest ustawiany za pomocą komendy \texttt{FROM}.
+
+\begin{verbatim}
+FROM amazoncorretto:21-alpine AS build
+\end{verbatim}
+
+\subsection{Instalowanie Maven i kompilacja aplikacji}
+
+W pierwszej fazie budowy obrazu instalowany jest Maven za pomocą komendy \texttt{RUN apk add --no-cache maven}, aby pobrać zależności aplikacji i ją skompilować. Następnie kopiowany jest plik \texttt{pom.xml} oraz kod źródłowy aplikacji do obrazu. Następnie uruchamiany jest Maven do pobrania zależności i zbudowania aplikacji:
+
+\begin{verbatim}
+RUN apk add --no-cache maven
+COPY pom.xml .
+RUN mvn dependency:go-offline
+COPY src ./src
+RUN mvn package -DskipTests
+\end{verbatim}
+
+\subsection{Tworzenie obrazu do uruchomienia aplikacji}
+
+Po zakończeniu kompilacji, w drugiej fazie budowy obrazu instalowane są wszystkie niezbędne zależności do uruchomienia aplikacji. Używany jest obraz \texttt{ubuntu:24.04}, aby zainstalować wymagane pakiety, takie jak \texttt{openjdk-21-jdk}, \texttt{openssl}, \texttt{docker.io} oraz \texttt{curl}:
+
+\begin{verbatim}
+FROM ubuntu:24.04
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates \
+    openjdk-21-jdk \
+    docker.io \
+    openssl && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+\end{verbatim}
+
+\subsection{Kopiowanie pliku JAR i generowanie kluczy RSA}
+
+Po zainstalowaniu zależności, kopiowany jest plik JAR do obrazu i generowane są klucze RSA, które będą używane przez aplikację do obsługi autoryzacji OAuth2. Wygenerowane klucze publiczny i prywatny są następnie konwertowane do formatu PKCS#8.
+
+\begin{verbatim}
+COPY --from=build /app/target/*.jar app.jar
+RUN openssl genrsa -out keypair.pem 2048
+RUN openssl rsa -in keypair.pem -pubout -out publicKey.pem
+RUN openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in keypair.pem -out privateKey.pem
+\end{verbatim}
+
+\subsection{Uruchamianie aplikacji}
+
+Po zbudowaniu obrazu, kontener jest uruchamiany. Używata zostaje komenda \texttt{ENTRYPOINT}, aby określić, jak uruchomić aplikację. W tym przypadku aplikacja jest uruchamiana za pomocą komendy \texttt{java -jar} z odpowiednimi parametrami konfiguracyjnymi dla serwera i kluczy publicznego oraz prywatnego.
+
+\begin{verbatim}
+ENTRYPOINT ["java", "-jar", "app.jar", \
+    "--server.port=8080", \
+    "--spring.security.oauth2.resourceserver.jwt.public-key-location=classpath:publicKey.pem", \
+    "--spring.security.oauth2.resourceserver.jwt.private-key-location=classpath:privateKey.pem"]
+\end{verbatim}
+
+\subsection{Podsumowanie struktury}
+
+Plik \texttt{Dockerfile} składa się z kilku kluczowych sekcji:
+\begin{itemize}
+    \item \textbf{Obraz bazowy}: Definiowanie obrazu, z którego kontener będzie korzystać w pierwszej fazie (np. \texttt{amazoncorretto:21-alpine} do kompilacji) oraz w drugiej fazie (np. \texttt{ubuntu:24.04} do uruchomienia aplikacji).
+    \item \textbf{Instalowanie Maven i kompilacja aplikacji}: Instalacja narzędzi do kompilacji oraz proces budowy aplikacji.
+    \item \textbf{Kopiowanie plików}: Przeniesienie pliku JAR oraz skopiowanie kodu aplikacji do obrazu.
+    \item \textbf{Uruchamianie aplikacji}: Określenie komendy uruchamiającej aplikację po starcie kontenera.
+\end{itemize}
+
+Powyższe instrukcje tworzą podstawową strukturę pliku \texttt{Dockerfile}, który pozwala na utworzenie obrazu aplikacji backendowej, który będzie można uruchomić w kontenerze Docker.
+
+\section{Struktura pliku Dockerfile dla aplikacji Frontend}
+
+Plik \texttt{Dockerfile} zawiera instrukcje, które definiują sposób budowy obrazu Docker dla aplikacji Frontend. Poniżej opisano strukturę pliku \texttt{Dockerfile} z uwzględnieniem najważniejszych instrukcji, które tworzą obraz kontenera i uruchamiają aplikację.
+
+\subsection{Podstawowy obraz}
+
+Pierwszym krokiem w pliku \texttt{Dockerfile} jest zdefiniowanie obrazu bazowego. W tym przypadku użyto z obrazu \texttt{node:20-alpine}, który zawiera środowisko uruchomieniowe Node.js w wersji 20, oparte na Alpine Linux, co zapewnia mały rozmiar obrazu.
+
+\begin{verbatim}
+FROM node:20-alpine
+\end{verbatim}
+
+\subsection{Ustawienia katalogu roboczego}
+
+Kolejnym krokiem jest określenie katalogu roboczego, w którym będą przechowywane pliki aplikacji w kontenerze. W tym przypadku ustawiono katalog roboczy na \texttt{/usr/app} za pomocą instrukcji \texttt{WORKDIR}.
+
+\begin{verbatim}
+WORKDIR /usr/app
+\end{verbatim}
+
+\subsection{Instalacja zależności aplikacji}
+
+Aby zainstalować wymagane zależności, skopiowano plik \texttt{package.json} z lokalnego systemu do katalogu roboczego w kontenerze, a następnie uruchomiono komendę \texttt{npm install}, która pobiera zależności zdefiniowane w pliku \texttt{package.json}.
+
+\begin{verbatim}
+COPY ./package.json ./
+RUN npm install
+\end{verbatim}
+
+\subsection{Kopiowanie plików aplikacji do obrazu}
+
+Po zainstalowaniu zależności, skopiowano resztę plików aplikacji z lokalnego systemu do kontenera za pomocą instrukcji \texttt{COPY}. Dzięki temu wszystkie pliki niezbędne do działania aplikacji będą dostępne w kontenerze.
+
+\begin{verbatim}
+COPY ./ ./
+\end{verbatim}
+
+\subsection{Eksponowanie portu}
+
+Aby umożliwić dostęp do aplikacji uruchomionej w kontenerze, wyeksportowano port 3000, na którym aplikacja Frontend będzie nasłuchiwać.
+
+\begin{verbatim}
+EXPOSE 3000
+\end{verbatim}
+
+\subsection{Uruchamianie aplikacji}
+
+Użytp instrukcji \texttt{CMD} do określenia domyślnej komendy, która zostanie wykonana po uruchomieniu kontenera. W tym przypadku uruchamiamy aplikację Frontend za pomocą komendy \texttt{npm start}.
+
+\begin{verbatim}
+CMD [ "npm", "start" ]
+\end{verbatim}
+
+\subsection{Podsumowanie struktury}
+
+Plik \texttt{Dockerfile} składa się z kilku kluczowych sekcji:
+\begin{itemize}
+    \item \textbf{Obraz bazowy}: Definiowanie obrazu, z którego kontener będzie korzystać (np. \texttt{node:20-alpine}).
+    \item \textbf{Ustawienia katalogu roboczego}: Określenie katalogu, w którym będą wykonywane operacje w kontenerze.
+    \item \textbf{Instalacja zależności}: Zainstalowanie wymaganych zależności aplikacji z pliku \texttt{package.json}.
+    \item \textbf{Kopiowanie plików}: Przeniesienie plików aplikacji do kontenera.
+    \item \textbf{Uruchamianie aplikacji}: Określenie komendy uruchamiającej aplikację po starcie kontenera.
+\end{itemize}
+
+Powyższe instrukcje tworzą podstawową strukturę pliku \texttt{Dockerfile}, który pozwala na utworzenie obrazu aplikacji Frontend, który będzie można uruchomić w kontenerze Docker.
+
+Analogicznie wykonano plik Dockerfile dla kontenera Nodejs, gdzie uruchamiane są skrypty Solany.
+
+\section{Integracja z Docker Compose}
+
+W celu ułatwienia zarządzania i uruchamiania zarówno aplikacji frontendowej, jak i backendowej w środowisku Docker, można użyć Docker Compose, narzędzia do orkiestracji kontenerów. Plik \texttt{docker-compose.yml} może wyglądać następująco:
+
+\begin{verbatim}
+version: '3'
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8080:8080"
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+\end{verbatim}
+
+\begin{enumerate}
+    \item W sekcji \texttt{services} zdefiniowane są dwa serwisy: \texttt{backend} i \texttt{frontend}.
+    \item \texttt{build} określa, gdzie znajduje się plik \texttt{Dockerfile} dla każdego serwisu (odpowiednio \texttt{./backend} i \texttt{./frontend}).
+    \item \texttt{ports} mapuje porty z kontenera na porty hosta, aby aplikacje były dostępne z zewnątrz.
+    \item \texttt{depends\_on} zapewnia, że kontener frontendowy będzie uruchamiany po backendzie.
+\end{enumerate}
+
+Aby uruchomić oba serwisy w jednym poleceniu, wystarczy wykonać:
+
+\begin{verbatim}
+docker-compose up --build
+\end{verbatim}
+
+Polecenie to buduje obrazy kontenerów i uruchamia aplikacje backendową i frontendową w oddzielnych kontenerach, z odpowiednimi zależnościami.

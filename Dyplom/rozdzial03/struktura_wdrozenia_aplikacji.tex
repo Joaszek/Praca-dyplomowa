@@ -1,0 +1,89 @@
+\subsection{Struktura wdrożenia aplikacji}
+
+Proces wdrożenia odbywa się za pomocą Docker Compose, co pozwala na uruchomienie wszystkich kontenerów w jednym kroku. Cała aplikacja – frontend, backend, baza danych oraz usługi zewnętrzne, takie jak API blockchain – są uruchamiane jako kontenery Docker, co zapewnia spójność środowiska oraz łatwość w zarządzaniu aplikacją na różnych etapach jej cyklu życia.
+
+\subsubsection{Proces uruchamiania aplikacji}
+
+Wszystkie kontenery aplikacji są uruchamiane poprzez jedną komendę:
+
+\begin{verbatim}
+docker-compose up --build
+\end{verbatim}
+
+Polecenie to uruchamia proces budowy obrazów (jeśli wcześniej nie zostały zbudowane) i uruchamia wszystkie kontenery zdefiniowane w pliku \texttt{docker-compose.yml}.
+
+\subsubsection{Baza danych}
+
+W pliku \texttt{docker-compose.yml} kontener bazy danych jest skonfigurowany z użyciem opcji \texttt{external: true}. Oznacza to, że baza danych nie jest tworzona bezpośrednio w kontenerze, lecz jest połączona z zewnętrzną bazą danych. W tym przypadku dane w bazie danych są zapisane i ładowane z określonego źródła, które jest dostępne na zewnątrz aplikacji.
+
+Konfiguracja bazy danych w pliku \texttt{docker-compose.yml} wygląda następująco:
+
+\begin{verbatim}
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
+    volumes:
+      - backend_pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - my_network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - my_network
+volumes:
+  backend_pg_data:
+    external: true
+\end{verbatim}
+
+W tej konfiguracji:
+- \texttt{postgres\_db} jest połączony z zewnętrzną bazą danych.
+- \texttt{external: true} oznacza, że baza danych nie jest tworzona w kontenerze, lecz jest połączona z istniejącym zasobem zewnętrznym.
+- Backend jest odpowiedzialny za komunikację z tą bazą danych, zdefiniowaną w środowisku aplikacji.
+
+\subsubsection{Usługi blockchain}
+
+Dane blockchain są pobierane na żądanie za pomocą różnych API, które są wywoływane, gdy aplikacja backendowa otrzyma odpowiedni request. Kiedy backend odbiera zapytanie od frontendu, na przykład o szczegóły transakcji lub saldo konta, backend kontaktuje się z odpowiednim API blockchain (np. API Ethereum, Bitcoin, Solana) w celu pobrania danych.
+
+Backend wykorzystyje biblioteki takie jak \texttt{RestTemplate} do komunikacji z API blockchain. Dane są następnie przetwarzane i zwracane do frontendu, który prezentuje je użytkownikowi.
+
+\begin{verbatim}
+private final RestTemplate restTemplate;
+
+    public BitcoinAccountService(@Qualifier("restTemplate") RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
+    public BitcoinAccountDto getAllAccountData(String address) {
+        String url = "https://api.blockcypher.com/v1/btc/main/addrs/" + address + "/full";
+
+        Optional<BitcoinAccount> bitcoinAccountOptional = Optional.ofNullable(restTemplate.getForObject(url, BitcoinAccount.class));
+
+        if (bitcoinAccountOptional.isPresent()) {
+            return BitcoinAccountMapper.mapAccountToAccountDto(bitcoinAccountOptional.get());
+        } else {
+            return null;
+        }
+    }
+\end{verbatim}
+
+\subsubsection{Komunikacja między frontendem, backendem i blockchain}
+
+Wszystkie te komponenty (frontend, backend, baza danych, API blockchain) komunikują się ze sobą w ramach sieci Docker, która jest zdefiniowana w pliku \texttt{docker-compose.yml}. Dzięki temu, backend ma dostęp do bazy danych PostgreSQL, a także może łączyć się z usługami blockchain, które są dostępne w internecie lub w innych kontenerach, jeśli wymagają one wewnętrznej komunikacji.

@@ -1,0 +1,45 @@
+\subsection{Opis klas w aplikacji}
+
+W aplikacji zostały zaimplementowane różne klasy, które odpowiadają za zarządzanie danymi blockchainowymi, danymi o kryptowalutach, transakcjami, a także za logikę biznesową i interakcje z API. Poniżej przedstawiono szczegółowy opis klas, które pełnią kluczowe role w aplikacji.
+
+\subsubsection{Klasy \texttt{Account}, \texttt{Transaction}, \texttt{Block}}
+
+Klasy \texttt{Account}, \texttt{Transaction} oraz \texttt{Block} w paczce \texttt{blockchain} mają podobny cel – reprezentują różne aspekty danych blockchainowych, jednak różnią się szczegółami implementacyjnymi:
+
+- \textbf{Klasa \texttt{Account}}: 
+  Klasa \texttt{Account} reprezentuje dane konta w blockchainie. Zawiera informacje takie jak adres konta, saldo oraz inne szczegóły związane z danym kontem. 
+
+- \textbf{Klasa \texttt{Transaction}}: 
+  Klasa \texttt{Transaction} jest odpowiedzialna za przechowywanie informacji o pojedynczej transakcji w blockchainie. Zawiera dane takie jak identyfikator transakcji, adresy nadawcy i odbiorcy, kwotę oraz status transakcji.
+	
+- \textbf{Klasa \texttt{Block}}: 
+  Klasa \texttt{Block} reprezentuje pojedynczy blok w blockchainie. Zawiera informacje o numerze bloku, dacie utworzenia, liście transakcji zawartych w bloku. 
+
+Chociaż klasy te różnią się szczegółami (takimi jak dane, które przechowują), ich głównym celem jest zarządzanie danymi blockchainowymi i zapewnienie spójności danych.
+
+\subsubsection{Opis klasy Client}
+
+Klasa \texttt{Client} reprezentuje użytkownika w systemie i zawiera wszystkie istotne informacje o kliencie, takie jak identyfikator, nazwa użytkownika, hasło, klucze publiczne i prywatne oraz saldo konta. Klasa ta implementuje interfejs \texttt{UserDetails}, co oznacza, że jest wykorzystywana w systemie uwierzytelniania i autoryzacji opartym na Spring Security. Wraz z klasą \texttt{ClientDto} pełni rolę obiektu transferu danych (DTO), umożliwiając przesyłanie danych o kliencie pomiędzy warstwami aplikacji.
+
+\section{Opis klasy Cryptocurrency}
+
+Klasa \texttt{Cryptocurrency} reprezentuje kryptowalutę w systemie, zawierającą szczegółowe informacje o jej identyfikatorze w systemie CoinMarketCap (\texttt{cmcId}), nazwie, symbolu, rankingu, podaży cyrkulującej, cenie, wolumenie w ciągu 24 godzin oraz procentowej zmianie ceny w różnych okresach (1h, 24h, 7d). Klasa ta posiada również powiązanie z historią cen przez relację \texttt{OneToMany} z klasą \texttt{HistoricalData}, a także z platformą, na której kryptowaluta jest notowana, za pomocą relacji \texttt{OneToOne} z klasą \texttt{Platform}.
+
+\section{Opis klasy Category}
+
+Klasa \texttt{Category} reprezentuje kategorię kryptowalut w systemie. Zawiera informacje o identyfikatorze kategorii, nazwie, tytule, opisie oraz dodatkowe dane statystyczne, takie jak liczba tokenów, średnia zmiana ceny, kapitalizacja rynkowa i wolumen. Klasa ta jest powiązana z klasą \texttt{Cryptocurrency} poprzez relację \texttt{OneToMany}, co oznacza, że każda kategoria może zawierać wiele kryptowalut. 
+
+\section{Opis klasy FearAndGreed}
+
+Klasa \texttt{FearAndGreed} reprezentuje dane dotyczące wskaźnika strachu i chciwości, który jest często wykorzystywany w analizach rynków finansowych, w tym kryptowalut. Klasa ta przechowuje informacje o wartości wskaźnika (\texttt{value}), jego klasyfikacji (\texttt{valueClassification}), oraz dacie, kiedy wskaźnik został zmierzony (\texttt{date}).
+
+\section{Opis klasy NFT}
+
+Klasa \texttt{NFT} reprezentuje pojedynczy token NFT (Non-Fungible Token) w systemie, przechowując szczegóły dotyczące tokena, takie jak identyfikator, standard tokena, nazwę, opis, URL do obrazu, animacji, oraz metadanych. Dodatkowo, klasa ta zawiera informacje na temat platformy, statusu tokena (czy jest wyłączony, NSFW, podejrzany), a także jego twórcy.
+
+Klasa \texttt{NFT} jest powiązana z klasą \texttt{Collection} przez relację \texttt{ManyToOne}, co oznacza, że jeden NFT należy do jednej kolekcji. Ponadto, klasa ta posiada relację \texttt{OneToMany} z klasami \texttt{NFTTrait} i \texttt{NFTOwner}, reprezentującymi cechy i właścicieli tokena, odpowiednio. 
+\section{Opis klasy Collection}
+
+Klasa \texttt{Collection} reprezentuje kolekcję NFT, która zawiera szereg informacji o grupie powiązanych tokenów. Klasa ta przechowuje dane takie jak unikalny identyfikator kolekcji, jej nazwę, opis, obrazek kolekcji, adresy kontraktów blockchain oraz linki do zewnętrznych stron, takich jak OpenSea, Discord, Twitter, czy Instagram.
+
+Klasa \texttt{Collection} posiada również flagi opisujące, czy kolekcja jest wyłączona, oraz czy oferowanie przedmiotów (traits) i ofert kolekcji jest włączone. Związana jest z klasą \texttt{NFT} przez relację \texttt{OneToMany}, co oznacza, że kolekcja może zawierać wiele tokenów NFT. Ponadto, lista kontraktów powiązanych z kolekcją jest przechowywana za pomocą adnotacji \texttt{@ElementCollection}.

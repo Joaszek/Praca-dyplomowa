@@ -1,0 +1,31 @@
+\section{Zależności między kontenerami}
+
+Aplikacja została zaprojektowana z wykorzystaniem kontenerów Docker, które umożliwiają izolację poszczególnych komponentów systemu oraz łatwą konfigurację środowiska developerskiego i produkcyjnego. Kontenery są połączone ze sobą w sieci Docker, co umożliwia ich wzajemną komunikację. Poniżej przedstawiono szczegółowy opis zależności między kontenerami w systemie oraz roli, jaką pełni każdy z nich.
+
+\subsection{Architektura kontenerów}
+
+W systemie zostały zaimplementowane następujące kontenery:
+
+\begin{itemize}
+    \item \textbf{Kontener backendowy} – zawiera aplikację backendową, która realizuje logikę biznesową, obsługę żądań HTTP, komunikację z bazą danych oraz integrację z zewnętrznymi API.
+    \item \textbf{Kontener frontendowy} – zawiera aplikację frontendową napisaną w React, która komunikuje się z backendem, wyświetlając dane użytkownikowi i obsługując interakcje z interfejsem.
+    \item \textbf{Kontener Node.js} – zawiera środowisko Node.js, które uruchamia skrypty do komunikacji z blockchainem Solany. Kontener ten jest odpowiedzialny za tworzenie konta na blockchainie devnet Solany, symulowanie transakcji oraz wykonywanie operacji airdrop.
+    \item \textbf{Kontener bazy danych PostgreSQL} – przechowuje dane aplikacji, w tym dane użytkowników, transakcje, informacje o przedmiotach do wynajmu itp. Komunikacja z bazą danych odbywa się za pośrednictwem warstwy repozytoriów w aplikacji backendowej.
+    \item \textbf{Kontener pgAdmin} – jest narzędziem do zarządzania bazą danych PostgreSQL, umożliwiającym administrację i monitorowanie bazy danych za pomocą interfejsu graficznego.
+\end{itemize}
+
+\subsection{Zależności między kontenerami}
+
+Kontenery w systemie są ze sobą powiązane, umożliwiając ich współpracę. Każdy kontener komunikuje się z innymi, zapewniając sprawne funkcjonowanie aplikacji jako całości. Wszystkie kontenery znajdują się na jednej sieci, co umożliwia im wymianę danych i współpracę. Poniżej opisano zależności między kontenerami:
+
+\begin{itemize}
+    \item \textbf{Kontener frontendowy i backendowy}: Kontener frontendowy, odpowiedzialny za interfejs użytkownika, wysyła żądania HTTP do kontenera backendowego. Aplikacja frontendowa, napisana w React, korzysta z API udostępnionego przez aplikację backendową za pomocą axios do pobierania i wysyłania danych. Komunikacja odbywa się przez porty udostępnione w konfiguracji Docker Compose.
+    \item \textbf{Kontener backendowy i baza danych PostgreSQL}: Aplikacja backendowa komunikuje się z bazą danych PostgreSQL w celu przechowywania i pobierania danych. Backend korzysta z JPA (Java Persistence API) do wykonywania operacji CRUD na bazie danych.
+    \item \textbf{Kontener backendowy i kontener Node.js}: Kontener Node.js pełni rolę interfejsu między aplikacją backendową a blockchainem Solany w kontekście wykonywania operacji na blockchainie, a nie pobieraniu danych z niego. Backend wysyła zapytania do kontenera Node.js w celu wykonania skryptów Solany, które mogą tworzyć konto, symulować transakcję oraz wykonywać operację airdrop. Kontener Node.js uruchamia odpowiednie skrypty do interakcji z blockchainem, wykorzystując bibliotekę @solana/web3.js.
+    \item \textbf{Kontener Node.js i blockchain Solany}: Kontener Node.js, uruchamiający skrypty Solany, komunikuje się z siecią blockchain Solany poprzez RPC endpointy (np. Solana Mainnet Beta). Skrypty w kontenerze Node.js są odpowiedzialne za tworzenie konta, symulowanie transakcji oraz wykonywanie operacji airdrop. Wyniki tych skryptów są następnie odbierane przez klasę serwisą, i zwracane do kontrolera, który wysyłaja je na frontend.
+    \item \textbf{Kontener pgAdmin i baza danych PostgreSQL}: Kontener pgAdmin umożliwia zarządzanie bazą danych PostgreSQL poprzez interfejs graficzny. Administratorzy mogą monitorować, modyfikować oraz zarządzać strukturą bazy danych, korzystając z pgAdmin, który łączy się z kontenerem bazy danych PostgreSQL.
+\end{itemize}
+
+\subsection{Podsumowanie zależności między kontenerami}
+
+System oparty na Dockerze korzysta z kontenerów w celu zapewnienia izolacji i elastyczności poszczególnych komponentów. Kontener frontendowy współpracuje z backendem, który realizuje logikę aplikacji i komunikuje się z bazą danych PostgreSQL. Kontener Node.js odgrywa kluczową rolę w integracji aplikacji z blockchainem Solany, wykonując skrypty do pobierania i przetwarzania danych. Dzięki zastosowaniu Docker Compose możliwe jest łatwe zarządzanie tymi kontenerami, ich konfiguracja oraz zapewnienie ich współpracy w ramach jednej sieci. Takie podejście pozwala na łatwą skalowalność aplikacji i rozdzielenie odpowiedzialności między poszczególne komponenty.

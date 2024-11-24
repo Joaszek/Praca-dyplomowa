@@ -1,0 +1,35 @@
+\section{Bezpieczeństwo aplikacji}
+
+Aplikacja wykorzystuje framework \texttt{Spring Security} w celu zapewnienia bezpieczeństwa i kontrolowania dostępu do zasobów. Dzięki zastosowaniu różnych mechanizmów uwierzytelniania i autoryzacji, takich jak \texttt{JWT} (JSON Web Tokens), oraz \texttt{Basic Authentication}, aplikacja jest chroniona przed nieautoryzowanym dostępem. Poniżej przedstawiono kluczowe komponenty zapewniające bezpieczeństwo aplikacji.
+
+\subsection{Konfiguracja bezpieczeństwa} (\texttt{SecurityConfig.java})
+
+Klasa \texttt{SecurityConfig} zawiera pełną konfigurację bezpieczeństwa aplikacji, w tym ustawienia filtrów bezpieczeństwa, które kontrolują dostęp do zasobów. W aplikacji zdefiniowano różne filtry dla endpointów, takich jak \texttt{/client/register} i \texttt{/client/login}, gdzie dostęp jest kontrolowany za pomocą tokenów \texttt{JWT} lub uwierzytelniania podstawowego. Dodatkowo, dla endpointów takich jak \texttt{/blockchain/\textit{*}}, \texttt{/bitcoin/\textit{*}}, dostęp jest zablokowany dla użytkowników nieautoryzowanych.
+
+Klasa ta zawiera również konfigurację \texttt{CORS}, która zezwala na dostęp do zasobów aplikacji z określonych domen (np. \texttt{http://localhost:3000}). Dzięki temu aplikacja jest bardziej elastyczna, umożliwiając współpracę z frontendem uruchomionym na różnych adresach.
+
+\subsection{Generowanie i weryfikacja JWT} (\texttt{JwtTokenUtils.java})
+
+Klasa \texttt{JwtTokenUtils} odpowiedzialna jest za generowanie oraz weryfikację tokenów \texttt{JWT}. Tokeny te są wykorzystywane do uwierzytelniania użytkowników i zapewnienia im dostępu do chronionych zasobów aplikacji. Klasa ta wykonuje następujące operacje:
+\begin{itemize}
+    \item Generowanie tokenów \texttt{JWT} z unikalnymi danymi użytkownika.
+    \item Weryfikacja ważności tokenu, w tym sprawdzanie daty wygaśnięcia.
+    \item Ustalenie, czy użytkownik w tokenie jest tym samym, który jest zapisany w bazie danych.
+\end{itemize}
+Po weryfikacji tokenu, użytkownik zostaje uwierzytelniony i przypisany do kontekstu bezpieczeństwa aplikacji.
+
+\subsection{Filtrowanie tokenów JWT} (\texttt{JwtAccessTokenFilter.java})
+
+Klasa \texttt{JwtAccessTokenFilter} jest odpowiedzialna za filtrację przychodzących żądań HTTP. Filtr ten sprawdza nagłówek \texttt{Authorization} w żądaniach, aby wyodrębnić i zweryfikować token \texttt{JWT}. Jeśli token jest ważny, użytkownik zostaje uwierzytelniony i przypisany do kontekstu aplikacji. W przypadku, gdy token jest nieważny lub nie istnieje, aplikacja zwraca odpowiedź o statusie \texttt{UNAUTHORIZED}.
+
+\subsection{Zarządzanie danymi użytkowników} (\texttt{UserInfoManager.java})
+
+Klasa \texttt{UserInfoManager} implementuje interfejs \texttt{UserDetailsService} i jest odpowiedzialna za załadowanie użytkownika z bazy danych na podstawie nazwy użytkownika. Metoda \texttt{loadUserByUsername} korzysta z repozytorium \texttt{ClientRepository}, aby odnaleźć użytkownika, a następnie dostarcza jego dane do kontekstu bezpieczeństwa aplikacji, co pozwala na uwierzytelnianie.
+
+\subsection{Rekordy RSA} (\texttt{RSAKeyRecord.java})
+
+Klasa \texttt{RSAKeyRecord} przechowuje klucze RSA (publiczny i prywatny), które są wykorzystywane do weryfikacji i generowania tokenów \texttt{JWT}. Klucz publiczny jest używany do weryfikacji podpisu tokenu, natomiast klucz prywatny służy do jego generowania. Jest to istotny element systemu autoryzacji, zapewniający integralność i bezpieczeństwo transmisji danych.
+
+\subsection{Podstawowa autentykacja} (\texttt{BasicAuthenticationSecurityConfiguration.java})
+
+Klasa \texttt{BasicAuthenticationSecurityConfiguration} wprowadza mechanizm podstawowej autentykacji. Choć nie zawiera jeszcze pełnej logiki konfiguracyjnej, jest przygotowana do użycia w przyszłości w celu rozszerzenia mechanizmów uwierzytelniania w aplikacji.

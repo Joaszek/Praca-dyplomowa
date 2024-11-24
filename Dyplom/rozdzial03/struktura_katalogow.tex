@@ -1,0 +1,79 @@
+\section{Struktura katalogów}
+
+\subsection{Frontend}
+
+\begin{verbatim}
+frontend
+|-- node_modules        # Zainstalowane zależności npm
+|-- public              # Pliki statyczne, np. HTML, obrazy
+|-- src                 # Katalog z kodem źródłowym aplikacji
+    |-- blockchain      # Moduły związane z blockchainami
+        |-- accounts
+        |-- blocks
+        |-- transactions
+    |-- clientOptions   # Opcje związane z interakcjami klienta
+        |-- predictPrices
+        |-- simulateTransaction
+    |-- cryptocurrency  # Moduły związane z kryptowalutami
+        |-- categories
+        |-- gainersAndLosers
+        |-- globalMarket
+        |-- historicalData
+        |-- ranking
+    |-- login            # Moduł logowania
+    |-- mainpage        # Strona główna aplikacji
+    |-- resources       # Pliki wspólne dla wielu modułów
+        |-- converter
+        |-- directory
+        |-- news
+        |-- predictPrices
+        |-- simulateTransaction
+    |-- signup           # Moduł rejestracji
+    |-- tokens           # Moduł zarządzania tokenami
+        |-- collections
+        |-- nftStatistics
+\end{verbatim}
+
+\subsection{Backend}
+
+\begin{verbatim}
+backend
+|-- .mvn                # Katalog dla plików konfiguracyjnych Mavena
+|-- src
+   |-- main
+       |-- java
+           |-- org.example.backend
+               |-- blockchain   # Moduły blockchainowe
+                   |-- bitcoin
+                       |-- accounts
+                       |-- block
+                       |-- stats
+                       |-- transaction
+                   |-- ethereum
+                       |-- accounts
+                       |-- block
+                       |-- contract
+                       |-- stats
+                       |-- token
+                       |-- transaction
+                   |-- solana
+                       |-- accounts
+                       |-- block
+                       |-- network
+                       |-- node
+                       |-- slot
+                       |-- transaction
+               |-- data
+                   |-- utils   # Narzędzia i pomocnicze klasy
+               |-- exception   # Obsługa wyjątków
+                   |-- error
+               |-- services    # Serwisy i logika aplikacji
+                   |-- cryptos
+                   |-- news
+               |-- config      # Pliki konfiguracyjne
+                   |-- cryptocurrency
+               |-- resources   # Pliki zasobów (np. konwersje)
+               |-- test        # Testy jednostkowe aplikacji
+       |-- resources         # Pliki konfiguracyjne i inne zasoby
+--- BackendApplication       # Główna klasa aplikacji backendowej
+\end{verbatim}

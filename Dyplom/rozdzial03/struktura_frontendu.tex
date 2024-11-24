@@ -1,0 +1,58 @@
+\section{Struktura katalogów w aplikacji frontendowej}
+
+Struktura katalogów w aplikacji frontendowej jest zorganizowana w sposób, który umożliwia łatwą skalowalność i utrzymanie kodu. Poniżej przedstawiono główną strukturę folderów aplikacji, która jest typowa dla aplikacji React.
+\begin{verbatim}
+frontend
+|-- node_modules
+|-- public
+|-- src
+    |-- blockchain
+        |-- accounts
+        |-- blocks
+        |-- transactions
+    |-- clientOptions
+        |-- predictPrices
+        |-- simulateTransaction
+    |-- cryptocurrency
+        |-- categories
+        |-- gainersAndLosers
+        |-- globalMarket
+        |-- historicalData
+        |-- ranking
+    |-- login
+    |-- mainpage
+    |-- resources
+        |-- converter
+        |-- directory
+        |-- news
+    |-- signup
+    |-- tokens
+        |-- collections
+        |-- nftStatistics
+    |-- App.css
+    |-- App.js
+    |-- App.test.js
+    |-- header.css
+    |-- header.js
+    |-- index.css
+    |-- index.js
+    |-- logo.svg
+\end{verbatim}
+
+
+\subsection{Opis folderów}
+
+- **\texttt{node\_modules/}**: Zawiera zainstalowane zależności.
+- **\texttt{public/}**: Zawiera pliki statyczne.
+- **\texttt{src/}**: Główny katalog z kodem źródłowym aplikacji.
+  - **\texttt{blockchain/}**: Zawiera pliki do obsługi blockchainów(block, account,transaction). 
+	- **\texttt{clientOptions/}**: Zawiera pliki do obsługi przewidywania cen oraz symulowania transakcji. 
+	- **\texttt{cryptocurrency/}**: Zawiera pliki do obsługi kryptowalut 
+	- **\texttt{login/}**: Zawiera pliki do obsługi logowania. 
+	- **\texttt{mainpage/}**: Zawiera pliki do obsługi głównej strony. 
+	- **\texttt{resources/}**: Zawiera pliki do obsługi konwersji walut, wiadomości oraz dodatkowych zasobów. 
+	- **\texttt{signup/}**: Zawiera pliki do obsługi rejestracji. 
+	- **\texttt{tokens/}**: Zawiera pliki do obsługi tokenów. 
+	- **\texttt{header.js}**: Jest to plik z nagłówkiem, który jest na każdej stronie. 
+  - **\texttt{App.js}**: Główny komponent aplikacji, który pełni rolę kontenera dla pozostałych komponentów. 
+  - **\texttt{index.js}**: Punkt wejścia aplikacji. Jest to miejsce, gdzie aplikacja React jest renderowana na stronie, a także, gdzie inicjalizowane są wszystkie globalne ustawienia, takie jak konfiguracja routera.

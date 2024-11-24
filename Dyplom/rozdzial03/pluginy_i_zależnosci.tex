@@ -1,0 +1,5 @@
+\subsection{Pluginy i zależności}
+
+W projekcie wykorzystano szereg pluginów Maven, które automatyzują procesy związane z budową aplikacji. Do podstawowych pluginów należy \texttt{maven-clean-plugin}, który odpowiada za czyszczenie środowiska przed rozpoczęciem kompilacji, \texttt{maven-compiler-plugin} do kompilacji kodu źródłowego, \texttt{maven-jar-plugin} do tworzenia plików JAR, oraz \texttt{maven-surefire-plugin} do uruchamiania testów jednostkowych. Dodatkowo, \texttt{spring-boot-maven-plugin} umożliwia integrację z frameworkiem Spring Boot, ułatwiając uruchamianie aplikacji.
+
+Jeśli chodzi o zależności, projekt korzysta z kilku kluczowych bibliotek. \texttt{spring-boot-starter-web} jest odpowiedzialny za stworzenie aplikacji webowej, a \texttt{spring-boot-starter-data-jpa} ułatwia integrację z bazą danych przy użyciu JPA. Zależność \texttt{postgresql} pozwala na połączenie z bazą danych PostgreSQL, a \texttt{spring-security} zapewnia mechanizmy bezpieczeństwa, w tym uwierzytelnianie i autoryzację. Dodatkowo, \texttt{lombok} jest używane do generowania boilerplate code, a \texttt{mysql-connector-java} wspiera komunikację z bazą danych MySQL.

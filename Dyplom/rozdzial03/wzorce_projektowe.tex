@@ -1,0 +1,19 @@
+\subsection{Wzorce projektowe użyte w aplikacji}
+
+W aplikacji zastosowano kilka popularnych wzorców projektowych, które pomagają w organizacji kodu, ułatwiają jego rozbudowę oraz zapewniają dobrą separację odpowiedzialności. Poniżej przedstawiono najważniejsze wzorce projektowe, które zostały użyte zarówno po stronie frontendowej, jak i backendowej aplikacji.
+
+\subsubsection{DTO (Data Transfer Object)}
+Po stronie backendu wzorzec DTO jest używany do przesyłania danych między frontendem a backendem. DTO pozwala na standaryzację struktury danych, szczególnie przy interakcji z różnymi API blockchainowymi, umożliwiając jednolitą formę danych do wysyłania i odbierania.
+
+\subsubsection{Singleton}
+W backendzie wzorzec Singleton jest używany w serwisach, które zarządzają danymi blockchain, np. w usługach odpowiedzialnych za integrację z różnymi blockchainami. Wzorzec ten zapewnia, że obiekt usługi zostanie utworzony tylko raz, a następnie będzie używany w całej aplikacji, co pozwala na efektywne zarządzanie stanem.
+
+\subsubsection{Service Layer}
+Wzorzec Service Layer jest powszechnie stosowany po stronie backendowej, gdzie logika biznesowa jest oddzielona od kontrolerów. Serwisy odpowiedzialne za operacje związane z blockchainem, kryptowalutami, NFT czy danymi użytkowników znajdują się w warstwie serwisów. Taki podział umożliwia łatwą rozbudowę aplikacji oraz ponowne wykorzystanie kodu w różnych częściach aplikacji.
+
+\subsubsection{Repository Pattern}
+Wzorzec Repository jest stosowany w backendzie do zarządzania danymi. W aplikacji bazującej na Spring Boot, klasy repozytoriów są odpowiedzialne za komunikację z bazą danych, co pozwala na łatwą manipulację danymi użytkowników, transakcjami czy innymi encjami. Repozytoria stanowią abstrakcję nad bazą danych, umożliwiając łatwą wymianę technologii bazodanowej bez zmiany logiki aplikacji.
+
+\subsection{Podsumowanie}
+
+W aplikacji wykorzystano szereg popularnych wzorców projektowych, które pomagają w organizacji kodu, ułatwiają rozbudowę systemu oraz zapewniają dobrą separację odpowiedzialności. Dzięki zastosowaniu takich wzorców jak DTO, Singleton, Service Layer oraz Repository, aplikacja jest skalowalna, łatwa do utrzymania i elastyczna w rozwoju. Wzorce te pozwalają na skuteczne zarządzanie danymi blockchainowymi, integrację z różnymi usługami zewnętrznymi oraz utrzymanie wysokiej jakości kodu, który może być łatwo testowany i rozszerzany.

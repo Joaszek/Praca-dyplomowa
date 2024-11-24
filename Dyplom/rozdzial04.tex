@@ -1,2 +1,143 @@
-\input{rozdzial04/wprowadzenie.tex}
-%\input{rozdzial04/podzial_kodu.tex}
+\chapter{Testy aplikacji backendowej}
+
+\section{Wprowadzenie do testów jednostkowych}
+
+Testowanie aplikacji backendowej jest kluczowym elementem zapewniającym jakość i stabilność oprogramowania. W tym rozdziale przedstawiamy strukturę testów jednostkowych w projekcie, który wykorzystuje framework Spring Boot oraz JUnit 5. Testy są podzielone na różne moduły, takie jak blockchain, kryptowaluty, NFT, oraz zasoby, co pozwala na łatwiejsze zarządzanie i rozwój aplikacji.
+
+\section{Testy w module Blockchain}
+
+Moduł blockchain zawiera testy związane z obsługą różnych łańcuchów bloków, takich jak Bitcoin, Ethereum i Solana. Poniżej przedstawiamy przykłady testów dla różnych podkategorii.
+
+\subsection{Testy dla Bitcoin}
+
+Przykładowy test dla klasy \texttt{BitcoinAccountControllerTest}
+
+\begin{lstlisting}[language=Java]
+package org.example.backend.blockchain.bitcoin.accounts.controller;
+
+import ...
+
+class BitcoinAccountControllerTest {
+
+    @Mock
+    private BitcoinAccountService bitcoinAccountService;
+
+    @InjectMocks
+    private BitcoinAccountController bitcoinAccountController;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testGetAccountData_Found() {
+        String address = "testAddress";
+        BitcoinAccountDto bitcoinAccountDto = new BitcoinAccountDto();
+        when(bitcoinAccountService.getAllAccountData(address)).thenReturn(bitcoinAccountDto);
+
+        ResponseEntity<BitcoinAccountDto> response = bitcoinAccountController.getAccountData(address);
+
+        assertEquals(ResponseEntity.ok(bitcoinAccountDto), response);
+        verify(bitcoinAccountService, times(1)).getAllAccountData(address);
+    }
+
+    @Test
+    void testGetAccountData_NotFound() {
+        String address = "testAddress";
+        when(bitcoinAccountService.getAllAccountData(address)).thenReturn(null);
+
+        ResponseEntity<BitcoinAccountDto> response = bitcoinAccountController.getAccountData(address);
+
+        assertEquals(ResponseEntity.notFound().build(), response);
+        verify(bitcoinAccountService, times(1)).getAllAccountData(address);
+    }
+}
+\end{lstlisting}
+
+\subsection{Testy dla Ethereum}
+Przykładowy test dla klasy \texttt{EthereumAccountControllerTest}
+
+\begin{lstlisting}[language=Java]
+package org.example.backend.blockchain.ethereum.accounts.controller;
+
+import ...
+
+class EthereumAccountControllerTest {
+
+    @Mock
+    private EthereumAccountService ethereumAccountService;
+
+    @InjectMocks
+    private EthereumAccountController ethereumAccountController;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void getEtherBalanceAndTransactionHistory() {
+        EthereumAccountDto ethereumAccountDto = new EthereumAccountDto();
+        when(ethereumAccountService.getEtherBalanceAndTransactionHistory(anyString())).thenReturn(Optional.of(ethereumAccountDto));
+
+        Optional<EthereumAccountDto> result = ethereumAccountController.GetEtherBalanceAndTransactionHistory("testAddress");
+
+        assertTrue(result.isPresent());
+        assertEquals(ethereumAccountDto, result.get());
+    }
+
+    @Test
+    void getTokenBalance() {
+        when(ethereumAccountService.getTokenBalance(anyString(), anyString())).thenReturn(100.0);
+
+        ResponseEntity<Double> response = ethereumAccountController.getTokenBalance("testAddress", "testContractAddress");
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(100.0, response.getBody());
+    }
+
+    ...
+}
+\end{lstlisting}
+
+\subsection{Testy dla Solana}
+
+Przykładowy test dla klasy \texttt{SolanaAccountControllerTest}
+
+\begin{lstlisting}[language=Java]
+package org.example.backend.blockchain.solana.accounts.controller;
+
+import ...
+
+public class SolanaAccountControllerTest {
+
+    @Mock
+    private SolanaAccountService solanaAccountService;
+
+    @InjectMocks
+    private SolanaAccountController solanaAccountController;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    public void testGetSolanaAccountBalance() {
+        String address = "someAddress";
+        String balance = "1000";
+        when(solanaAccountService.getAccountBalance(address)).thenReturn(Optional.of(balance));
+
+        ResponseEntity<String> response = solanaAccountController.getSolanaAccountBalance(address);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(balance, response.getBody());
+    }
+
+    ...
+}
+\end{lstlisting}
+
+Pozostałe klasy zostały podobnie przetestowane.

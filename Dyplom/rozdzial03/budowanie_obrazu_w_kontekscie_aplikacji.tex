@@ -1,0 +1,115 @@
+\subsection{Budowanie obrazu Docker w kontekście aplikacji}
+
+W kontekście Twojej aplikacji, proces budowy obrazów Docker jest kluczowy do zapewnienia spójności środowiska, w którym aplikacja jest uruchamiana. Dzięki wykorzystaniu Docker, zarówno frontend, jak i backend mogą być uruchamiane w odizolowanych środowiskach, co zapewnia ich przenośność oraz łatwość konfiguracji. Poniżej opisano szczegóły procesu budowy obrazów Docker dla obu części aplikacji.
+
+\subsubsection{Budowanie obrazu Docker dla aplikacji backendowej}
+
+Dla aplikacji backendowej, która jest oparta na Javie i wykorzystuje Spring Boot, plik \texttt{Dockerfile} będzie zawierał następujące instrukcje:
+
+\begin{verbatim}
+FROM openjdk:21-jdk-slim
+
+# Ustawienie katalogu roboczego
+WORKDIR /app
+
+# Kopiowanie pliku JAR aplikacji do kontenera
+COPY target/myapp.jar /app/myapp.jar
+
+# Określenie komendy uruchamiającej aplikację
+CMD ["java", "-jar", "/app/myapp.jar"]
+\end{verbatim}
+
+1. \texttt{FROM openjdk:21-jdk-slim} – użycie obrazu bazowego Java 21, zoptymalizowanego pod względem rozmiaru.
+2. \texttt{WORKDIR /app} – ustawia katalog roboczy, w którym będą znajdować się pliki aplikacji.
+3. \texttt{COPY target/myapp.jar /app/myapp.jar} – kopiuje plik JAR aplikacji do kontenera.
+4. \texttt{CMD ["java", "\texttt{-}jar", "/app/myapp.jar"]} – uruchamia aplikację Java w kontenerze.
+
+W celu zbudowania obrazu dla aplikacji backendowej, wystarczy wykonać polecenie:
+
+\begin{verbatim}
+docker build -t backend-app .
+\end{verbatim}
+
+Polecenie to buduje obraz Docker, używając pliku \texttt{Dockerfile} w bieżącym katalogu, a tag \texttt{backend-app} przypisuje nazwę obrazowi.
+
+\subsubsection{Budowanie obrazu Docker dla aplikacji frontendowej}
+
+Dla aplikacji frontendowej, która jest oparta na React, proces budowy obrazu Docker będzie wyglądał nieco inaczej. W przypadku aplikacji React, obraz będzie zawierał środowisko Node.js oraz instrukcje do budowy aplikacji, a także do jej uruchomienia. Przykładowy plik \texttt{Dockerfile} wygląda następująco:
+
+\begin{verbatim}
+FROM node:18-slim
+
+# Ustawienie katalogu roboczego
+WORKDIR /app
+
+# Kopiowanie plików projektu do kontenera
+COPY package.json package-lock.json /app/
+RUN npm install
+
+# Kopiowanie pozostałych plików aplikacji
+COPY . /app/
+
+# Budowanie aplikacji
+RUN npm run build
+
+# Określenie portu, na którym będzie działać aplikacja
+EXPOSE 3000
+
+# Uruchamianie aplikacji
+CMD ["npm", "start"]
+\end{verbatim}
+
+1. \texttt{FROM node:18-slim} – użycie obrazu bazowego Node.js w wersji 18.
+2. \texttt{WORKDIR /app} – ustawia katalog roboczy w kontenerze.
+3. \texttt{COPY package.json package-lock.json /app/} – kopiuje pliki konfiguracyjne npm do kontenera.
+4. \texttt{RUN npm install} – instaluje zależności aplikacji.
+5. \texttt{COPY . /app/} – kopiuje wszystkie pozostałe pliki aplikacji do kontenera.
+6. \texttt{RUN npm run build} – buduje aplikację React.
+7. \texttt{EXPOSE 3000} – otwiera port 3000 dla aplikacji frontendowej.
+8. \texttt{CMD ["npm", "start"]} – uruchamia aplikację React w kontenerze.
+
+Aby zbudować obraz dla aplikacji frontendowej, należy wykonać polecenie:
+
+\begin{verbatim}
+docker build -t frontend-app .
+\end{verbatim}
+
+To polecenie buduje obraz Docker, używając pliku \texttt{Dockerfile} i taguje go nazwą \texttt{frontend-app}.
+
+\subsubsection{Integracja z Docker Compose}
+
+W celu ułatwienia zarządzania i uruchamiania zarówno aplikacji frontendowej, jak i backendowej w środowisku Docker, można użyć Docker Compose, narzędzia do orkiestracji kontenerów. Plik \texttt{docker-compose.yml} może wyglądać następująco:
+
+\begin{verbatim}
+version: '3'
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8080:8080"
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+\end{verbatim}
+
+1. W sekcji \texttt{services} zdefiniowane są dwa serwisy: \texttt{backend} i \texttt{frontend}.
+2. \texttt{build} określa, gdzie znajduje się plik \texttt{Dockerfile} dla każdego serwisu (odpowiednio \texttt{./backend} i \texttt{./frontend}).
+3. \texttt{ports} mapuje porty z kontenera na porty hosta, aby aplikacje były dostępne z zewnątrz.
+4. \texttt{depends\_on} zapewnia, że kontener frontendowy będzie uruchamiany po backendzie.
+
+Aby uruchomić oba serwisy w jednym poleceniu, wystarczy wykonać:
+
+\begin{verbatim}
+docker-compose up --build
+\end{verbatim}
+
+Polecenie to buduje obrazy kontenerów i uruchamia aplikacje backendową i frontendową w oddzielnych kontenerach, z odpowiednimi zależnościami.
+
+\subsection{Podsumowanie}
+
+Budowanie obrazów Docker dla aplikacji frontendowej i backendowej w Twoim projekcie jest kluczowym krokiem w zapewnieniu przenośności i izolacji środowisk. Docker umożliwia łatwe zarządzanie zależnościami oraz uruchamianie aplikacji w odizolowanych środowiskach, co upraszcza proces deploymentu zarówno w środowisku developerskim, jak i produkcyjnym. Integracja z Docker Compose pozwala na zarządzanie wieloma kontenerami w sposób spójny i wydajny.

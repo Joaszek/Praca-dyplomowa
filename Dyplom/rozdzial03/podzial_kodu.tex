@@ -1,0 +1,69 @@
+\section{Podział kodu}
+
+Podczas implementacji systemu, kod został podzielony na dwie główne części: backend oraz frontend. Każda z tych części realizuje określone zadania, a ich współpraca umożliwia pełne funkcjonowanie aplikacji. W poniższym rozdziale przedstawiono szczegóły dotyczące struktury kodu, podziału na funkcje, a także sposób organizacji obu części systemu.
+
+\subsection{Struktura aplikacji}
+
+Struktura aplikacji jest oparta na dwóch głównych komponentach: backendzie i frontendzie. Backend jest odpowiedzialny za logikę aplikacji, zarządzanie danymi oraz komunikację z bazą danych, natomiast frontend odpowiada za interfejs użytkownika oraz interakcje z backendem. Poniżej przedstawiono szczegółowy opis obu części:
+
+\subsubsection{Backend}
+Backend aplikacji jest napisany w języku Java z wykorzystaniem frameworku Spring Boot. Struktura kodu backendowego jest zgodna z najlepszymi praktykami w zakresie organizacji projektów opartych na tym frameworku. Kluczowe elementy struktury backendu to:
+\begin{itemize}
+    \item \texttt{src/main/java}: Główna część aplikacji, zawierająca logikę biznesową i kontrolery.
+    \item \texttt{src/main/resources}: Pliki konfiguracyjne, w tym \texttt{application.properties}, które służą do konfiguracji bazy danych i innych usług.
+    \item \texttt{src/test/java}: Testy jednostkowe oraz integracyjne, zapewniające poprawność działania aplikacji.
+    \item \texttt{pom.xml}: Plik konfiguracyjny Maven, który zarządza zależnościami aplikacji.
+    \item \texttt{Dockerfile}: Konfiguracja dla Docker, umożliwiająca tworzenie kontenerów dla aplikacji backendowej.
+\end{itemize}
+
+Backend jest podzielony na różne warstwy:
+\begin{itemize}
+    \item \textbf{Controller}: Warstwa odpowiedzialna za odbiór żądań HTTP i przekazywanie ich do odpowiednich usług.
+    \item \textbf{Service}: Warstwa logiki biznesowej, która przetwarza dane i wykonuje operacje na modelach.
+    \item \textbf{Repository}: Warstwa odpowiedzialna za komunikację z bazą danych przy użyciu JPA (Java Persistence API).
+\end{itemize}
+
+\subsubsection{Frontend}
+Frontend aplikacji jest stworzony z użyciem React, popularnego frameworku JavaScript, który umożliwia tworzenie dynamicznych interfejsów użytkownika. Struktura kodu frontendowego obejmuje:
+\begin{itemize}
+    \item \texttt{src/}: Główna część aplikacji frontendowej, zawierająca komponenty, funkcje oraz logikę.
+    \item \texttt{public/}: Pliki statyczne, takie jak HTML, obrazy, czcionki itp.
+    \item \texttt{package.json}: Plik konfiguracyjny npm, zarządzający zależnościami aplikacji.
+    \item \texttt{Dockerfile.dev}: Plik konfiguracyjny Docker dla środowiska deweloperskiego.
+\end{itemize}
+
+Frontend jest podzielony na następujące elementy:
+\begin{itemize}
+    \item \textbf{Komponenty}: Aplikacja frontendowa jest zbudowana w oparciu o komponenty React, które reprezentują poszczególne elementy interfejsu użytkownika.
+    \item \textbf{Logika aplikacji}: Funkcje obsługujące interakcje użytkownika, komunikację z backendem oraz zarządzanie stanem aplikacji.
+    \item \textbf{Routing}: Aplikacja frontendowa wykorzystuje React Router do zarządzania nawigacją pomiędzy różnymi widokami aplikacji.
+\end{itemize}
+
+\subsection{Podział na funkcje}
+
+W obydwu częściach aplikacji kod został podzielony na funkcje i metody, które realizują określone zadania. Dzięki temu struktura aplikacji jest czytelna, modularna i łatwa do rozbudowy. Poniżej przedstawiono przykłady podziału na funkcje w backendzie oraz frontendzie.
+
+\subsubsection{Backend}
+W backendzie każda funkcjonalność została wydzielona do oddzielnych metod w odpowiednich klasach. Przykłady funkcji backendowych:
+\begin{itemize}
+    \item \texttt{registerUser}: Funkcja tworząca nowego użytkownika w bazie danych.
+    \item \texttt{createSolanaAccount}: Funkcja tworząca konto na Solana devnet.
+    \item \texttt{getERC20TokenTransfers}: Funkcja pobierająca wszystkie transfery tokenów ERC-20 związane z podanym adresem Ethereum w określonym zakresie bloków (od startBlock do endBlock). Funkcja zwraca listę transakcji w postaci obiektów \texttt{EthereumTransactionDto}.
+		\item \texttt{predictPrices}: Funkcja zwracająca przewidywane ceny na następny tydzień dla wybranej kryptowaluty.
+\end{itemize}
+
+\subsubsection{Frontend}
+W frontendzie kod również jest podzielony na mniejsze funkcje. Przykłady funkcji frontendowych:
+\begin{itemize}
+    \item \texttt{fetchData}: Funkcja do pobierania danych z API backendu.
+    \item \texttt{handleSubmit}: Funkcja obsługująca zdarzenie wysyłania formularza, aby dostać dane ze specyficznego dnia.
+    \item \texttt{navigateToDetails}: Funkcja nawigująca do strony szczegółów na podstawie wprowadzonego adresu.
+\end{itemize}
+
+\subsection{Integracja Backend-Frontend}
+
+Backend i frontend komunikują się ze sobą za pomocą API. Backend udostępnia RESTful API, które umożliwia frontendowi wykonywanie operacji takich jak tworzenie, pobieranie, aktualizowanie danych. Frontend, korzystając z React, wysyła żądania HTTP do backendu za pomocą axios i renderuje odpowiednie dane na interfejsie użytkownika.
+
+\subsection{Podsumowanie}
+
+Struktura aplikacji została zaprojektowana w sposób modularny, co umożliwia łatwą rozbudowę i modyfikację poszczególnych komponentów. Zarówno backend, jak i frontend zostały podzielone na funkcje, co pozwala na lepszą organizację kodu oraz łatwiejsze testowanie poszczególnych części aplikacji. Integracja pomiędzy frontendem a backendem została zrealizowana przy pomocy API, co zapewnia elastyczność i łatwość w komunikacji między różnymi warstwami systemu.

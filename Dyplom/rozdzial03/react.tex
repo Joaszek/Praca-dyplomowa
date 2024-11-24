@@ -1,0 +1,63 @@
+\subsection{Framework React}
+
+React jest jednym z najpopularniejszych frameworków JavaScript, używanym do tworzenia dynamicznych, interaktywnych interfejsów użytkownika. Wykorzystuje podejście komponentowe, co oznacza, że aplikacja jest budowana z niezależnych, wielokrotnie używanych komponentów. React jest szczególnie efektywny w tworzeniu aplikacji typu single-page (SPA), gdzie tylko część strony jest dynamicznie aktualizowana w odpowiedzi na akcje użytkownika, zamiast przeładowywania całej strony.
+
+React został opracowany przez Facebooka i jest wykorzystywany do budowy aplikacji frontendowych, które wymagają dużej interakcji z użytkownikiem, jak np. aplikacje webowe, platformy społecznościowe czy systemy zarządzania danymi.
+
+\subsubsection{Podstawowe cechy React}
+
+\begin{itemize}
+    \item \textbf{Komponenty}: React opiera się na tworzeniu aplikacji z niezależnych komponentów. Każdy komponent reprezentuje część interfejsu użytkownika, którą można wielokrotnie wykorzystywać. Komponenty mogą być klasowe lub funkcyjne.
+    \item \textbf{JSX (JavaScript XML)}: React używa JSX, czyli rozszerzenia składni JavaScript, które pozwala na pisanie struktury HTML bezpośrednio w kodzie JavaScript. JSX jest następnie kompilowane do czystego JavaScriptu.
+    \item \textbf{Wirtualny DOM}: React używa wirtualnego DOM, co oznacza, że przed dokonaniem jakiejkolwiek zmiany w prawdziwym DOM, React najpierw dokonuje tej zmiany w wirtualnym DOM, a następnie porównuje go z rzeczywistym DOM (tzw. \textit{diffing}). Dzięki temu, React minimalizuje liczbę operacji na rzeczywistym DOM, co zwiększa wydajność aplikacji.
+    \item \textbf{Stan (State) i właściwości (Props)}: Komponenty w React mogą posiadać własny stan (\texttt{state}), który przechowuje dane związane z danym komponentem. Dodatkowo, komponenty mogą otrzymywać dane z innych komponentów poprzez właściwości (\texttt{props}), co umożliwia przekazywanie danych pomiędzy komponentami.
+    \item \textbf{Reaktywność}: React umożliwia tworzenie aplikacji, które reagują na zmiany danych w czasie rzeczywistym. Dzięki tym zmianom, komponenty są automatycznie aktualizowane, co zapewnia dynamiczność aplikacji.
+    \item \textbf{Jednokierunkowy przepływ danych}: W React, dane płyną w jednym kierunku – z rodzica do dziecka poprzez \texttt{props}. W przypadku potrzeby zmiany stanu, komponenty wywołują funkcje przekazane przez rodzica.
+\end{itemize}
+
+\subsubsection{Struktura aplikacji React}
+
+Struktura aplikacji w React jest zazwyczaj podzielona na kilka kluczowych katalogów:
+
+\begin{itemize}
+    \item \texttt{src/}: Główny katalog z kodem źródłowym aplikacji.
+    \item \texttt{components/}: Katalog zawierający wszystkie komponenty aplikacji. Komponenty mogą być podzielone na podkatalogi w zależności od ich funkcji, np. \texttt{blockchain/}, \texttt{cryptocurrency/}, \texttt{accounts/}, itp.
+    \item \texttt{assets/}: Zawiera zasoby statyczne, takie jak obrazy, czcionki, style CSS.
+    \item \texttt{services/}: Katalog, w którym przechowywane są funkcje pomocnicze, takie jak zapytania do API, logika aplikacyjna.
+    \item \texttt{utils/}: Katalog z funkcjami pomocniczymi, np. formatowanie danych, walidacja formularzy.
+    \item \texttt{App.js}: Główny komponent aplikacji, który pełni rolę kontenera dla pozostałych komponentów.
+\end{itemize}
+
+Struktura ta pozwala na łatwe zarządzanie kodem i rozdzielenie odpowiedzialności między różne komponenty.
+
+\subsubsection{Zastosowanie React w aplikacji}
+
+W aplikacji wykorzystano React do stworzenia interfejsu użytkownika, który jest dynamiczny i reaguje na zmiany danych. React jest odpowiedzialny za renderowanie komponentów, które wyświetlają dane blockchainowe, kryptowalutowe oraz inne informacje, takie jak saldo konta, historia transakcji czy szczegóły bloków. Komponenty są zorganizowane w sposób modularny, co umożliwia łatwe rozszerzanie aplikacji o nowe funkcjonalności.
+
+\subsubsection{Biblioteki i narzędzia używane w aplikacji React}
+
+W aplikacji użyto kilku popularnych bibliotek i narzędzi, które wspomagają rozwój w React:
+
+\begin{itemize}
+    \item \textbf{React Router}: Biblioteka do zarządzania nawigacją w aplikacji. Umożliwia tworzenie wielostronicowych aplikacji (SPAs), gdzie zmiana widoku nie wymaga przeładowania strony.
+    \item \textbf{Axios}: Biblioteka do wykonywania zapytań HTTP. W aplikacji jest wykorzystywana do komunikacji z backendem i pobierania danych o blockchainie, kryptowalutach oraz NFT.
+    \item \textbf{Redux}: Narzędzie do zarządzania stanem aplikacji. Używane do przechowywania globalnego stanu aplikacji (np. stan użytkownika, dane z API).
+    \item \textbf{React Context API}: Alternatywa dla Redux do zarządzania stanem w mniejszych aplikacjach. Umożliwia przekazywanie stanu do komponentów bez konieczności przesyłania go przez \texttt{props}.
+    \item \textbf{Styled Components}: Biblioteka do stylowania komponentów React. Pozwala na pisanie CSS bezpośrednio w JavaScript, co umożliwia lepszą modularność stylów.
+    \item \textbf{React Hooks}: Funkcje umożliwiające korzystanie ze stanu i efektów ubocznych w komponentach funkcyjnych, co upraszcza kod i zmniejsza potrzebę korzystania z komponentów klasowych.
+\end{itemize}
+
+\subsubsection{Zalety React w aplikacji}
+
+Wykorzystanie React w aplikacji pozwoliło na osiągnięcie kilku kluczowych korzyści:
+
+\begin{itemize}
+    \item \textbf{Wydajność}: Dzięki wirtualnemu DOM, React minimalizuje liczbę operacji na rzeczywistym DOM, co przyspiesza renderowanie aplikacji.
+    \item \textbf{Modularność}: Komponentowa struktura React pozwala na łatwe rozdzielenie aplikacji na mniejsze, wielokrotnie używane jednostki, co ułatwia jej rozwój.
+    \item \textbf{Reaktywność}: Aplikacja automatycznie reaguje na zmiany danych i aktualizuje interfejs użytkownika, zapewniając płynne wrażenia użytkownika.
+    \item \textbf{Łatwość testowania}: Dzięki podziałowi na komponenty, aplikacja jest łatwiejsza do testowania jednostkowego, co pozwala na szybsze wykrywanie i naprawianie błędów.
+\end{itemize}
+
+\subsection{Podsumowanie}
+
+React jest kluczowym elementem frontendowym aplikacji, umożliwiającym tworzenie dynamicznych, responsywnych interfejsów użytkownika. Dzięki modularnej strukturze komponentów oraz zastosowaniu popularnych bibliotek, takich jak React Router, Axios i Redux, aplikacja jest elastyczna, wydajna i łatwa do rozbudowy. React pozwala na tworzenie aplikacji typu single-page, które oferują płynne doświadczenia użytkownika, umożliwiając interakcję z różnymi danymi blockchainowymi i kryptowalutowymi w czasie rzeczywistym.
