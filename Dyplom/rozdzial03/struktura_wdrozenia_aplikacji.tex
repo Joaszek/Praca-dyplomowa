@@ -6,9 +6,9 @@ Proces wdrożenia odbywa się za pomocą Docker Compose, co pozwala na uruchomie
 
 Wszystkie kontenery aplikacji są uruchamiane poprzez jedną komendę:
 
-\begin{verbatim}
+\begin{lstlisting}
 docker-compose up --build
-\end{verbatim}
+\end{lstlisting}
 
 Polecenie to uruchamia proces budowy obrazów (jeśli wcześniej nie zostały zbudowane) i uruchamia wszystkie kontenery zdefiniowane w pliku \texttt{docker-compose.yml}.
 
@@ -18,7 +18,7 @@ W pliku \texttt{docker-compose.yml} kontener bazy danych jest skonfigurowany z u
 
 Konfiguracja bazy danych w pliku \texttt{docker-compose.yml} wygląda następująco:
 
-\begin{verbatim}
+\begin{lstlisting}
 version: '3.8'
 
 services:
@@ -51,7 +51,7 @@ services:
 volumes:
   backend_pg_data:
     external: true
-\end{verbatim}
+\end{lstlisting}
 
 W tej konfiguracji:
 - \texttt{postgres\_db} jest połączony z zewnętrzną bazą danych.
@@ -64,7 +64,7 @@ Dane blockchain są pobierane na żądanie za pomocą różnych API, które są 
 
 Backend wykorzystyje biblioteki takie jak \texttt{RestTemplate} do komunikacji z API blockchain. Dane są następnie przetwarzane i zwracane do frontendu, który prezentuje je użytkownikowi.
 
-\begin{verbatim}
+\begin{lstlisting}[language=Java,style=JavaStyle]
 private final RestTemplate restTemplate;
 
     public BitcoinAccountService(@Qualifier("restTemplate") RestTemplate restTemplate) {
@@ -82,7 +82,7 @@ private final RestTemplate restTemplate;
             return null;
         }
     }
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Komunikacja między frontendem, backendem i blockchain}
 

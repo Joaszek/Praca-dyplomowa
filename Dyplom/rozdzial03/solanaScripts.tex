@@ -21,7 +21,7 @@ Skrypty w folderze \texttt{solanaScripts} są wywoływane z aplikacji backendowe
 
 Przykład na podstawie skryptu \texttt{airdrop}:
 
-\begin{verbatim}
+\begin{lstlisting}
 const { Connection, clusterApiUrl, PublicKey, LAMPORTS_PER_SOL } = require('@solana/web3.js');
 
 const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
@@ -60,7 +60,7 @@ if (!publicKeyBase58) {
 
 requestAirdrop(publicKeyBase58);
 
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Dockerfile – budowanie obrazu dla skryptów Solany}
 
@@ -68,7 +68,7 @@ Skrypty w folderze \texttt{solanaScripts} są częścią aplikacji uruchamianej 
 
 Plik \texttt{Dockerfile}:
 
-\begin{verbatim}
+\begin{lstlisting}
 FROM node:18
 
 WORKDIR /app
@@ -82,7 +82,7 @@ COPY . .
 EXPOSE 3001
 
 CMD ["npm", "start"]
-\end{verbatim}
+\end{lstlisting}
 
 1. \texttt{FROM node:18-slim} – używa obrazu bazowego Node.js w wersji 18, który jest lekki i odpowiedni do uruchamiania skryptów JavaScript.
 2. \texttt{WORKDIR /app} – ustawia katalog roboczy w kontenerze na \texttt{/app}.
@@ -93,18 +93,17 @@ CMD ["npm", "start"]
 
 Kontener jest budowany wraz z kontenerem frontend, backend oraz bazą danych za pomocą komendy:
 
-\begin{verbatim}
+\begin{lstlisting}
 docker compose up --build
-\end{verbatim}
+\end{lstlisting}
 
 \subsubsection{Biblioteki używane w skryptach Solany}
 
 Skrypty w folderze \texttt{solanaScripts} korzystają z kilku ważnych bibliotek, które umożliwiają interakcję z blockchainem Solany oraz przetwarzanie danych:
 
-- **\texttt{@solana/web3.js}**: Jest to oficjalna biblioteka JavaScript do interakcji z blockchainem Solany. 
-  
+- **\texttt{@solana/web3.js}**: Jest to oficjalna biblioteka JavaScript do interakcji z blockchainem Solany.  
   Przykład użycia tej biblioteki do stworzenia konta:
-  \begin{verbatim}
+  \begin{lstlisting}
 const { Keypair } = require('@solana/web3.js');
 
 function createSolanaAccount() {
@@ -118,4 +117,4 @@ function createSolanaAccount() {
 }
 
 createSolanaAccount();
-  \end{verbatim}
+  \end{lstlisting}

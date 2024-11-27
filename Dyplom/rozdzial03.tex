@@ -1,14 +1,362 @@
 \chapter{Implementacja}
+W niniejszym rozdziale opisano proces, którego celem było zaimplementowanie platformy spełniającej postawione wcześniej wymagania funkcjonalne oraz niefunkcjonalne. 
+W procesie tym wystąpiły wszystkie kluczowe kroki, począwszy od konfiguracji środowiska, przez rozwój aplikacji backendowej i frontendowej, aż po integrację z systemami zewnętrznymi oraz konfigurację kontenerów Dockerowych. Lektura tego rozdziału powinna pozwolić na zapoznanie się ze szczegółami implementacji, uwagami dotyczącymi użytych technologii, narzędzi oraz metodami, które umożliwiły realizację tak założonego projektu.
+
+W rozdziale omówione zostaną aspekty techniczne implementacji, w tym struktura repozytoriów kodu, konfiguracja środowiska developerskiego, użyte frameworki i biblioteki, oraz zagadnienia związane z budową i wdrożenia aplikacji. Zaznaczono w nim główne decyzje architektoniczne, które wpłynęły na projektowanie aplikacji oraz integrację z systemami zewnętrznymi, w tym bazami danych, serwerami aplikacji oraz kontenerami Dockerowymi.
+
+Podczas implementacji, szczególną uwagę poświęcono skalowalności aplikacji, zapewnieniu bezpieczeństwa danych oraz optymalizacji wydajności. Każdy z komponentów systemu – zarówno backend jak i frontend – został zaprojektowany w sposób umożliwiający łatwą rozbudowę oraz integrację z dodatkowymi usługami w przyszłości.
 
 
-\input{rozdzial03/wprowadzenie.tex}
-\input{rozdzial03/podzial_kodu.tex}
-\input{rozdzial03/zaleznosc_kontenerow.tex}
-\input{rozdzial03/maven.tex}
-\input{rozdzial03/budowa_maven_i_docker.tex}
-\input{rozdzial03/pluginy_i_zależnosci.tex}
+\section{Podział logiczny}
+\subsection{Komponenty systemu}
+Zgodnie z założeniami co do architektury, podczas implementacji stworzono główne moduły systemu: frontend oraz backend (patrz podrozdział~\ref{subsec:ZarysArchitektury}).
+
+Frontend, zbudowany w React, odpowiada za prezentację danych i interakcję z użytkownikami. Podzielono go na moduły odpowiadające różnym domenom funkcjonalnym. Moduł blockchain prezentuje dane związane z blockchainami Bitcoin, Ethereum i Solana, w tym szczegóły transakcji, bloków oraz kont. Ten moduł zawiera podkomponenty obsługujące wyszukiwanie oraz wyświetlanie szczegółowych informacji. Moduł kryptowalut zarządza kategoriami kryptowalut, danymi historycznymi, rynkiem globalnym oraz rankingami. Dodatkowo frontend oferuje widoki użytkownika, takie jak logowanie, rejestracja oraz strona główna. Komunikacja z backendem odbywa się za pomocą biblioteki axios, z uwierzytelnianiem opartym na tokenach JWT przechowywanych w \texttt{localStorage}.
+
+Backend systemu został zaimplementowany w Spring Boot 3 przy użyciu Javy 21. Jest to centralny komponent systemu, który integruje funkcjonalności związane z logiką biznesową, bazą danych oraz zewnętrznymi dostawcami informacji. Backend udostępnia API REST dla frontendu i obsługuje kilka kluczowych domen, takich jak kryptowaluty, NFT oraz zasoby zewnętrzne. Moduł kryptowalut oferuje funkcje zarządzania kategoriami, danymi historycznymi oraz danymi rynkowymi. Moduł NFT zarządza tokenami, kolekcjami oraz ich statystykami. Backend również integruje dane blockchainowe, takie jak transakcje i bloki, które są dynamicznie pobierane z zewnętrznych API, takich jak Etherscan czy CoinMarketCap. Ponadto backend wywołuje dedykowane skrypty w Node.js w celu realizacji zaawansowanych operacji blockchainowych, takich jak symulacje transakcji oraz airdropy.
+
+Część backendu odpowiada również za bezpieczeństwo, realizowane poprzez mechanizm OAuth2 i tokeny JWT. Tokeny te są wykorzystywane do uwierzytelniania użytkowników oraz zabezpieczania komunikacji między frontendem a backendem. W backendzie zastosowano również bazę danych PostgreSQL, która przechowuje trwałe dane, takie jak użytkownicy, dane NFT oraz kryptowaluty, podczas gdy dane blockchainowe są dynamicznie pobierane i nie są przechowywane.
+
+Skrypty Node.js stanowią osobny komponent systemu, uruchamiany w dedykowanym kontenerze Docker. Skrypty te obsługują operacje blockchainowe, takie jak symulacje transakcji, tworzenie nowych kont oraz airdropy tokenów. Współpracują one z backendem, zapewniając wsparcie dla bardziej zaawansowanych funkcjonalności systemu.
+
+System jest w pełni konteneryzowany, co oznacza, że każdy z jego komponentów — frontend, backend, baza danych i Node.js — działa w odrębnym kontenerze Docker. Taka architektura zapewnia izolację środowisk, łatwość wdrażania i możliwość niezależnego skalowania komponentów. Planowane jest również wdrożenie modelu sztucznej inteligencji (AI) do przewidywania cen kryptowalut, który zostanie zintegrowany z backendem jako dodatkowy moduł analityczny. W przyszłości system zostanie wdrożony w chmurze AWS z wykorzystaniem Elastic Load Balancer (ELB), co pozwoli na równoważenie obciążenia i zwiększenie wydajności oraz skalowalności.
+
+\subsection{Interakcje między komponentami}
+Interakcja między komponentami systemu została zaprojektowana z wykorzystaniem standardowych mechanizmów komunikacji, które zapewniają efektywność, bezpieczeństwo i elastyczność działania. System składa się z czterech głównych komponentów: frontendu, backendu, skryptów Node.js oraz bazy danych PostgreSQL. Każdy z tych komponentów pełni odrębną rolę w architekturze i współpracuje z innymi poprzez jasno zdefiniowane interfejsy.
+
+Frontend, działający jako aplikacja wielostronicowa (MPA) zbudowana w React, pełni rolę warstwy prezentacji. Użytkownicy wchodzą w interakcje z aplikacją za pomocą interfejsu graficznego, który umożliwia przeglądanie danych blockchainowych, zarządzanie NFT oraz dostęp do funkcji związanych z kryptowalutami. Frontend komunikuje się z backendem za pomocą protokołu REST, korzystając z biblioteki axios. Żądania wysyłane przez frontend zawierają tokeny JWT w nagłówkach, co pozwala na autoryzację użytkowników oraz zapewnia bezpieczeństwo przesyłanych danych. Backend przetwarza żądania, odwołuje się do bazy danych lub zewnętrznych API i zwraca odpowiedzi w formacie JSON.
+
+Backend, zaimplementowany w Spring Boot, jest centralnym komponentem odpowiedzialnym za przetwarzanie logiki biznesowej oraz zarządzanie danymi. Komunikacja między frontendem a backendem jest synchroniczna i odbywa się za pomocą jasno określonych endpointów API REST. Backend działa również jako pośrednik między frontendem a zewnętrznymi dostawcami informacji blockchainowych, takimi jak Etherscan, CoinMarketCap czy Solana RPC, co pozwala na dynamiczne pobieranie danych transakcji, bloków i kont w czasie rzeczywistym. W przypadku bardziej zaawansowanych operacji blockchainowych, takich jak symulacje transakcji czy airdropy, backend wywołuje dedykowane skrypty Node.js.
+
+Skrypty Node.js działają w osobnym kontenerze i pełnią rolę wspierającą backend w realizacji specyficznych operacji blockchainowych. Skrypty te są wywoływane przez backend za pomocą mechanizmów interfejsowych i umożliwiają wykonywanie działań takich jak generowanie nowych transakcji, symulacje przepływu środków czy zarządzanie airdropami tokenów. Skrypty te operują na danych dynamicznych, które są bezpośrednio pobierane z blockchaina, co eliminuje potrzebę ich zapisywania w bazie danych.
+
+Baza danych PostgreSQL przechowuje dane trwałe, takie jak informacje o użytkownikach, kategoriach kryptowalut, danych historycznych oraz NFT. Backend komunikuje się z bazą danych za pomocą warstwy repozytoriów opartej na interfejsach CrudRepository. Gdy użytkownik żąda danych dostępnych w bazie, backend odczytuje je i przekształca w odpowiedzi API, które następnie są przesyłane do frontendu. W przypadku danych blockchainowych, które są dynamiczne, backend bezpośrednio pobiera je z zewnętrznych API, bez konieczności korzystania z bazy danych.
+
+Planowane wdrożenie modelu AI do przewidywania cen kryptowalut wprowadzi nowy sposób interakcji między komponentami. Model będzie integrowany z backendem, który będzie przesyłał dane wejściowe do analizy i odbierał wyniki predykcji. Te dane będą następnie prezentowane użytkownikom na frontendzie, co zapewni dodatkową wartość dla systemu.
+
+Podsumowując, interakcja między komponentami opiera się na wyraźnym podziale ról i odpowiedzialności. Frontend obsługuje interfejs użytkownika i komunikuje się z backendem poprzez REST API. Backend pełni funkcję centralnego punktu przetwarzania, współpracując zarówno z bazą danych PostgreSQL, jak i z zewnętrznymi dostawcami danych blockchainowych. Skrypty Node.js wspierają backend w realizacji specyficznych operacji blockchainowych, a baza danych zapewnia trwałe przechowywanie kluczowych informacji. Wszystkie komponenty współpracują w sposób zintegrowany, zapewniając elastyczność, wydajność i bezpieczeństwo działania systemu.
+
+\section{Podział kodu}
+
+Podczas implementacji systemu, kod został podzielony na dwie główne części: backend oraz frontend. Każda z tych części realizuje określone zadania, a ich współpraca umożliwia pełne funkcjonowanie aplikacji. W poniższym rozdziale przedstawiono szczegóły dotyczące struktury kodu, podziału na funkcje, a także sposób organizacji obu części systemu.
+
+\subsection{Struktura aplikacji}
+
+Struktura aplikacji jest oparta na dwóch głównych komponentach: backendzie i frontendzie. Backend jest odpowiedzialny za logikę aplikacji, zarządzanie danymi oraz komunikację z bazą danych, natomiast frontend odpowiada za interfejs użytkownika oraz interakcje z backendem. Poniżej przedstawiono szczegółowy opis obu części:
+
+\subsubsection{Backend}
+Backend aplikacji jest napisany w języku Java z wykorzystaniem frameworku Spring Boot. Struktura kodu backendowego jest zgodna z najlepszymi praktykami w zakresie organizacji projektów opartych na tym frameworku. Kluczowe elementy struktury backendu to:
+\begin{itemize}
+    \item \texttt{src/main/java}: Główna część aplikacji, zawierająca logikę biznesową i kontrolery.
+    \item \texttt{src/main/resources}: Pliki konfiguracyjne, w tym \texttt{application.properties}, które służą do konfiguracji bazy danych i innych usług.
+    \item \texttt{src/test/java}: Testy jednostkowe oraz integracyjne, zapewniające poprawność działania aplikacji.
+    \item \texttt{pom.xml}: Plik konfiguracyjny Maven, który zarządza zależnościami aplikacji.
+    \item \texttt{Dockerfile}: Konfiguracja dla Docker, umożliwiająca tworzenie kontenerów dla aplikacji backendowej.
+\end{itemize}
+
+Backend jest podzielony na różne warstwy:
+\begin{itemize}
+    \item \textbf{Controller}: Warstwa odpowiedzialna za odbiór żądań HTTP i przekazywanie ich do odpowiednich usług.
+    \item \textbf{Service}: Warstwa logiki biznesowej, która przetwarza dane i wykonuje operacje na modelach.
+    \item \textbf{Repository}: Warstwa odpowiedzialna za komunikację z bazą danych przy użyciu JPA (Java Persistence API).
+\end{itemize}
+
+\subsubsection{Frontend}
+Frontend aplikacji jest stworzony z użyciem React, popularnego frameworku JavaScript, który umożliwia tworzenie dynamicznych interfejsów użytkownika. Struktura kodu frontendowego obejmuje:
+\begin{itemize}
+    \item \texttt{src/}: Główna część aplikacji frontendowej, zawierająca komponenty, funkcje oraz logikę.
+    \item \texttt{public/}: Pliki statyczne, takie jak HTML, obrazy, czcionki itp.
+    \item \texttt{package.json}: Plik konfiguracyjny npm, zarządzający zależnościami aplikacji.
+    \item \texttt{Dockerfile.dev}: Plik konfiguracyjny Docker dla środowiska deweloperskiego.
+\end{itemize}
+
+Frontend jest podzielony na następujące elementy:
+\begin{itemize}
+    \item \textbf{Komponenty}: Aplikacja frontendowa jest zbudowana w oparciu o komponenty React, które reprezentują poszczególne elementy interfejsu użytkownika.
+    \item \textbf{Logika aplikacji}: Funkcje obsługujące interakcje użytkownika, komunikację z backendem oraz zarządzanie stanem aplikacji.
+    \item \textbf{Routing}: Aplikacja frontendowa wykorzystuje React Router do zarządzania nawigacją pomiędzy różnymi widokami aplikacji.
+\end{itemize}
+
+\subsection{Podział na funkcje}
+
+W obydwu częściach aplikacji kod został podzielony na funkcje i metody, które realizują określone zadania. Dzięki temu struktura aplikacji jest czytelna, modularna i łatwa do rozbudowy. Poniżej przedstawiono przykłady podziału na funkcje w backendzie oraz frontendzie.
+
+\subsubsection{Backend}
+W backendzie każda funkcjonalność została wydzielona do oddzielnych metod w odpowiednich klasach. Przykłady funkcji backendowych:
+\begin{itemize}
+    \item \texttt{registerUser}: Funkcja tworząca nowego użytkownika w bazie danych.
+    \item \texttt{createSolanaAccount}: Funkcja tworząca konto na Solana devnet.
+    \item \texttt{getERC20TokenTransfers}: Funkcja pobierająca wszystkie transfery tokenów ERC-20 związane z podanym adresem Ethereum w określonym zakresie bloków (od startBlock do endBlock). Funkcja zwraca listę transakcji w postaci obiektów \texttt{EthereumTransactionDto}.
+		\item \texttt{predictPrices}: Funkcja zwracająca przewidywane ceny na następny tydzień dla wybranej kryptowaluty.
+\end{itemize}
+
+\subsubsection{Frontend}
+W frontendzie kod również jest podzielony na mniejsze funkcje. Przykłady funkcji frontendowych:
+\begin{itemize}
+    \item \texttt{fetchData}: Funkcja do pobierania danych z API backendu.
+    \item \texttt{handleSubmit}: Funkcja obsługująca zdarzenie wysyłania formularza, aby dostać dane ze specyficznego dnia.
+    \item \texttt{navigateToDetails}: Funkcja nawigująca do strony szczegółów na podstawie wprowadzonego adresu.
+\end{itemize}
+
+\subsection{Integracja Backend-Frontend}
+
+Backend i frontend komunikują się ze sobą za pomocą API. Backend udostępnia RESTful API, które umożliwia frontendowi wykonywanie operacji takich jak tworzenie, pobieranie, aktualizowanie danych. Frontend, korzystając z React, wysyła żądania HTTP do backendu za pomocą axios i renderuje odpowiednie dane na interfejsie użytkownika.
+
+\subsection{Podsumowanie}
+
+Struktura aplikacji została zaprojektowana w sposób modularny, co umożliwia łatwą rozbudowę i modyfikację poszczególnych komponentów. Zarówno backend, jak i frontend zostały podzielone na funkcje, co pozwala na lepszą organizację kodu oraz łatwiejsze testowanie poszczególnych części aplikacji. Integracja pomiędzy frontendem a backendem została zrealizowana przy pomocy API, co zapewnia elastyczność i łatwość w komunikacji między różnymi warstwami systemu.
+
+
+\section{Zależności między kontenerami}
+
+Aplikacja została zaprojektowana z wykorzystaniem kontenerów Docker, które umożliwiają izolację poszczególnych komponentów systemu oraz łatwą konfigurację środowiska developerskiego i produkcyjnego. Kontenery są połączone ze sobą w sieci Docker, co umożliwia ich wzajemną komunikację. Poniżej przedstawiono szczegółowy opis zależności między kontenerami w systemie oraz roli, jaką pełni każdy z nich.
+
+\subsection{Architektura kontenerów}
+
+W systemie zostały zaimplementowane następujące kontenery:
+
+\begin{itemize}
+    \item \textbf{Kontener backendowy} – zawiera aplikację backendową, która realizuje logikę biznesową, obsługę żądań HTTP, komunikację z bazą danych oraz integrację z zewnętrznymi API.
+    \item \textbf{Kontener frontendowy} – zawiera aplikację frontendową napisaną w React, która komunikuje się z backendem, wyświetlając dane użytkownikowi i obsługując interakcje z interfejsem.
+    \item \textbf{Kontener Node.js} – zawiera środowisko Node.js, które uruchamia skrypty do komunikacji z blockchainem Solany. Kontener ten jest odpowiedzialny za tworzenie konta na blockchainie devnet Solany, symulowanie transakcji oraz wykonywanie operacji airdrop.
+    \item \textbf{Kontener bazy danych PostgreSQL} – przechowuje dane aplikacji, w tym dane użytkowników, transakcje, informacje o przedmiotach do wynajmu itp. Komunikacja z bazą danych odbywa się za pośrednictwem warstwy repozytoriów w aplikacji backendowej.
+    \item \textbf{Kontener pgAdmin} – jest narzędziem do zarządzania bazą danych PostgreSQL, umożliwiającym administrację i monitorowanie bazy danych za pomocą interfejsu graficznego.
+\end{itemize}
+
+\subsection{Zależności między kontenerami}
+Kontenery w systemie są ze sobą powiązane, umożliwiając ich współpracę. Każdy kontener komunikuje się z innymi, zapewniając sprawne funkcjonowanie aplikacji jako całości. Wszystkie kontenery znajdują się na jednej sieci, co umożliwia im wymianę danych i współpracę. 
+
+Kontener frontendowy współpracuje z backendem, który realizuje logikę aplikacji i komunikuje się z bazą danych PostgreSQL. Kontener Node.js odgrywa kluczową rolę w integracji aplikacji z blockchainem Solany, wykonując skrypty do pobierania i przetwarzania danych. Dzięki zastosowaniu Docker Compose możliwe jest łatwe zarządzanie tymi kontenerami, ich konfiguracja oraz zapewnienie ich współpracy w ramach jednej sieci. Takie podejście pozwala na łatwą skalowalność aplikacji i rozdzielenie odpowiedzialności między poszczególne komponenty. Poniżej opisano zależności między kontenerami:
+\begin{itemize}
+    \item \textbf{Kontener frontendowy i backendowy}: Kontener frontendowy, odpowiedzialny za interfejs użytkownika, wysyła żądania HTTP do kontenera backendowego. Aplikacja frontendowa, napisana w React, korzysta z API udostępnionego przez aplikację backendową za pomocą axios do pobierania i wysyłania danych. Komunikacja odbywa się przez porty udostępnione w konfiguracji Docker Compose.
+    \item \textbf{Kontener backendowy i baza danych PostgreSQL}: Aplikacja backendowa komunikuje się z bazą danych PostgreSQL w celu przechowywania i pobierania danych. Backend korzysta z JPA (Java Persistence API) do wykonywania operacji CRUD na bazie danych.
+    \item \textbf{Kontener backendowy i kontener Node.js}: Kontener Node.js pełni rolę interfejsu między aplikacją backendową a blockchainem Solany w kontekście wykonywania operacji na blockchainie, a nie pobieraniu danych z niego. Backend wysyła zapytania do kontenera Node.js w celu wykonania skryptów Solany, które mogą tworzyć konto, symulować transakcję oraz wykonywać operację airdrop. Kontener Node.js uruchamia odpowiednie skrypty do interakcji z blockchainem, wykorzystując bibliotekę @solana/web3.js.
+    \item \textbf{Kontener Node.js i blockchain Solany}: Kontener Node.js, uruchamiający skrypty Solany, komunikuje się z siecią blockchain Solany poprzez RPC endpointy (np. Solana Mainnet Beta). Skrypty w kontenerze Node.js są odpowiedzialne za tworzenie konta, symulowanie transakcji oraz wykonywanie operacji airdrop. Wyniki tych skryptów są następnie odbierane przez klasę serwisą, i zwracane do kontrolera, który wysyłaja je na frontend.
+    \item \textbf{Kontener pgAdmin i baza danych PostgreSQL}: Kontener pgAdmin umożliwia zarządzanie bazą danych PostgreSQL poprzez interfejs graficzny. Administratorzy mogą monitorować, modyfikować oraz zarządzać strukturą bazy danych, korzystając z pgAdmin, który łączy się z kontenerem bazy danych PostgreSQL.
+\end{itemize}
+
+\section{Budowanie Aplikacji za pomocą Maven i Docker}
+% TO DO: W pracy obecnie są dwie sekcje Budowanie Aplikacji za pomocą Maven i Docker.
+%        Nie rozumiem po co. Obie sekcje wyglądają na bardzo podobne (przynajmniej ich początki). Liczba powtórzeń jest nie do przyjęcia.
+%        Proszę scalić te dwie sekcje w jedną (likwidując niepotrzebne powtórzenia!!!!!)
+%        Jeśli chciałby Pan wyróżnić charakterystyczne ustawienia dla projektu, to można na to srobić osobną podsekcję (Konfiguracja narzędzi)
+Projekt wykorzystuje zarówno Maven, jak i Docker do zarządzania procesem budowy aplikacji. Narzędzia te pełnią różne role: Maven obsługuje zarządzanie zależnościami, kompilację i testowanie aplikacji, natomiast Docker umożliwia konteneryzację aplikacji i jej środowiska, zapewniając przenośne, izolowane środowiska wykonawcze. Razem umożliwiają pełną automatyzację procesu budowy i płynne wdrażanie aplikacji w środowiskach deweloperskich i produkcyjnych. Na przykład Docker może uruchomić kontener z aplikacją wcześniej zbudowaną za pomocą Maven. Docker zapewnia spójne wersje aplikacji i upraszcza wdrażanie w różnych środowiskach. Poniżej znajduje się szczegółowe wyjaśnienie ról tych narzędzi w procesie budowy projektu.
+
+\subsection{Opis narzędzi}
+\subsubsection{Maven}
+Maven to narzędzie do zarządzania projektami i automatyzacji budowy, szeroko stosowane w~ekosystemie Java. Wspiera cały cykl życia aplikacji, od kompilacji i testowania po wdrażanie. Do zalet korzystania z Mavena zalicza się:
+\begin{itemize}
+    \item \textbf{Standaryzacja struktury projektu} -- struktura katalogów projektu jest ustandaryzowana, co zapewnia łatwość utrzymania i skalowalność.
+    \item \textbf{Zarządzanie zależnościami} -- Maven automatycznie pobiera i zarządza zależnościami z centralnego repozytorium Maven lub innych źródeł, eliminując konieczność ręcznego pobierania i wersjonowania. 
+    \item \textbf{Uproszczony proces budowy} -- Maven automatyzuje proces kompilacji, testowania i pakowania. W szczególności jest odpowiedzialny za uruchamianie testów jednostkowych, takich jak te napisane przy użyciu JUnit. Pomaga to w zapewnieniu jakości aplikacji poprzez automatyczne wykonywanie testów przed jej wdrożeniem. Ponadto jest w stanie wygenerować pliki JAR (ang.~\emph{Java ARchive}) lub WAR (ang.~\emph{Web ARchive}), które zawierają skompilowany kod aplikacji oraz wszystkie zależności, co pozwala na łatwe wdrożenie aplikacji w środowisku produkcyjnym.
+    \item \textbf{Rozbudowane wsparcie dla wtyczek} -- Maven obsługuje liczne wtyczki do automatyzacji zadań, takich jak uruchamianie testów jednostkowych, generowanie raportów, tworzenie dokumentacji oraz budowanie aplikacji w różnych formatach. Do najczęściej wykorzystywanych wtyczek należą \texttt{maven-compiler-plugin} -- do kompilacji kodu, \texttt{maven-surefire-plugin} -- do uruchamiania testów, czy \texttt{maven-assembly-plugin} -- do pakowania aplikacji w finalny artefakt.
+    \item \textbf{Integracja z CI/CD} -- Maven bezproblemowo integruje się z narzędziami CI/CD, takimi jak Jenkins czy GitLab CI, umożliwiając automatyczne budowanie, testowanie i wdrażanie w różnych środowiskach.
+    \item \textbf{Standaryzowany proces budowy} -- proces budowy jest zdefiniowany w pliku \texttt{pom.xml}, który centralizuje wszystkie informacje o zależnościach (bibliotekach pobieranych automatycznie, używanych w projekcie), wtyczkach (pobieranych automatycznie, do realizacji różnych zadań, takich jak: kompilacja, testowanie i wdrażanie) i konfiguracji budowy (specyficzne dla np.\ produkcji czy testowania).
+\end{itemize}
+
+
+\noindent Maven wspomaga realizację różnych zadań w cyklu życia aplikacji, w tym takich, jak: 
+\begin{itemize} % TO DO: niepotrzebnie w wytłuszczeniach wszystkie wyrazy pisane są z dużej litery, proszę poprawić wyliczenia podobnie do tego
+    \item \textbf{Kompilacja} -- kompiluje kod źródłowy do postaci kodu bajtowego.
+    \item \textbf{Testowanie} -- uruchamia testy jednostkowe (np.\ z użyciem JUnit).
+    \item \textbf{Pakowanie} -- pakuje skompilowany kod w formatach nadających się do wdrożenia (np.\ JAR).
+    \item \textbf{Instalacja} -- instaluje zbudowane artefakty w lokalnym repozytorium w celu ponownego użycia w innych projektach.
+\end{itemize}
+
+\noindent Maven standardowo obsługuje następujące cele: \texttt{clean}, \texttt{compile}, \texttt{test}, \texttt{package}, \texttt{install} i \texttt{deploy}. Typowe polecenie budowy Maven uruchamia się definiując cel, np.:
+\begin{lstlisting}
+mvn clean install
+\end{lstlisting}
+Polecenie to usuwa poprzednie wyniki budowy, kompiluje aplikację, uruchamia testy jednostkowe i tworzy finalny artefakt (np.\ plik JAR).
+
+\subsubsection{Docker} 
+Jest narzędziem do konteneryzacji. Tworzy izolowane środowiska do uruchamiania aplikacji, zapewniając ich przenośność na różnych systemach. Do zalet korzystania z Dockera zalicza się:
+\begin{itemize} 
+    \item \textbf{Izolacja środowiska} -- zapewnia spójne działanie aplikacji niezależnie od systemu operacyjnego.
+    \item \textbf{Przenośność} -- kontenery Docker mogą działać na dowolnej platformie (Windows, Linux, macOS).
+    \item \textbf{Uproszczone zarządzanie zależnościami} -- wszystkie zależności aplikacji są zawarte w jednym obrazie kontenera, eliminując potrzebę instalacji i konfiguracji na docelowych maszynach.
+    \item \textbf{Skalowalność} -- łatwo skalowalne aplikacje poprzez uruchamianie wielu instancji kontenerów.
+\end{itemize}
+
+Tworzenie obrazów przez Docker odbywa się na podstawie pliku \texttt{Dockerfile}. W nim definiuje się obrazy kontenerów, w tym zależności aplikacji, system operacyjny, konfiguracje i pliki aplikacji niezbędne do jej uruchomienia. Na przykład \texttt{Dockerfile} dla aplikacji Java może zawierać instrukcje do kopiowania plików JAR do obrazu i uruchamiania aplikacji.
+
+ W przypadku aplikacji składającej się z kilku usług, jak frontend, backend i Node.js (do integracji z Solaną), każdy z tych komponentów ma własny \texttt{Dockerfile}, który definiuje sposób budowy obrazu dla danej części aplikacji. Po stworzeniu obrazów, kontenery mogą zostać uruchomione razem za pomocą pliku \texttt{docker-compose.yml}, który zarządza wszystkimi usługami w jednej sieci.
+Aby zbudować obraz Dockera, można użyć polecenia:
+\begin{lstlisting}
+docker build -t myapp .
+\end{lstlisting}
+Polecenie to tworzy obraz Dockera na podstawie instrukcji zawartych w pliku \texttt{Dockerfile} i pozwala na uruchamianie aplikacji w kontenerze.
+
+
+W niektórych przypadkach aplikacja może być kompilowana bezpośrednio w kontenerze Docker. Na przykład kontener backendowy, w którym znajduje się aplikacja Spring Boot, uruchamia proces kompilacji przy użyciu Mavena, a następnie uruchamia aplikację w tym samym kontenerze. Dzięki temu cały proces budowy aplikacji i jej uruchamiania odbywa się w izolowanym środowisku, bez konieczności instalowania Mavena lub JDK na systemie operacyjnym.
+   
+Po zbudowaniu obrazu Docker, kontener jest uruchamiany, co oznacza, że aplikacja działa w izolowanym środowisku. Docker pozwala na uruchomienie aplikacji zarówno w środowisku developerskim, jak i produkcyjnym, z zachowaniem pełnej przenośności. W przypadku aplikacji wieloskładnikowej, jak frontend, backend oraz usługa Node.js do komunikacji z blockchainem Solany, wszystkie kontenery komunikują się między sobą poprzez wspólną sieć Docker (\texttt{my\_network}), co zapewnia łatwą wymianę danych.
+    
+Docker umożliwia zarządzanie wszystkimi zależnościami aplikacji w ramach kontenera. Na przykład, kontener z bazą danych PostgreSQL jest uruchamiany w osobnym kontenerze, zapewniając pełną izolację od aplikacji backendowej. Wspólny plik \texttt{docker-compose.yml} definiuje, jak kontenery frontendowy, backendowy oraz Node.js (do Solany) mają współdziałać w tej samej sieci, co zapewnia łatwe zarządzanie konfiguracją środowiska.
+
+\subsection{Konfiguracja narzędzi} 
+\subsubsection{Zależności i wtyczki Maven}
+W projekcie wykorzystano szereg pluginów Maven, które automatyzują procesy związane z budową aplikacji. Do podstawowych pluginów należy \texttt{maven-clean-plugin}, który odpowiada za czyszczenie środowiska przed rozpoczęciem kompilacji, \texttt{maven-compiler-plugin} do kompilacji kodu źródłowego, \texttt{maven-jar-plugin} do tworzenia plików JAR, oraz \texttt{maven-surefire-plugin} do uruchamiania testów jednostkowych. Dodatkowo, \texttt{spring-boot-maven-plugin} umożliwia integrację z frameworkiem Spring Boot, ułatwiając uruchamianie aplikacji.
+
+Jeśli chodzi o zależności, projekt korzysta z kilku kluczowych bibliotek. \texttt{spring-boot-starter-web} jest odpowiedzialny za stworzenie aplikacji webowej, a \texttt{spring-boot-starter-data-jpa} ułatwia integrację z bazą danych przy użyciu JPA. Zależność \texttt{postgresql} pozwala na połączenie z bazą danych PostgreSQL, a \texttt{spring-security} zapewnia mechanizmy bezpieczeństwa, w tym uwierzytelnianie i autoryzację. Dodatkowo, \texttt{lombok} jest używane do generowania boilerplate code, a \texttt{mysql-connector-java} wspiera komunikację z bazą danych MySQL.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Struktura pliku Dockerfile dla aplikacji backendowej}
+
+Plik \texttt{Dockerfile} zawiera instrukcje, które definiują sposób budowy obrazu Docker dla aplikacji. Poniżej opisano strukturę pliku \texttt{Dockerfile}, z uwzględnieniem najważniejszych instrukcji, bazujących na dwufazowej budowie obrazu.
+
+\paragraph{Podstawowy obraz}
+Pierwszym krokiem w pliku \texttt{Dockerfile} jest zdefiniowanie obrazu bazowego. W pracy używany jest obraz \texttt{amazoncorretto:21-alpine} w pierwszej fazie budowy, który zawiera OpenJDK 21, a także obraz \texttt{ubuntu:24.04} w drugiej fazie. Obraz \texttt{amazoncorretto:21-alpine} jest używany do budowy aplikacji w kontenerze, a \texttt{ubuntu:24.04} do uruchamiania jej w drugim etapie. Obraz bazowy jest ustawiany za pomocą komendy \texttt{FROM}:
+\begin{lstlisting}
+FROM amazoncorretto:21-alpine AS build
+\end{lstlisting}
+
+\paragraph{Instalowanie Maven i kompilacja aplikacji}
+W pierwszej fazie budowy obrazu instalowany jest Maven za pomocą komendy \texttt{RUN apk add --no-cache maven}, aby pobrać zależności aplikacji i ją skompilować. Następnie kopiowany jest plik \texttt{pom.xml} oraz kod źródłowy aplikacji do obrazu. Następnie uruchamiany jest Maven do pobrania zależności i zbudowania aplikacji:
+\begin{lstlisting}
+RUN apk add --no-cache maven
+COPY pom.xml .
+RUN mvn dependency:go-offline
+COPY src ./src
+RUN mvn package -DskipTests
+\end{lstlisting}
+
+\paragraph{Tworzenie obrazu do uruchomienia aplikacji}
+Po zakończeniu kompilacji, w drugiej fazie budowy obrazu instalowane są wszystkie niezbędne zależności do uruchomienia aplikacji. Używany jest obraz \texttt{ubuntu:24.04}, aby zainstalować wymagane pakiety, takie jak \texttt{openjdk-21-jdk}, \texttt{openssl}, \texttt{docker.io} oraz \texttt{curl}:
+\begin{lstlisting}
+FROM ubuntu:24.04
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates \
+    openjdk-21-jdk \
+    docker.io \
+    openssl && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+\end{lstlisting}
+
+\paragraph{Kopiowanie pliku JAR i generowanie kluczy RSA}
+Po zainstalowaniu zależności, kopiowany jest plik JAR do obrazu i generowane są klucze RSA, które będą używane przez aplikację do obsługi autoryzacji OAuth2. Wygenerowane klucze publiczny i prywatny są następnie konwertowane do formatu PKCS\#8.
+\begin{lstlisting}
+COPY --from=build /app/target/*.jar app.jar
+RUN openssl genrsa -out keypair.pem 2048
+RUN openssl rsa -in keypair.pem -pubout -out publicKey.pem
+RUN openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in keypair.pem -out privateKey.pem
+\end{lstlisting}
+
+\paragraph{Uruchamianie aplikacji}
+Po zbudowaniu obrazu, kontener jest uruchamiany. Użyta zostaje komenda \texttt{ENTRYPOINT}, aby określić, jak uruchomić aplikację. W tym przypadku aplikacja jest uruchamiana za pomocą komendy \texttt{java -jar} z odpowiednimi parametrami konfiguracyjnymi dla serwera i kluczy publicznego oraz prywatnego.
+\begin{lstlisting}
+ENTRYPOINT ["java", "-jar", "app.jar", \
+    "--server.port=8080", \
+    "--spring.security.oauth2.resourceserver.jwt.public-key-location=classpath:publicKey.pem", \
+    "--spring.security.oauth2.resourceserver.jwt.private-key-location=classpath:privateKey.pem"]
+\end{lstlisting}
+
+\paragraph{Podsumowanie struktury}
+Plik \texttt{Dockerfile} składa się z kilku kluczowych sekcji:
+\begin{itemize}
+    \item \textbf{Obraz bazowy}: Definiowanie obrazu, z którego kontener będzie korzystać w pierwszej fazie (np. \texttt{amazoncorretto:21-alpine} do kompilacji) oraz w drugiej fazie (np. \texttt{ubuntu:24.04} do uruchomienia aplikacji).
+    \item \textbf{Instalowanie Maven i kompilacja aplikacji}: Instalacja narzędzi do kompilacji oraz proces budowy aplikacji.
+    \item \textbf{Kopiowanie plików}: Przeniesienie pliku JAR oraz skopiowanie kodu aplikacji do obrazu.
+    \item \textbf{Uruchamianie aplikacji}: Określenie komendy uruchamiającej aplikację po starcie kontenera.
+\end{itemize}
+
+Powyższe instrukcje tworzą podstawową strukturę pliku \texttt{Dockerfile}, który pozwala na utworzenie obrazu aplikacji backendowej, który będzie można uruchomić w kontenerze Docker.
+
+\subsubsection{Struktura pliku Dockerfile dla aplikacji Frontend}
+
+Plik \texttt{Dockerfile} zawiera instrukcje, które definiują sposób budowy obrazu Docker dla aplikacji Frontend. Poniżej opisano strukturę pliku \texttt{Dockerfile} z uwzględnieniem najważniejszych instrukcji, które tworzą obraz kontenera i uruchamiają aplikację.
+
+\paragraph{Podstawowy obraz}
+Pierwszym krokiem w pliku \texttt{Dockerfile} jest zdefiniowanie obrazu bazowego. W tym przypadku użyto z obrazu \texttt{node:20-alpine}, który zawiera środowisko uruchomieniowe Node.js w wersji 20, oparte na Alpine Linux, co zapewnia mały rozmiar obrazu.
+\begin{lstlisting}
+FROM node:20-alpine
+\end{lstlisting}
+
+\paragraph{Ustawienia katalogu roboczego}
+Kolejnym krokiem jest określenie katalogu roboczego, w którym będą przechowywane pliki aplikacji w kontenerze. W tym przypadku ustawiono katalog roboczy na \texttt{/usr/app} za pomocą instrukcji \texttt{WORKDIR}.
+\begin{lstlisting}
+WORKDIR /usr/app
+\end{lstlisting}
+
+\paragraph{Instalacja zależności aplikacji}
+Aby zainstalować wymagane zależności, skopiowano plik \texttt{package.json} z lokalnego systemu do katalogu roboczego w kontenerze, a następnie uruchomiono komendę \texttt{npm install}, która pobiera zależności zdefiniowane w pliku \texttt{package.json}.
+\begin{lstlisting}
+COPY ./package.json ./
+RUN npm install
+\end{lstlisting}
+
+\paragraph{Kopiowanie plików aplikacji do obrazu}
+Po zainstalowaniu zależności, skopiowano resztę plików aplikacji z lokalnego systemu do kontenera za pomocą instrukcji \texttt{COPY}. Dzięki temu wszystkie pliki niezbędne do działania aplikacji będą dostępne w kontenerze.
+\begin{lstlisting}
+COPY ./ ./
+\end{lstlisting}
+
+\paragraph{Eksponowanie portu}
+Aby umożliwić dostęp do aplikacji uruchomionej w kontenerze, wyeksportowano port 3000, na którym aplikacja Frontend będzie nasłuchiwać.
+\begin{lstlisting}
+EXPOSE 3000
+\end{lstlisting}
+
+\paragraph{Uruchamianie aplikacji}
+Użyto instrukcji \texttt{CMD} do określenia domyślnej komendy, która zostanie wykonana po uruchomieniu kontenera. W tym przypadku uruchamiamy aplikację Frontend za pomocą komendy \texttt{npm start}.
+\begin{lstlisting}
+CMD [ "npm", "start" ]
+\end{lstlisting}
+
+\paragraph{Podsumowanie struktury}
+Plik \texttt{Dockerfile} składa się z kilku kluczowych sekcji:
+\begin{itemize}
+    \item \textbf{Obraz bazowy}: Definiowanie obrazu, z którego kontener będzie korzystać (np. \texttt{node:20-alpine}).
+    \item \textbf{Ustawienia katalogu roboczego}: Określenie katalogu, w którym będą wykonywane operacje w kontenerze.
+    \item \textbf{Instalacja zależności}: Zainstalowanie wymaganych zależności aplikacji z pliku \texttt{package.json}.
+    \item \textbf{Kopiowanie plików}: Przeniesienie plików aplikacji do kontenera.
+    \item \textbf{Uruchamianie aplikacji}: Określenie komendy uruchamiającej aplikację po starcie kontenera.
+\end{itemize}
+
+Powyższe instrukcje tworzą podstawową strukturę pliku \texttt{Dockerfile}, który pozwala na utworzenie obrazu aplikacji Frontend, który będzie można uruchomić w kontenerze Docker. Analogicznie wykonano plik Dockerfile dla kontenera Nodejs, gdzie uruchamiane są skrypty Solany.
+
+\subsubsection{Integracja z Docker Compose}
+W celu ułatwienia zarządzania i uruchamiania zarówno aplikacji frontendowej, jak i backendowej w środowisku Docker, można użyć Docker Compose, narzędzia do orkiestracji kontenerów. Plik \texttt{docker-compose.yml} może wyglądać następująco:
+
+\begin{lstlisting}
+version: '3'
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8080:8080"
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+\end{lstlisting}
+
+\begin{enumerate}
+    \item W sekcji \texttt{services} zdefiniowane są dwa serwisy: \texttt{backend} i \texttt{frontend}.
+    \item \texttt{build} określa, gdzie znajduje się plik \texttt{Dockerfile} dla każdego serwisu (odpowiednio \texttt{./backend} i \texttt{./frontend}).
+    \item \texttt{ports} mapuje porty z kontenera na porty hosta, aby aplikacje były dostępne z zewnątrz.
+    \item \texttt{depends\_on} zapewnia, że kontener frontendowy będzie uruchamiany po backendzie.
+\end{enumerate}
+
+Aby uruchomić oba serwisy w jednym poleceniu, wystarczy wykonać:
+\begin{lstlisting}
+docker-compose up --build
+\end{lstlisting}
+
+Polecenie to buduje obrazy kontenerów i uruchamia aplikacje backendową i frontendową w oddzielnych kontenerach, z odpowiednimi zależnościami.
+
+
 \input{rozdzial03/struktura_katalogow.tex}
-\input{rozdzial03/struktura_pliku_Dockerfile.tex}
 \input{rozdzial03/struktura_wdrozenia_aplikacji.tex}
 \input{rozdzial03/quickstart.tex}
 \input{rozdzial03/wzorce_projektowe.tex}

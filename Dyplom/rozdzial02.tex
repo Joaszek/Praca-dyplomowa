@@ -1,60 +1,18 @@
 \chapter{Analiza wymagań}
-% TO DO: poniższa sekcja została przeniesiona z pierwszego rozdziału, bo na analizę wymagań mamy specjalny rozdział (we wstępie pisze się zwykle o celu i ogólnych założeniach, szczegóły omawia się później).
+\section{Założenia ogólne}
+% TO DO: tutaj jeszcze tryb niedokonany - planujemy, co ma być wykonane
+%        musiałem sporo przeredagować w tym rodziale, zmieniając jego układ, bo było bardzo dużo powtórzeń.
 
-\section{Zakres funkcjonalny platformy}
+Przystępując do realizacji projektu założono, że budowana platforma będzie oferować użytkownikom szeroki wachlarz funkcji, umożliwiając im nie tylko naukę, ale także interakcję z rzeczywistymi danymi blockchainowymi. Zakres tych interakcji zebrano w punktach opisanych poniżej.
+\begin{enumerate} 
+\item \textbf{Sprawdzanie danych z blockchainów}: użytkownicy będą mogli przeglądać aktualne informacje o transakcjach, stanie kont i opłatach w wybranych blockchainach. Dzięki integracji z Alchemy, platforma będzie zapewniała bezpośredni dostęp do danych blockchainowych w czasie rzeczywistym. 
+\item \textbf{Symulacja transakcji na blockchainie Solana}: platforma umożliwi użytkownikom przeprowadzenie symulowanych transakcji, co pozwoli na lepsze zrozumienie mechanizmów przesyłania środków bez ryzyka utraty realnych środków. 
+\item \textbf{Przewidywanie cen kryptowalut}: z wykorzystaniem modeli sztucznej inteligencji użytkownicy będą mogli uzyskać prognozy dotyczące cen kryptowalut, co pomoże im w podejmowaniu decyzji inwestycyjnych. 
+\item \textbf{Dostęp do materiałów edukacyjnych}: platforma będzie zawierać linki do kursów wideo, artykułów oraz innych materiałów edukacyjnych, które pozwolą użytkownikom poszerzać wiedzę na temat technologii blockchain. 
+\item \textbf{Konwersja walut i kryptowalut}: funkcja konwertera ułatwi przeliczenia pomiędzy walutami tradycyjnymi a kryptowalutami, co jest istotne dla inwestorów. 
+\end{enumerate}
 
-Platforma będzie oferować użytkownikom szeroki zakres funkcji, umożliwiając im nie tylko naukę, ale także interakcję z rzeczywistymi danymi blockchainowymi:
-
-\begin{enumerate} \item \textbf{Sprawdzanie danych z blockchainów}: użytkownicy będą mogli przeglądać aktualne informacje o transakcjach, stanie kont i opłatach w wybranych blockchainach. Dzięki integracji z Alchemy, platforma będzie zapewniała bezpośredni dostęp do danych blockchainowych w czasie rzeczywistym. \item \textbf{Symulacja transakcji na blockchainie Solana}: platforma umożliwi użytkownikom przeprowadzenie symulowanych transakcji, co pozwoli na lepsze zrozumienie mechanizmów przesyłania środków bez ryzyka utraty realnych środków. \item \textbf{Przewidywanie cen kryptowalut}: z wykorzystaniem modeli sztucznej inteligencji użytkownicy będą mogli uzyskać prognozy dotyczące cen kryptowalut, co pomoże im w podejmowaniu decyzji inwestycyjnych. \item \textbf{Dostęp do materiałów edukacyjnych}: platforma będzie zawierać linki do kursów wideo, artykułów oraz innych materiałów edukacyjnych, które pozwolą użytkownikom poszerzać wiedzę na temat technologii blockchain. \item \textbf{Konwersja walut i kryptowalut}: funkcja konwertera ułatwi przeliczenia pomiędzy walutami tradycyjnymi a kryptowalutami, co jest istotne dla inwestorów. \end{enumerate}
-
-Platforma wyróżniać się będzie możliwością \textbf{wyboru konkretnego blockchaina do analiz i operacji}, co odróżnia ją od istniejących serwisów, takich jak Etherscan (skoncentrowanego na Ethereum) czy Solscan (dedykowanego Solanie). Dzięki integracji z API użytkownicy będą mieli dostęp do bieżących danych o transakcjach i stanie blockchainów, co zwiększy wartość informacyjną platformy i pozwoli na podejmowanie bardziej świadomych decyzji inwestycyjnych.
-
-
-\section{Zarys Architektury}
-
-System został zaprojektowany jako aplikacja wielowarstwowa, składająca się z dwóch głównych komponentów: backendu i frontendu. Każdy komponent działa jako osobny moduł, uruchamiany w odrębnym kontenerze Docker, co zapewnia izolację środowisk oraz łatwość wdrażania i utrzymania. Komunikacja między frontendem a backendem odbywa się za pomocą protokołu REST, z odpowiedziami zwracanymi w formacie JSON w postaci obiektów \texttt{ResponseEntity}, co ułatwia integrację i zapewnia spójność przesyłanych danych.
-
-Backend został zaimplementowany w Spring Boot 3 z użyciem Javy 21 i pełni rolę centralnego punktu przetwarzania danych. Korzysta z interfejsów \texttt{CrudRepository} do zarządzania danymi użytkowników oraz NFT w bazie PostgreSQL. Informacje blockchainowe, takie jak transakcje i dane tokenów, są pobierane w czasie rzeczywistym z API dostawców, takich jak Etherscan i CoinMarketCap. Backend dodatkowo wykorzystuje Node.js do realizacji zaawansowanych operacji blockchainowych, w tym symulacji transakcji oraz airdropów.
-
-Frontend zbudowany w React działa jako aplikacja wielostronicowa (MPA) i wykorzystuje bibliotekę \texttt{axios} do komunikacji z backendem. Autoryzacja użytkowników jest realizowana za pomocą tokenów JWT przechowywanych w \texttt{localStorage}, co zapewnia bezpieczeństwo sesji oraz ochronę komunikacji między komponentami.
-
-System jest w pełni konteneryzowany, a jego architektura umożliwia łatwą skalowalność i przyszłe rozszerzenia, takie jak wdrożenie modelu AI do przewidywania cen kryptowalut oraz migracja do chmury AWS z użyciem Elastic Load Balancer (ELB) w celu równoważenia obciążenia i zwiększenia niezawodności.
-
-
-
-\section{Komponenty systemu}
-System składa się z kilku kluczowych komponentów, które wspólnie realizują jego funkcjonalność. Pierwszym z nich jest frontend, zaimplementowany w React, który odpowiada za prezentację danych i interakcję z użytkownikami. Frontend został podzielony na moduły odpowiadające różnym domenom funkcjonalnym. Moduł blockchain prezentuje dane związane z blockchainami Bitcoin, Ethereum i Solana, w tym szczegóły transakcji, bloków oraz kont. Ten moduł zawiera podkomponenty obsługujące wyszukiwanie oraz wyświetlanie szczegółowych informacji. Moduł kryptowalut zarządza kategoriami kryptowalut, danymi historycznymi, rynkiem globalnym oraz rankingami. Dodatkowo frontend oferuje widoki użytkownika, takie jak logowanie, rejestracja oraz strona główna. Komunikacja z backendem odbywa się za pomocą biblioteki axios, z uwierzytelnianiem opartym na tokenach JWT przechowywanych w \texttt{localStorage}.
-
-Backend systemu został zaimplementowany w Spring Boot 3 przy użyciu Javy 21. Jest to centralny komponent systemu, który integruje funkcjonalności związane z logiką biznesową, bazą danych oraz zewnętrznymi dostawcami informacji. Backend udostępnia API REST dla frontendu i obsługuje kilka kluczowych domen, takich jak kryptowaluty, NFT oraz zasoby zewnętrzne. Moduł kryptowalut oferuje funkcjonalności zarządzania kategoriami, danymi historycznymi oraz danymi rynkowymi. Moduł NFT zarządza tokenami, kolekcjami oraz ich statystykami. Backend również integruje dane blockchainowe, takie jak transakcje i bloki, które są dynamicznie pobierane z zewnętrznych API, takich jak Etherscan czy CoinMarketCap. Ponadto backend wywołuje dedykowane skrypty w Node.js w celu realizacji zaawansowanych operacji blockchainowych, takich jak symulacje transakcji oraz airdropy.
-
-Część backendu odpowiada również za bezpieczeństwo, realizowane poprzez mechanizm OAuth2 i tokeny JWT. Tokeny te są wykorzystywane do uwierzytelniania użytkowników oraz zabezpieczania komunikacji między frontendem a backendem. W backendzie zastosowano również bazę danych PostgreSQL, która przechowuje trwałe dane, takie jak użytkownicy, dane NFT oraz kryptowaluty, podczas gdy dane blockchainowe są dynamicznie pobierane i nie są przechowywane.
-
-Skrypty Node.js stanowią osobny komponent systemu, uruchamiany w dedykowanym kontenerze Docker. Skrypty te obsługują operacje blockchainowe, takie jak symulacje transakcji, tworzenie nowych kont oraz airdropy tokenów. Współpracują one z backendem, zapewniając wsparcie dla bardziej zaawansowanych funkcjonalności systemu.
-
-System jest w pełni konteneryzowany, co oznacza, że każdy z jego komponentów — frontend, backend, baza danych i Node.js — działa w odrębnym kontenerze Docker. Taka architektura zapewnia izolację środowisk, łatwość wdrażania i możliwość niezależnego skalowania komponentów. Planowane jest również wdrożenie modelu sztucznej inteligencji (AI) do przewidywania cen kryptowalut, który zostanie zintegrowany z backendem jako dodatkowy moduł analityczny. W przyszłości system zostanie wdrożony w chmurze AWS z wykorzystaniem Elastic Load Balancer (ELB), co pozwoli na równoważenie obciążenia i zwiększenie wydajności oraz skalowalności.
-
-\section{Interakcje między komponentami}
-
-
-Interakcja między komponentami systemu została zaprojektowana z wykorzystaniem standardowych mechanizmów komunikacji, które zapewniają efektywność, bezpieczeństwo i elastyczność działania. System składa się z czterech głównych komponentów: frontendu, backendu, skryptów Node.js oraz bazy danych PostgreSQL. Każdy z tych komponentów pełni odrębną rolę w architekturze i współpracuje z innymi poprzez jasno zdefiniowane interfejsy.
-
-Frontend, działający jako aplikacja wielostronicowa (MPA) zbudowana w React, pełni rolę warstwy prezentacji. Użytkownicy wchodzą w interakcje z aplikacją za pomocą interfejsu graficznego, który umożliwia przeglądanie danych blockchainowych, zarządzanie NFT oraz dostęp do funkcji związanych z kryptowalutami. Frontend komunikuje się z backendem za pomocą protokołu REST, korzystając z biblioteki axios. Żądania wysyłane przez frontend zawierają tokeny JWT w nagłówkach, co pozwala na autoryzację użytkowników oraz zapewnia bezpieczeństwo przesyłanych danych. Backend przetwarza żądania, odwołuje się do bazy danych lub zewnętrznych API i zwraca odpowiedzi w formacie JSON.
-
-Backend, zaimplementowany w Spring Boot, jest centralnym komponentem odpowiedzialnym za przetwarzanie logiki biznesowej oraz zarządzanie danymi. Komunikacja między frontendem a backendem jest synchroniczna i odbywa się za pomocą jasno określonych endpointów API REST. Backend działa również jako pośrednik między frontendem a zewnętrznymi dostawcami informacji blockchainowych, takimi jak Etherscan, CoinMarketCap czy Solana RPC, co pozwala na dynamiczne pobieranie danych transakcji, bloków i kont w czasie rzeczywistym. W przypadku bardziej zaawansowanych operacji blockchainowych, takich jak symulacje transakcji czy airdropy, backend wywołuje dedykowane skrypty Node.js.
-
-Skrypty Node.js działają w osobnym kontenerze i pełnią rolę wspierającą backend w realizacji specyficznych operacji blockchainowych. Skrypty te są wywoływane przez backend za pomocą mechanizmów interfejsowych i umożliwiają wykonywanie działań takich jak generowanie nowych transakcji, symulacje przepływu środków czy zarządzanie airdropami tokenów. Skrypty te operują na danych dynamicznych, które są bezpośrednio pobierane z blockchaina, co eliminuje potrzebę ich zapisywania w bazie danych.
-
-Baza danych PostgreSQL przechowuje dane trwałe, takie jak informacje o użytkownikach, kategoriach kryptowalut, danych historycznych oraz NFT. Backend komunikuje się z bazą danych za pomocą warstwy repozytoriów opartej na interfejsach CrudRepository. Gdy użytkownik żąda danych dostępnych w bazie, backend odczytuje je i przekształca w odpowiedzi API, które następnie są przesyłane do frontendu. W przypadku danych blockchainowych, które są dynamiczne, backend bezpośrednio pobiera je z zewnętrznych API, bez konieczności korzystania z bazy danych.
-
-Planowane wdrożenie modelu AI do przewidywania cen kryptowalut wprowadzi nowy sposób interakcji między komponentami. Model będzie integrowany z backendem, który będzie przesyłał dane wejściowe do analizy i odbierał wyniki predykcji. Te dane będą następnie prezentowane użytkownikom na frontendzie, co zapewni dodatkową wartość dla systemu.
-
-Podsumowując, interakcja między komponentami opiera się na wyraźnym podziale ról i odpowiedzialności. Frontend obsługuje interfejs użytkownika i komunikuje się z backendem poprzez REST API. Backend pełni funkcję centralnego punktu przetwarzania, współpracując zarówno z bazą danych PostgreSQL, jak i z zewnętrznymi dostawcami danych blockchainowych. Skrypty Node.js wspierają backend w realizacji specyficznych operacji blockchainowych, a baza danych zapewnia trwałe przechowywanie kluczowych informacji. Wszystkie komponenty współpracują w sposób zintegrowany, zapewniając elastyczność, wydajność i bezpieczeństwo działania systemu.
-
-
-
-\section{Wymagania aplikacji} %DONE: aktualizaja opisu rozmowy na ostanim spotkaniu
-
-Aplikacja została zaprojektowana tak, aby spełniać zarówno wymagania funkcjonalne, jak i niefunkcjonalne, zapewniając użytkownikom pełną funkcjonalność oraz wysoką wydajność i bezpieczeństwo.
+Platforma będzie oferowała możliwość \textbf{wyboru konkretnego blockchaina do analiz i operacji}, czym różnić się będzie od istniejących serwisów, takich jak Etherscan (skoncentrowanego na Ethereum) czy Solscan (dedykowanego Solanie). Dzięki integracji z API użytkownicy będą mieli dostęp do bieżących danych o transakcjach i stanie blockchainów, co zwiększy wartość informacyjną platformy i pozwoli na podejmowanie bardziej świadomych decyzji inwestycyjnych.
 
 Pod względem funkcjonalnym aplikacja musi umożliwiać zarządzanie użytkownikami, w tym rejestrację i logowanie za pomocą bezpiecznego mechanizmu autoryzacji opartego na OAuth2 i tokenach JWT. Użytkownicy muszą mieć możliwość przeglądania szczegółowych danych blockchainowych, takich jak transakcje, bloki i konta na blockchainach Bitcoin, Ethereum i Solana. System powinien także umożliwiać dynamiczne wyszukiwanie tych danych za pomocą zapytań REST, które frontend przesyła do backendu.
 
@@ -62,136 +20,133 @@ Kolejnym wymaganiem jest obsługa kryptowalut, obejmująca prezentację kategori
 
 Oprócz funkcji użytkowych system musi zapewniać przewidywanie cen kryptowalut dzięki integracji z modelem AI. Model ten będzie analizować dane historyczne i bieżące, generując prognozy, które będą udostępniane użytkownikom w aplikacji.
 
-Pod względem niefunkcjonalnym aplikacja musi być wydajna, obsługując co najmniej 100 równoczesnych zapytań REST bez znaczącego spadku wydajności. Dynamiczne pobieranie danych blockchainowych z zewnętrznych API, takich jak Etherscan czy CoinMarketCap, musi odbywać się w czasie rzeczywistym z minimalnym opóźnieniem. System musi być skalowalny, co zostanie osiągnięte dzięki wdrożeniu w chmurze AWS z użyciem Elastic Load Balancer (ELB), który umożliwi równoważenie obciążenia oraz dynamiczne zarządzanie zasobami.
+Pod względem niefunkcjonalnym aplikacja musi być wydajna, obsługując wiele równoczesnych zapytań REST bez znaczącego spadku wydajności. Dynamiczne pobieranie danych blockchainowych z zewnętrznych API, takich jak Etherscan czy CoinMarketCap, musi odbywać się w czasie rzeczywistym z minimalnym opóźnieniem. System musi być skalowalny.
 
-Bezpieczeństwo aplikacji jest priorytetem. Wszystkie dane przesyłane między frontendem a backendem muszą być zabezpieczone za pomocą szyfrowania HTTPS, a tokeny JWT muszą być przechowywane w sposób bezpieczny w przeglądarce użytkownika. System musi być odporny na ataki, takie jak CSRF czy XSS, a także zapewniać ochronę przed nieautoryzowanym dostępem.
+\subsection{Zarys architektury}\label{subsec:ZarysArchitektury}
+Architektura budowanej platformy ma być wielowarstwowa, z wyróżnionymi dwoma głównymi elementami: backendem i frontendem. 
+% TO DO:
+% Zarys architektury tej aplikacji pojazano na rysunku~\ref{}
+%\begin{figure}[htb]
+	%\includegraphics[width=\.9\linwidth]{}
+	%\caption{Zarysy architektury systemu}
+	%\label{fig:ZarysyArchitekturySystemu}
+%\end{figure}
+Każdy komponent działać ma jako osobny moduł, uruchamiany w odrębnym kontenerze Docker, co zapewnić ma izolację środowisk oraz łatwość wdrażania i utrzymania. Komunikacja między frontendem a backendem odbywać się ma za pomocą protokołu REST, z odpowiedziami zwracanymi w formacie JSON, w postaci obiektów \texttt{ResponseEntity}, co ułatwi integrację i zapewni spójność przesyłanych danych.
 
-Wymagana niezawodność systemu zakłada jego dostępność na poziomie 99,9%, co zostanie osiągnięte dzięki konteneryzacji oraz planowanemu wdrożeniu w chmurze AWS. System musi być elastyczny, aby umożliwić łatwe dodawanie nowych funkcjonalności, takich jak integracja z kolejnymi blockchainami czy wdrażanie kolejnych modeli analitycznych. Modułowa architektura aplikacji, w której każdy komponent działa jako niezależny moduł w odrębnym kontenerze Docker, wspiera tę elastyczność.
+Bezpieczeństwo aplikacji jest priorytetem. Wszystkie dane przesyłane między frontendem a backendem muszą być zabezpieczone za pomocą szyfrowania HTTPS, a tokeny JWT muszą być przechowywane w sposób bezpieczny w przeglądarce użytkownika. System musi być odporny na ataki oraz zapewniać ochronę przed nieautoryzowanym dostępem.
 
-Pod względem zgodności technologicznej aplikacja musi działać w środowisku wspierającym Dockera, z backendem opartym na Javie 21 i Spring Boot 3 oraz frontendem zbudowanym w React. Baza danych PostgreSQL odpowiada za przechowywanie trwałych informacji, takich jak dane użytkowników, kolekcje NFT i dane kryptowalut.
+Backend, pełniący rolę centralnego punktu przetwarzania danych, zostanie zaimplementowany w Spring Boot 3 z użyciem Javy 21. Do zarządzania danymi użytkowników oraz NFT w bazie PostgreSQL wykorzystany zostanie \texttt{CrudRepository} ze Spring Data JPA. Informacje blockchainowe, takie jak transakcje i dane tokenów, będą pobierane w czasie rzeczywistym z API dostawców, takich jak Etherscan i CoinMarketCap (zakłada się możliwość zamockowania tych API do celów testowania). Backend dodatkowo wykorzystany sostanie Node.js do realizacji zaawansowanych operacji blockchainowych, w tym symulacji transakcji oraz airdropów.
 
-System musi być również łatwy w utrzymaniu. Kod aplikacji musi być zgodny z najlepszymi praktykami programistycznymi, co zapewni łatwość rozszerzania i debugowania. Planowane wdrożenie pipeline’u CI/CD umożliwi automatyzację procesu budowy, testowania i wdrażania, co przyczyni się do zwiększenia efektywności zespołu developerskiego.
+Frontend, zbudowany w React, działać ma jako aplikacja wielostronicowa MPA (ang.~\emph{Multi-Page Application}). Komunikację z backendem zapewnić ma użycie biblioteki \texttt{axios}. Autoryzacja użytkowników zostanie realizowana za pomocą tokenów JWT przechowywanych w \texttt{localStorage}, co zapewni bezpieczeństwo sesji oraz ochronę komunikacji między komponentami.
 
-Podsumowując, aplikacja musi spełniać wymagania zarówno użytkowe, jak i techniczne, aby zapewnić dostęp do nowoczesnych funkcji związanych z blockchainami, kryptowalutami i NFT. Dzięki modularnej architekturze, konteneryzacji i planowanemu wdrożeniu w chmurze AWS system będzie elastyczny, skalowalny i bezpieczny, co pozwoli sprostać rosnącym wymaganiom użytkowników.
+System musi być również łatwy w utrzymaniu. Kod aplikacji musi być zgodny z najlepszymi praktykami programistycznymi. Planowane jest wdrożenie pipeline’u CI/CD do automatyzacji procesu budowy, testowania i wdrażania.
 
-\section{Przykłady użycia aplikacji}
+% TO DO: tutaj jeszcze tryb niedokonany - planujemy, co ma być wykonane
 
-Aplikacja umożliwia realizację różnych scenariuszy użytkowania, dostosowanych do potrzeb użytkowników zainteresowanych blockchainami, kryptowalutami i NFT. Poniżej przedstawiono główne przypadki użycia.
 
-\subsection{Przeglądanie danych blockchainowych}
+
+\section{Analiza wymagań}
+Na podstawie założeń ogólnych sformułowano wymagania szczegółowe. Zestawiono je poniżej w kolejnych podrozdziałach. Stanowią one uzupełnienie do opisanych już wymagań. 
+\subsection{Wymagania funkcjonalne}
+Wymagania funkcjonalne systemu zostały podzielone na grupy w zależności od ich domeny zastosowania. Poniżej przedstawiono szczegóły każdej z tych grup.
+% TO DO: opis poniżej jest trochę trudny do zrozumienia. Nie wiadomo do końca o co chodzi - czy nazwę sekcji na interfejsie użytkownika, w ramach której da się wykonać wymienione operacje, czy o coś innego. Przydałoby się jakieś kolejne zdanie wyjaśniające  Proszę je dopisać. 
+% Chodzi o to, by było wiadomo, czym jest wytłuszczony wyraz i towarzyszący mu jednozdaniowy opis (reszta opisu to zdaje się są funkcje dostępne na interfejsie użytkownika w ramach danej grupy?). 
+% TO DO: Przeredagowałem pierwszą subsubsekcję, ale nie wiem, czy efekt jest zadowalający. Proszę to sprawdzić.
+% TO DO: Proszę preredagować pozostałe subsekcje.
+\subsubsection{Kategorie i dane rynkowe}
+\begin{itemize}
+\item \textbf{Category} Reprezentuje kategorię kryptowalut (np.\ DeFi, NFT), z jej nazwą i opcjonalnym opisem. System powinien umożliwiać zarządzanie kategoriami: dodawanie, edytowanie, usuwanie i wyświetlanie. Obsługuje mapowanie kategorii na powiązane kryptowaluty.
+\item \textbf{Cryptocurrency} Reprezentuje kryptowalutę, jej nazwę, symbol i dane rynkowe. System powinien zapewnić obsługę operacji CRUD (ang.~\emph{Create, Read, Update, Delete}) na kryptowalutach. Zakres danych przypisany do kryptowalutu: ID, nazwa, symbol, cena, wolumen obrotu i kapitalizacja rynkowa.
+\item \textbf{HistoricalData} Reprezentuje dane historyczne kryptowalut (cena, wolumen, kapitalizacja). System powinien umożliwiać przechowywanie danych historycznych i zapytania o dane w określonych przedziałach czasowych.
+\item \textbf{Platform} Przechowuje szczegóły platform, na których działają kryptowaluty (np.\ Ethereum, Solana). System powinien obsługiwać mapowanie kryptowalut na platformy.
+\item \textbf{FearAndGreed} Reprezentuje wskaźnik strachu i chciwości na rynku kryptowalut. System powinien umożliwiać pobieranie bieżących i historycznych wartości wskaźnika.
+\end{itemize}
+
+\subsubsection{Dane NFT}
+\begin{itemize}
+\item \textbf{Collection} Reprezentuje kolekcję NFT, np.\ Bored Ape Yacht Club. Przechowuje nazwę, opis, liczbę tokenów w kolekcji oraz właścicieli. Powiązana z tokenami NFT.
+\item \textbf{CollectionStats} Przechowuje dane statystyczne kolekcji NFT, np. średnia cena, wolumen obrotu. Umożliwia aktualizację danych na podstawie transakcji.
+\item \textbf{NFT} Reprezentuje token NFT, w tym metadane, właściciela i historię transakcji. Obsługuje CRUD dla tokenów NFT. Przechowuje ID, nazwę, obraz i właściciela.
+\item \textbf{NFTOwner} Przechowuje dane właścicieli NFT, np. ID użytkownika i adres portfela. Obsługuje powiązania między właścicielami a tokenami.
+\item \textbf{NFTRarity} Reprezentuje rzadkość tokenu NFT w skali procentowej. Obsługuje zapytania o tokeny o określonym poziomie rzadkości.
+\item \textbf{NFTTrait} Przechowuje cechy tokenów NFT, np. kolor oczu, tło. Obsługuje mapowanie cech na tokeny.
+\end{itemize}
+
+\subsubsection{Dane blockchainowe Bitcoin}
+\begin{itemize}
+\item \textbf{BitcoinAccount} Reprezentuje konto w sieci Bitcoin, przechowuje adres, saldo i listę transakcji. Obsługuje CRUD dla kont oraz aktualizację salda na podstawie transakcji.
+\item \textbf{BitcoinBlock} Reprezentuje blok w sieci Bitcoin, przechowuje numer bloku, hash i listę transakcji. Umożliwia wyszukiwanie bloków po numerze lub hash.
+\item \textbf{BitcoinTransaction} Reprezentuje transakcję w sieci Bitcoin, zawiera hash, adresy nadawcy i odbiorcy, oraz kwotę. Obsługuje analizę transakcji i zapytania o szczegóły.
+\end{itemize}
+
+\subsubsection{Dane blockchainowe Ethereum}
+\begin{itemize}
+\item \textbf{EthereumAccount} Reprezentuje konto w sieci Ethereum, przechowuje saldo, adres i interakcje z kontraktami. Obsługuje zapytania o historię transakcji i saldo.
+\item \textbf{EthereumBlock} Reprezentuje blok Ethereum, zawiera numer, hash i listę transakcji. Umożliwia zapytania o szczegóły bloków i analizę stanu sieci.
+\item \textbf{Contract} Reprezentuje inteligentny kontrakt Ethereum, przechowuje kod, adres i ABI. Umożliwia interakcję z kontraktami i odczyt/zapis danych na blockchainie.
+\item \textbf{EthereumTransaction} Reprezentuje transakcję Ethereum, zawiera hash, gaz, status i listę adresów. Obsługuje analizę kosztów gazu i stan kont po transakcji.
+\end{itemize}
+
+\subsubsection{Dane blockchainowe Solana}
+\begin{itemize}
+\item \textbf{SolanaAccount} Reprezentuje konto w sieci Solana, przechowuje saldo, właściciela i ostatni slot. Obsługuje zapytania o szczegóły konta i integrację z API Solana.
+\item \textbf{SolanaBlock} Reprezentuje blok w sieci Solana, zawiera numer, hash, listę transakcji i czas utworzenia. Obsługuje zapytania o szczegóły bloków i analizę stanu sieci.
+\item \textbf{Epoch} Reprezentuje epokę w sieci Solana, przechowuje liczbę slotów i czas trwania. Obsługuje dynamiczne aktualizacje danych w zależności od stanu sieci.
+\item \textbf{SolanaClusterNode} Reprezentuje węzeł Solana, zawiera adres IP, status i typ roli (np. walidator). Umożliwia monitorowanie stanu węzłów klastra.
+\item \textbf{SolanaTokenAccount} Reprezentuje konto tokenowe w Solana, przechowuje adres tokenu, właściciela i saldo. Obsługuje historię operacji związanych z tokenami.
+\item \textbf{SplToken} Reprezentuje token SPL, przechowuje symbol, nazwę, liczbę dziesiętnych miejsc i adres kontraktu. Obsługuje zapytania o szczegóły tokenu i jego emisję.
+\item \textbf{SolanaTransaction} Reprezentuje transakcję w Solana, zawiera hash, uczestników i status wykonania. Obsługuje analizę kosztów gazu i powiązanych instrukcji.
+\end{itemize}
+
+\subsection{Przykłady użycia aplikacji}
+Aplikacja powinna umożliwiać realizację różnych scenariuszy użytkowania, dostosowanych do potrzeb użytkowników zainteresowanych blockchainami, kryptowalutami i NFT. Poniżej przedstawiono główne przypadki użycia.
+
+\paragraph{Przeglądanie danych blockchainowych}
 Użytkownik loguje się do aplikacji, a następnie może przeglądać szczegółowe dane blockchainowe dotyczące Bitcoin, Ethereum i Solana. Na przykład może wyszukiwać adresy blockchainowe, aby uzyskać historię transakcji, saldo lub dane o blokach, takie jak wysokość i czas utworzenia. Dane są pobierane w czasie rzeczywistym z zewnętrznych API, co zapewnia aktualność informacji.
 
-\subsection{Analiza kryptowalut i danych rynkowych}
+\paragraph{Analiza kryptowalut i danych rynkowych}
 Użytkownik może przeglądać kategorie kryptowalut, ich dane historyczne oraz informacje o rynku globalnym, takie jak wskaźnik strachu i chciwości. Na przykład może analizować historię cen kryptowalut z ostatnich 30 dni lub uzyskać dane o wolumenie obrotu dla wybranej kategorii. Te funkcje wspierają podejmowanie decyzji inwestycyjnych.
 
-\subsection{Zarządzanie kolekcjami NFT}
+\paragraph{Zarządzanie kolekcjami NFT}
 Aplikacja pozwala przeglądać szczegóły dotyczące kolekcji NFT, takie jak liczba właścicieli, wolumen obrotu czy historia sprzedaży. Użytkownik może również wyszukiwać pojedyncze tokeny i sprawdzać ich metadane, historię transakcji oraz obecnego właściciela. To przydatne dla kolekcjonerów i inwestorów NFT.
 
-\subsection{Symulacje transakcji blockchainowych}
+\paragraph{Symulacje transakcji blockchainowych}
 Za pomocą skryptów Node.js użytkownik może symulować transakcje blockchainowe, takie jak przesyłanie tokenów lub wykonywanie airdropów. Na przykład może skonfigurować adres nadawcy i odbiorcy oraz ilość tokenów, a następnie uzyskać wyniki symulacji w czasie rzeczywistym. Taka funkcjonalność jest idealna do testowania strategii.
 
-\subsection{Wykorzystanie AI do przewidywania cen kryptowalut}
+\paragraph{Wykorzystanie AI do przewidywania cen kryptowalut}
 Model AI zintegrowany z aplikacją umożliwi prognozowanie cen kryptowalut. Użytkownik wybiera kryptowalutę, np. Bitcoin, i otrzymuje przewidywane zmiany cen na najbliższe dni. Wyniki są prezentowane w formie wykresów, co wspiera podejmowanie decyzji inwestycyjnych.
 
-\subsection{Dynamiczne przetwarzanie danych blockchainowych}
+\paragraph{Dynamiczne przetwarzanie danych blockchainowych}
 Aplikacja pozwala uzyskać dane blockchainowe w czasie rzeczywistym dzięki dynamicznym połączeniom z API dostawców. Użytkownik może np. przeglądać najnowsze transakcje w sieci Solana lub analizować szczegóły tokenów ERC-20 na Ethereum. Funkcjonalność ta jest kluczowa dla osób potrzebujących aktualnych danych.
 
-\section{Wymagania funkcjonalne}
+\subsection{Wymagania niefunkcjonalne}
+Aplikacja powinna być zaprojektowana tak, aby spełnić wymagania co do jej wydajność, skalowalność, bezpieczeństwo oraz łatwość utrzymania zdefiniowane poniżej.
 
-Wymagania funkcjonalne systemu zostały podzielone na grupy w zależności od ich domeny zastosowania. Poniżej przedstawiono szczegóły dla każdej z kategorii.
-
-\subsection{Kategorie i dane rynkowe}
-
-\paragraph{Category} Reprezentuje kategorię kryptowalut (np. DeFi, NFT). Umożliwia zarządzanie kategoriami: dodawanie, edytowanie, usuwanie i wyświetlanie. Przechowuje nazwę kategorii i opcjonalny opis. Obsługuje mapowanie kategorii na powiązane kryptowaluty.
-
-\paragraph{Cryptocurrency} Reprezentuje kryptowalutę, jej nazwę, symbol i dane rynkowe. Obsługuje operacje CRUD (Create, Read, Update, Delete) na kryptowalutach. Przechowuje ID, nazwę, symbol, cenę, wolumen obrotu i kapitalizację rynkową.
-
-\paragraph{HistoricalData} Reprezentuje dane historyczne kryptowalut (cena, wolumen, kapitalizacja). Umożliwia przechowywanie danych historycznych i zapytania o dane w określonych przedziałach czasowych.
-
-\paragraph{Platform} Przechowuje szczegóły platform, na których działają kryptowaluty (np. Ethereum, Solana). Obsługuje mapowanie kryptowalut na platformy.
-
-\paragraph{FearAndGreed} Reprezentuje wskaźnik strachu i chciwości na rynku kryptowalut. Umożliwia pobieranie bieżących i historycznych wartości wskaźnika.
-
-\subsection{Dane NFT}
-
-\paragraph{Collection} Reprezentuje kolekcję NFT, np. Bored Ape Yacht Club. Przechowuje nazwę, opis, liczbę tokenów w kolekcji oraz właścicieli. Powiązana z tokenami NFT.
-
-\paragraph{CollectionStats} Przechowuje dane statystyczne kolekcji NFT, np. średnia cena, wolumen obrotu. Umożliwia aktualizację danych na podstawie transakcji.
-
-\paragraph{NFT} Reprezentuje token NFT, w tym metadane, właściciela i historię transakcji. Obsługuje CRUD dla tokenów NFT. Przechowuje ID, nazwę, obraz i właściciela.
-
-\paragraph{NFTOwner} Przechowuje dane właścicieli NFT, np. ID użytkownika i adres portfela. Obsługuje powiązania między właścicielami a tokenami.
-
-\paragraph{NFTRarity} Reprezentuje rzadkość tokenu NFT w skali procentowej. Obsługuje zapytania o tokeny o określonym poziomie rzadkości.
-
-\paragraph{NFTTrait} Przechowuje cechy tokenów NFT, np. kolor oczu, tło. Obsługuje mapowanie cech na tokeny.
-
-\subsection{Dane blockchainowe Bitcoin}
-
-\paragraph{BitcoinAccount} Reprezentuje konto w sieci Bitcoin, przechowuje adres, saldo i listę transakcji. Obsługuje CRUD dla kont oraz aktualizację salda na podstawie transakcji.
-
-\paragraph{BitcoinBlock} Reprezentuje blok w sieci Bitcoin, przechowuje numer bloku, hash i listę transakcji. Umożliwia wyszukiwanie bloków po numerze lub hash.
-
-\paragraph{BitcoinTransaction} Reprezentuje transakcję w sieci Bitcoin, zawiera hash, adresy nadawcy i odbiorcy, oraz kwotę. Obsługuje analizę transakcji i zapytania o szczegóły.
-
-\subsection{Dane blockchainowe Ethereum}
-
-\paragraph{EthereumAccount} Reprezentuje konto w sieci Ethereum, przechowuje saldo, adres i interakcje z kontraktami. Obsługuje zapytania o historię transakcji i saldo.
-
-\paragraph{EthereumBlock} Reprezentuje blok Ethereum, zawiera numer, hash i listę transakcji. Umożliwia zapytania o szczegóły bloków i analizę stanu sieci.
-
-\paragraph{Contract} Reprezentuje inteligentny kontrakt Ethereum, przechowuje kod, adres i ABI. Umożliwia interakcję z kontraktami i odczyt/zapis danych na blockchainie.
-
-\paragraph{EthereumTransaction} Reprezentuje transakcję Ethereum, zawiera hash, gaz, status i listę adresów. Obsługuje analizę kosztów gazu i stan kont po transakcji.
-
-\subsection{Dane blockchainowe Solana}
-
-\paragraph{SolanaAccount} Reprezentuje konto w sieci Solana, przechowuje saldo, właściciela i ostatni slot. Obsługuje zapytania o szczegóły konta i integrację z API Solana.
-
-\paragraph{SolanaBlock} Reprezentuje blok w sieci Solana, zawiera numer, hash, listę transakcji i czas utworzenia. Obsługuje zapytania o szczegóły bloków i analizę stanu sieci.
-
-\paragraph{Epoch} Reprezentuje epokę w sieci Solana, przechowuje liczbę slotów i czas trwania. Obsługuje dynamiczne aktualizacje danych w zależności od stanu sieci.
-
-\paragraph{SolanaClusterNode} Reprezentuje węzeł Solana, zawiera adres IP, status i typ roli (np. walidator). Umożliwia monitorowanie stanu węzłów klastra.
-
-\paragraph{SolanaTokenAccount} Reprezentuje konto tokenowe w Solana, przechowuje adres tokenu, właściciela i saldo. Obsługuje historię operacji związanych z tokenami.
-
-\paragraph{SplToken} Reprezentuje token SPL, przechowuje symbol, nazwę, liczbę dziesiętnych miejsc i adres kontraktu. Obsługuje zapytania o szczegóły tokenu i jego emisję.
-
-\paragraph{SolanaTransaction} Reprezentuje transakcję w Solana, zawiera hash, uczestników i status wykonania. Obsługuje analizę kosztów gazu i powiązanych instrukcji.
-
-
-
-
-\section{Wymagania niefunkcjonalne}
-
-Aplikacja została zaprojektowana tak, aby spełniać szereg wymagań niefunkcjonalnych, które zapewniają jej wydajność, skalowalność, bezpieczeństwo oraz łatwość utrzymania.
-
-\subsection{Wydajność}
+\paragraph{Wydajność}
 Backend musi obsługiwać co najmniej 100 równoczesnych zapytań REST bez znaczącego spadku wydajności. Dynamiczne pobieranie danych blockchainowych z zewnętrznych API musi odbywać się w czasie rzeczywistym z minimalnym opóźnieniem, aby zapewnić użytkownikom aktualne informacje.
 
-\subsection{Skalowalność}
+\paragraph{Skalowalność}
 System musi być skalowalny i dostosowany do zwiększającej się liczby użytkowników. Planowane wdrożenie w chmurze AWS z wykorzystaniem Elastic Load Balancer (ELB) umożliwi równoważenie obciążenia oraz dynamiczne zarządzanie zasobami.
 
-\subsection{Bezpieczeństwo}
+\paragraph{Bezpieczeństwo}
 Wszystkie dane przesyłane między frontendem a backendem muszą być zabezpieczone szyfrowaniem HTTPS. Tokeny JWT muszą być bezpiecznie przechowywane w \texttt{localStorage} i weryfikowane przez backend przy każdym zapytaniu. System musi być odporny na ataki CSRF i XSS, a dane użytkowników muszą być chronione przed nieautoryzowanym dostępem.
 
-\subsection{Niezawodność}
+\paragraph{Niezawodność}
 Aplikacja musi zapewniać 99,9\% dostępności, co zostanie osiągnięte dzięki konteneryzacji oraz planowanemu wdrożeniu na AWS. Mechanizmy monitorowania i powiadamiania o błędach lub awariach muszą zapewnić szybką reakcję na problemy.
 
-\subsection{Elastyczność}
+\paragraph{Elastyczność}
 Architektura aplikacji musi umożliwiać łatwe dodawanie nowych funkcjonalności, takich jak obsługa kolejnych blockchainów czy wdrażanie modeli analitycznych AI. Modularna budowa, w której każdy komponent działa jako niezależny kontener Docker, wspiera tę elastyczność.
 
-\subsection{Łatwość utrzymania}
+\paragraph{Łatwość utrzymania}
 Kod aplikacji musi być zgodny z najlepszymi praktykami, w tym zasadami SOLID i wzorcami projektowymi, co zapewni jego łatwą rozbudowę i utrzymanie. Planowane wdrożenie pipeline'u CI/CD usprawni procesy budowy, testowania i wdrażania.
 
-\subsection{Zgodność technologiczna}
+\paragraph{Zgodność technologiczna}
 Aplikacja musi działać w środowisku obsługującym Dockera. Backend opiera się na Javie 21 i Spring Boot 3, a frontend został zaimplementowany w React, co zapewnia kompatybilność z nowoczesnymi przeglądarkami, takimi jak Chrome, Firefox i Safari.
 
 
 \section{Podsumowanie}
 
-W rozdziale przedstawiono szczegółową analizę wymagań aplikacji, obejmującą zarówno funkcjonalności, jak i aspekty techniczne. Opisano kluczowe funkcje platformy, takie jak przeglądanie danych blockchainowych, zarządzanie kryptowalutami i NFT, symulacje transakcji oraz przewidywanie cen z wykorzystaniem modeli AI. Wyróżnikiem aplikacji jest integracja z zewnętrznymi API blockchainowymi, co umożliwia dynamiczne pobieranie danych w czasie rzeczywistym i oferowanie unikalnych funkcji dla użytkowników.
+W rozdziale przedstawiono analizę wymagań, od ogólnych założeń po szczegóły dotyczące zarówno planowanych funkcji systemu, jak i aspektów technicznych związanych z ich implementacją. Opisano kluczowe funkcje platformy, takie jak przeglądanie danych blockchainowych, zarządzanie kryptowalutami i NFT, symulacje transakcji oraz przewidywanie cen z wykorzystaniem modeli AI. Wyróżnikiem aplikacji jest integracja z zewnętrznymi API blockchainowymi, co umożliwia dynamiczne pobieranie danych w czasie rzeczywistym i oferowanie unikalnych funkcji dla użytkowników.
 
 Architektura systemu opiera się na modularnym podejściu, z wyraźnym podziałem na frontend i backend, wspieranych przez skrypty Node.js oraz bazę danych PostgreSQL. Dzięki konteneryzacji każdy komponent działa w izolowanym środowisku, co zapewnia elastyczność, skalowalność i łatwość utrzymania. Interakcje między komponentami odbywają się za pomocą protokołu REST, z uwierzytelnieniem opartym na OAuth2 i tokenach JWT, co gwarantuje bezpieczeństwo komunikacji.
 
