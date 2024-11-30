@@ -40,7 +40,7 @@ Podsumowując, interakcja między komponentami opiera się na wyraźnym podziale
 
 \section{Podział kodu}
 
-Podczas implementacji systemu, kod został podzielony na dwie główne części: backend oraz frontend. Każda z tych części realizuje określone zadania, a ich współpraca umożliwia pełne funkcjonowanie aplikacji. W poniższym rozdziale przedstawiono szczegóły dotyczące struktury kodu, podziału na funkcje, a także sposób organizacji obu części systemu.
+Implementując system, podzielono kod na dwie główne części. Pierwszą jest backend oraz drugą frontend. Każda część realizuje właściwe zadania. Co umożliwia pełne  funkcjonalność aplikacji. Rozdział poniższy informuje szczegółowo o strukturze kodu, o podziale funkcji, a także sposobie organizacji części systemu.
 
 \subsection{Struktura aplikacji}
 
@@ -747,6 +747,67 @@ function createSolanaAccount() {
 createSolanaAccount();
   \end{lstlisting}
 	
+\section{Opis modelu predykcji cen}
+Model stworzony został stworzony z wykorzystaniem technologii sieci neuronowych typu LSTM (Long Short-Term Memory), zaprojektowaną do przewidywania cen Bitcoina, Etheru i Sol. Użyto danych historycznych od momentu powstania danych kryptowalut.
+
+\paragraph{Biblioteki}
+Najpierw zaimportowano biblioteki do budowy modelu:
+
+\begin{itemize}
+    \item \texttt{pandas} i \texttt{numpy} do manipulacji danymi,
+    \item \texttt{matplotlib} do wizualizacji,
+    \item \texttt{MinMaxScaler} z \texttt{sklearn.preprocessing} do skalowania danych wejściowych,
+    \item Keras (\texttt{Sequential}, \texttt{LSTM}, \texttt{Dense}, \texttt{Dropout}) do budowy i trenowania modelu LSTM.
+\end{itemize}
+
+\paragraph{Źródło danych}
+Dane załadowano z plików CSV:
+
+\begin{itemize}
+    \item \texttt{bitcoin\_data} – dane dotyczące Bitcoina,
+\end{itemize}
+
+\paragraph{Dane do nauki}
+Następnie wyodrębniono kolumnę \texttt{Price}, aby model uczył się na cenach z każdego dnia.
+
+\paragraph{Skalowanie danych}
+Do skalowania danych zastosowano \texttt{MinMaxScaler}, aby wartości cen zostały przekształcone w przedział \([0, 1]\).
+
+
+\paragraph{Przygotowanie sekwencji}
+Dane zostały podzielone na sekwencje o długości 60 kroków czasowych, gdzie każda sekwencja \texttt{X} zawiera 60 poprzednich punktów cenowych, a zmienna \texttt{y} zawiera cenę w kolejnym kroku czasowym:
+\begin{itemize}
+    \item \texttt{X} – wejściowe dane dla modelu,
+    \item \texttt{y} – docelowe dane (przewidywana cena).
+\end{itemize}
+
+\paragraph{Podział na dane treningowe i testowe}
+Dane zostały podzielone w stosunku 80\%/20\%, tak aby można było przetestować model.
+
+\paragraph{Architektura modelu}
+
+Pierwsza wersja modelu oparta jest na klasycznych warstwach LSTM:
+\begin{itemize}
+    \item Trzy warstwy LSTM z 128, 128 i 64 jednostkami,
+    \item Warstwy Dropout z wartościami 30\% i 20\% dla zapobiegania przeuczeniu,
+    \item Dwie warstwy Dense, gdzie pierwsza ma 50 jednostek z funkcją aktywacji ReLU, a druga 1 jednostkę wyjściową.
+\end{itemize}
+
+\paragraph{Kompilacja i trening modelu}
+Model został skompilowany z odpowiednią funkcją straty i optymalizatorem. Model został następnie trenowany na zestawie treningowym przez 50 epok.
+
+\paragraph{Wyniki}
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.9\linewidth]{Wyniki_testowe_i_walidacyjne.png}
+    \caption{Zarysy architektury systemu}
+    \label{fig:Wyniki_testowe_i_walidacyjne}
+\end{figure}
+
+\paragraph{Wnioski}
+Po wykresie widać, że strata na zbiorze treningowym szybko maleje, co może wskazywać na efektywne uczenie się modelu na danych treningowych. Jednak strata na zbiorze walidacyjnym po początkowym spadku, zaczyna się stabilizować. Może to być znakiem, że dochodzi do efektu przeuczenia. Rozwiązaniem tego może być zastosowanie technik regularyzacji takich jak Dropout.
+
 \section{Bezpieczeństwo aplikacji}
 
 Aplikacja wykorzystuje framework \texttt{Spring Security} w celu zapewnienia bezpieczeństwa i kontrolowania dostępu do zasobów. Dzięki zastosowaniu różnych mechanizmów uwierzytelniania i autoryzacji, takich jak \texttt{JWT} (JSON Web Tokens), oraz \texttt{Basic Authentication}, aplikacja jest chroniona przed nieautoryzowanym dostępem. Poniżej przedstawiono kluczowe komponenty zapewniające bezpieczeństwo aplikacji.
