@@ -1,41 +1,69 @@
 \subsection{Podział klas i wzorców projektowych w aplikacji}
 
-Aplikacja jest podzielona na różne warstwy, każda z nich odpowiedzialna za określoną funkcjonalność. Wzorce projektowe takie jak \texttt{DTO}, \texttt{Service Layer}, \texttt{Repository}, oraz \texttt{Controller} zostały zastosowane, aby zapewnić czystą architekturę i separację odpowiedzialności. Poniżej przedstawiamy szczegółowy opis podziału klas w aplikacji, stosowane wzorce oraz rolę kontrolerów i repozytoriów.
+Aplikacja jest podzielona na różne warstwy, każda z nich odpowiedzialna za określoną funkcjonalność. Wzorce projektowe takie jak \texttt{DTO}, \texttt{Service Layer}, \texttt{Repository}, oraz \texttt{Controller} zostały zastosowane, aby zapewnić czystą architekturę i separację odpowiedzialności.
 
 \subsubsection{Podział klas}
 
 W aplikacji występują trzy główne warstwy: \texttt{Model}, \texttt{Service} i \texttt{Controller}, z odpowiednimi klasami, które pełnią określoną rolę.
 
-- **\texttt{Model}**: Klasy modelu są odpowiedzialne za reprezentowanie danych aplikacji. Przykładami klas modelu są:
-  - \texttt{SolanaAccount}, \texttt{SolanaTransaction}, \texttt{EthereumBlock} – reprezentują dane związane z blockchainami i są głównie używane do przenoszenia danych pomiędzy warstwami aplikacji.
-  - \texttt{Cryptocurrency}, \texttt{Categories}, \texttt{GlobalMarket}, \texttt{NFT} – reprezentują dane dotyczące kryptowalut i NFT, które są kluczowe dla funkcji aplikacji.
-  
-- **\texttt{Service}**: Warstwa serwisów zarządza logiką biznesową. To tutaj realizowane są operacje związane z przetwarzaniem danych. Przykładami są:
-  - \texttt{BlockchainService}, \texttt{CryptocurrencyService}, \texttt{NFTService} – odpowiedzialne za przetwarzanie i udostępnianie danych blockchainowych, rynków kryptowalutowych oraz NFT.
-  
-- **\texttt{Controller}**: Kontrolery służą do obsługi zapytań HTTP, przekazywania żądań do odpowiednich serwisów oraz zwracania odpowiedzi do frontend. Przykładami są:
-  - \texttt{BlockchainController}, \texttt{CryptocurrencyController}, \texttt{NFTController} – kontrolują ruch związany z blockchainami, kryptowalutami oraz NFT.
+\begin{lstlisting}[language=Java, caption={Podział klas w aplikacji}]
+Model:
+- SolanaAccount, SolanaTransaction, EthereumBlock
+  Reprezentują dane związane z blockchainami, głównie do przenoszenia danych.
+- Cryptocurrency, Categories, GlobalMarket, NFT
+  Reprezentują dane kryptowalutowe i NFT, kluczowe dla funkcji aplikacji.
+
+Service:
+- BlockchainService, CryptocurrencyService, NFTService
+  Zarządzają logiką biznesową, przetwarzając i udostępniając dane.
+
+Controller:
+- BlockchainController, CryptocurrencyController, NFTController
+  Obsługują zapytania HTTP, przekazując je do serwisów i zwracając odpowiedzi.
+\end{lstlisting}
+
 
 \subsubsection{Wzorce projektowe}
 
 W aplikacji zastosowano kilka popularnych wzorców projektowych, które pomagają w organizacji kodu oraz umożliwiają łatwą jego rozbudowę i konserwację.
 
-- **DTO (Data Transfer Object)**: Wzorzec \texttt{DTO} jest wykorzystywany do przenoszenia danych między warstwami aplikacji w ujednoliconej formie. Przykładami są obiekty \texttt{AccountDTO}, \texttt{TransactionDTO}, \texttt{BlockDTO}, które są używane do transferu danych między backendem a frontendem.
-  
-- **Service Layer**: Warstwa usług realizuje logikę biznesową, dzięki czemu aplikacja jest modularna i łatwa do rozbudowy. Serwisy takie jak \texttt{BlockchainService}, \texttt{CryptocurrencyService} i \texttt{NFTService} zarządzają logiką aplikacyjną dotyczącą operacji na blockchainach, kryptowalutach i NFT.
+\begin{lstlisting}[language=Java, caption={Wzorce projektowe w aplikacji}]
+DTO (Data Transfer Object):
+- Używany do przenoszenia danych między warstwami aplikacji w ujednoliconej formie.
+- Przykłady: AccountDTO, TransactionDTO, BlockDTO
+  Transferują dane między backendem a frontendem.
 
-- **Repository**: Wzorzec \texttt{Repository} oddziela logikę dostępu do danych od reszty aplikacji. Dzięki temu, zarządzanie bazą danych jest bardziej przejrzyste i elastyczne. Przykładami są repozytoria takie jak \texttt{CategoryRepository}, \texttt{ClientRepository}, \texttt{NFTRepository}, które umożliwiają interakcję z bazą danych.
+Service Layer:
+- Realizuje logikę biznesową, zapewnia modularność aplikacji.
+- Przykłady: BlockchainService, CryptocurrencyService, NFTService
+  Zarządzają operacjami na blockchainach, kryptowalutach i NFT.
 
-- **Singleton**: Wzorzec \texttt{Singleton} zapewnia, że dany obiekt jest tworzony tylko raz i jest współdzielony przez całą aplikację.
+Repository:
+- Oddziela logikę dostępu do danych od reszty aplikacji.
+- Przykłady: CategoryRepository, ClientRepository, NFTRepository
+  Umożliwiają interakcję z bazą danych w przejrzysty sposób.
+
+Singleton:
+- Zapewnia, że dany obiekt jest tworzony tylko raz i współdzielony.
+\end{lstlisting}
+
 
 \subsubsection{Kontrolery i Repozytoria}
 
-- **Kontrolery**: Kontrolery w aplikacji pełnią rolę mediatorów między frontendem a backendem. Przykłady kontrolerów to:
-  - \texttt{EthereumController} – odbiera zapytania związane z blockchainem Ethereum.
-  - \texttt{CryptocurrencyController} – obsługuje zapytania dotyczące danych kryptowalutowych.
-  - \texttt{NFTController} – odpowiada za operacje związane z NFT.
+\begin{lstlisting}[language=Java, caption={Kontrolery i Repozytoria w aplikacji}]
+Kontrolery:
+- EthereumController
+  Obsługuje zapytania związane z blockchainem Ethereum.
+- CryptocurrencyController
+  Obsługuje zapytania dotyczące danych kryptowalutowych.
+- NFTController
+  Zarządza operacjami związanymi z NFT.
 
-- **Repozytoria**: Repozytoria w aplikacji odpowiadają za dostęp do bazy danych i operacje CRUD. Każde repozytorium jest powiązane z odpowiednim modelem danych. Przykłady repozytoriów to:
-  - \texttt{ClientRepository} – odpowiedzialne za dostęp do danych konta użytkownika.
-  - \texttt{CryptocurrencyRepository} – zarządza danymi kryptowalut.
-  - \texttt{CategoryRepository} – obsługuje dane związane z kategoriami.
+Repozytoria:
+- ClientRepository
+  Odpowiada za dostęp do danych konta użytkownika.
+- CryptocurrencyRepository
+  Zarządza danymi kryptowalut.
+- CategoryRepository
+  Obsługuje dane związane z kategoriami.
+\end{lstlisting}

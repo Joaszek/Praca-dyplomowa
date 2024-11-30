@@ -1,13 +1,13 @@
 \subsection{Opis klas w aplikacji}
 
-W aplikacji zostały zaimplementowane różne klasy, które odpowiadają za zarządzanie danymi blockchainowymi, danymi o kryptowalutach, transakcjami, a także za logikę biznesową i interakcje z API. Poniżej przedstawiono szczegółowy opis klas, które pełnią kluczowe role w aplikacji.
+W aplikacji zostały zaimplementowane różne klasy, które odpowiadają za zarządzanie danymi blockchainowymi, danymi o kryptowalutach, transakcjami, a także za logikę biznesową i interakcje z API i i innymi kontenerami. Poniżej przedstawiono szczegółowy opis klas, które pełnią kluczowe role w aplikacji.
 
 \subsubsection{Klasy \texttt{Account}, \texttt{Transaction}, \texttt{Block}}
 
 Klasy \texttt{Account}, \texttt{Transaction} oraz \texttt{Block} w paczce \texttt{blockchain} mają podobny cel – reprezentują różne aspekty danych blockchainowych, jednak różnią się szczegółami implementacyjnymi:
 
 - \textbf{Klasa \texttt{Account}}: 
-  Klasa \texttt{Account} reprezentuje dane konta w blockchainie. Zawiera informacje takie jak adres konta, saldo oraz inne szczegóły związane z danym kontem. 
+  Klasa \texttt{Account} reprezentuje dane konta w blockchainie. Zawiera informacje takie jak adres konta, saldo oraz inne szczegóły konta. 
 
 - \textbf{Klasa \texttt{Transaction}}: 
   Klasa \texttt{Transaction} jest odpowiedzialna za przechowywanie informacji o pojedynczej transakcji w blockchainie. Zawiera dane takie jak identyfikator transakcji, adresy nadawcy i odbiorcy, kwotę oraz status transakcji.
@@ -15,7 +15,7 @@ Klasy \texttt{Account}, \texttt{Transaction} oraz \texttt{Block} w paczce \textt
 - \textbf{Klasa \texttt{Block}}: 
   Klasa \texttt{Block} reprezentuje pojedynczy blok w blockchainie. Zawiera informacje o numerze bloku, dacie utworzenia, liście transakcji zawartych w bloku. 
 
-Chociaż klasy te różnią się szczegółami (takimi jak dane, które przechowują), ich głównym celem jest zarządzanie danymi blockchainowymi i zapewnienie spójności danych.
+Chociaż klasy te różnią się szczegółowymi danymi to ich głównym celeme jest zarządzanie danymi blockchainowymi.
 
 \subsubsection{Opis klasy Client}
 
@@ -23,7 +23,7 @@ Klasa \texttt{Client} reprezentuje użytkownika w systemie i zawiera wszystkie i
 
 \section{Opis klasy Cryptocurrency}
 
-Klasa \texttt{Cryptocurrency} reprezentuje kryptowalutę w systemie, zawierającą szczegółowe informacje o jej identyfikatorze w systemie CoinMarketCap (\texttt{cmcId}), nazwie, symbolu, rankingu, podaży cyrkulującej, cenie, wolumenie w ciągu 24 godzin oraz procentowej zmianie ceny w różnych okresach (1h, 24h, 7d). Klasa ta posiada również powiązanie z historią cen przez relację \texttt{OneToMany} z klasą \texttt{HistoricalData}, a także z platformą, na której kryptowaluta jest notowana, za pomocą relacji \texttt{OneToOne} z klasą \texttt{Platform}.
+Klasa \texttt{Cryptocurrency} reprezentuje kryptowalutę w systemie, zawierającą szczegółowe informacje o jej identyfikatorze w systemie CoinMarketCap (\texttt{cmcId}), nazwie, symbolu, rankingu, podaży cyrkulującej, cenie, wolumenie oraz procentowej zmianie ceny w różnych okresach (1h, 24h, 7d). Klasa ta posiada również powiązanie z historią cen przez relację \texttt{OneToMany} z klasą \texttt{HistoricalData}, a także z platformą, na której kryptowaluta jest notowana, za pomocą relacji \texttt{OneToOne} z klasą \texttt{Platform}.
 
 \section{Opis klasy Category}
 

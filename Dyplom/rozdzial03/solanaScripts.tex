@@ -6,13 +6,15 @@ Folder \texttt{solanaScripts} zawiera skrypty odpowiedzialne za interakcję z bl
 
 Folder \texttt{solanaScripts} zawiera skrypty napisane w języku JavaScript, które są odpowiedzialne za komunikację z blockchainem Solany. Skrypty te wykorzystują bibliotekę \texttt{@solana/web3.js}, która umożliwia interakcję z blockchainem Solany. Skrypty w tym folderze są wywoływane przez backend aplikacji, gdy użytkownik wysyła odpowiednie zapytanie.
 
-Struktura folderu \texttt{solanaScripts} może wyglądać następująco:
+Struktura folderu \texttt{solanaScripts} wygląda następująco:
 
 \begin{verbatim}
 solanaScripts/
 |-- airdrop.js  # Skrypt do wykonania operacji airdrop
 |-- createTransaction.js  # Skrypt do symulowania transakcji
 |-- create.js  # Skrypt do stworzenia konta
+|-- start.js # Serwer
+|-- Dockerfile # Obraz 
 \end{verbatim}
 
 \subsubsection{Wywoływanie skryptów z aplikacji}
@@ -91,17 +93,22 @@ CMD ["npm", "start"]
 5. \texttt{COPY . .} – kopiuje foldery do katalogu roboczego w kontenerze.
 6. \texttt{CMD ["npm", "run"]} – uruchamia serwer do słuchania na zapytania.
 
-Kontener jest budowany wraz z kontenerem frontend, backend oraz bazą danych za pomocą komendy:
+Obraz należy zbudować wykorzystując komendę:
+\begin{lstlisting}
+docker build -t solana\_scritps\_image . --no-cache
+\end{lstlisting}
+
+Kontener zostanie utworzony wraz z innymi kontenerami po wpisaniu komendy:
 
 \begin{lstlisting}
-docker compose up --build
+docker compose up
 \end{lstlisting}
 
 \subsubsection{Biblioteki używane w skryptach Solany}
 
-Skrypty w folderze \texttt{solanaScripts} korzystają z kilku ważnych bibliotek, które umożliwiają interakcję z blockchainem Solany oraz przetwarzanie danych:
+Skrypty w folderze \texttt{solanaScripts} korzystają z z biblioteki do interackji z blockchainem Solany:
 
-- **\texttt{@solana/web3.js}**: Jest to oficjalna biblioteka JavaScript do interakcji z blockchainem Solany.  
+ \texttt{@solana/web3.js}: Jest to oficjalna biblioteka JavaScript do interakcji z blockchainem Solany.  
   Przykład użycia tej biblioteki do stworzenia konta:
   \begin{lstlisting}
 const { Keypair } = require('@solana/web3.js');
