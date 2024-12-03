@@ -17,15 +17,15 @@ Aby uruchomić aplikację, należy zbudować obrazy dla 4 kontenerów:
 \end{itemize}
 
 Obrazy można także pobrać z Docker Hub:
-\begin{verbatim}
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 docker pull joaszek/bachelor-thesis:model_server_image
 docker pull joaszek/bachelor-thesis:solana_scripts_image
 docker pull joaszek/bachelor-thesis:backend_image
 docker pull joaszek/bachelor-thesis:frontend_image
 docker pull joaszek/bachelor-thesis:postgres_image
-\end{verbatim}
+\end{lstlisting}
 
-\begin{lstlisting}
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily,tabsize=2]
 version: "3.8"
 
 services:
@@ -128,7 +128,7 @@ Aplikacja została wdrożona w środowisku AWS z wykorzystaniem usługi ECS (Ela
 \begin{itemize}
     \item \textbf{Postgres}:
     \begin{itemize}
-        \item Obraz: \texttt{503561436372.dkr.ecr.eu-north-1.amazonaws.com/bachelor/deployment:postgres\_custom}
+        \item Obraz: \url{503561436372.dkr.ecr.eu-north-1.amazonaws.com/bachelor/deployment:postgres_custom}
         \item Port: \texttt{5432}
         \item Zmienne środowiskowe:
         \begin{itemize}
@@ -149,7 +149,7 @@ Aplikacja została wdrożona w środowisku AWS z wykorzystaniem usługi ECS (Ela
     \end{itemize}
     \item \textbf{Backend App}:
     \begin{itemize}
-        \item Obraz: \texttt{503561436372.dkr.ecr.eu-north-1.amazonaws.com/bachelor/deployment:backend\_image\_latest}
+        \item Obraz: \url{503561436372.dkr.ecr.eu-north-1.amazonaws.com/bachelor/deployment:backend_image_latest}
         \item Port: \texttt{8080}
         \item Zmienne środowiskowe:
         \begin{itemize}
@@ -163,18 +163,18 @@ Aplikacja została wdrożona w środowisku AWS z wykorzystaniem usługi ECS (Ela
     \end{itemize}
     \item \textbf{Solana Scripts Service}:
     \begin{itemize}
-        \item Obraz: \texttt{503561436372.dkr.ecr.eu-north-1.amazonaws.com/bachelor/deployment:solana\_scripts\_image\_latest}
+        \item Obraz: \url{503561436372.dkr.ecr.eu-north-1.amazonaws.com/bachelor/deployment:solana_scripts_image_latest}
         \item Port: \texttt{3001}
         \item Polecenie startowe: \texttt{npm start}
     \end{itemize}
     \item \textbf{Model Server}:
     \begin{itemize}
-        \item Obraz: \texttt{503561436372.dkr.ecr.eu-north-1.amazonaws.com/bachelor/deployment:model\_server\_image\_latest}
+        \item Obraz: \url{503561436372.dkr.ecr.eu-north-1.amazonaws.com/bachelor/deployment:model_server_image_latest}
         \item Port: \texttt{5000}
     \end{itemize}
     \item \textbf{Frontend App}:
     \begin{itemize}
-        \item Obraz: \texttt{503561436372.dkr.ecr.eu-north-1.amazonaws.com/bachelor/deployment:frontend\_image\_latest}
+        \item Obraz: \url{503561436372.dkr.ecr.eu-north-1.amazonaws.com/bachelor/deployment:frontend_image_latest}
         \item Port: \texttt{3000}
         \item Polecenie startowe: \texttt{npm start}
     \end{itemize}
