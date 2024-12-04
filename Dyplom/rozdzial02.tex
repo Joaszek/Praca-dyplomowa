@@ -108,7 +108,7 @@ Aplikacja pozwala przeglądać szczegóły dotyczące kolekcji NFT. Użytkownik 
 Za pomocą skryptów Node.js użytkownik może symulować transakcje blockchainowe takie jak przesyłanie tokenów lub wykonywanie airdropów. Po wykonaniu operacji użytkownik dostanie informację na temat rezultatów operacji.
 
 \paragraph{Wykorzystanie AI do przewidywania cen kryptowalut}
-Model AI zintegrowany z aplikacją umożliwi prognozowanie cen kryptowalut. Użytkownik wybiera kryptowalutę, np. Bitcoin, i otrzymuje przewidywane zmiany cen na dany dzień. Wyniki są prezentowane w formie pojedyńczej wartości, co wspiera podejmowanie decyzji inwestycyjnych.
+Model AI zintegrowany z aplikacją umożliwi prognozowanie cen kryptowalut. Użytkownik będzie wybierał datę a następnie będzie mógł zobaczyć przewidywaną cenę Bitcoina, Etheru i Sol. Wyniki są prezentowane w formie pojedyńczej wartości, co wspiera podejmowanie decyzji inwestycyjnych.
 
 \paragraph{Dynamiczne przetwarzanie danych blockchainowych}
 Aplikacja pozwala uzyskać dane blockchainowe w czasie rzeczywistym dzięki dynamicznym połączeniom z API dostawców. Użytkownik może np. przeglądać najnowsze transakcje w sieci Solana lub analizować szczegóły tokenów ERC-20 na Ethereum. Funkcjonalność ta jest kluczowa dla osób potrzebujących aktualnych danych.
@@ -142,7 +142,7 @@ Aplikacja musi działać w środowisku obsługującym Dockera. Backend opiera si
 
 W rozdziale przedstawiono analizę wymagań, od ogólnych założeń po szczegóły dotyczące zarówno planowanych funkcji systemu, jak i aspektów technicznych związanych z ich implementacją. Opisano kluczowe funkcje platformy, takie jak przeglądanie danych blockchainowych, zarządzanie kryptowalutami i NFT, symulacje transakcji oraz przewidywanie cen z wykorzystaniem modeli AI. Wyróżnikiem aplikacji jest integracja z zewnętrznymi API blockchainowymi, co umożliwia dynamiczne pobieranie danych w czasie rzeczywistym i oferowanie unikalnych funkcji dla użytkowników.
 
-Architektura systemu opiera się na modularnym podejściu, z wyraźnym podziałem na frontend i backend, wspieranych przez skrypty Node.js oraz bazę danych PostgreSQL. Dzięki konteneryzacji każdy komponent działa w izolowanym środowisku, co zapewnia elastyczność, skalowalność i łatwość utrzymania. Interakcje między komponentami odbywają się za pomocą protokołu REST, z uwierzytelnieniem opartym na OAuth2 i tokenach JWT, co gwarantuje bezpieczeństwo komunikacji.
+Architektura systemu opiera się na modularnym podejściu, z wyraźnym podziałem na frontend i backend, wspieranych przez skrypty Node.js i Python oraz bazę danych PostgreSQL. Dzięki konteneryzacji każdy komponent działa w izolowanym środowisku, co zapewnia elastyczność, skalowalność i łatwość utrzymania. Interakcje między komponentami odbywają się za pomocą protokołu REST, z uwierzytelnieniem opartym na OAuth2 i tokenach JWT, co gwarantuje bezpieczeństwo komunikacji.
 
 Wymagania niefunkcjonalne aplikacji koncentrują się na wydajności, skalowalności oraz niezawodności. Planowane wdrożenie w chmurze AWS z wykorzystaniem Elastic Load Balancer (ELB) pozwoli na dynamiczne zarządzanie zasobami i równoważenie obciążenia. Dodatkowo, zastosowanie pipeline’u CI/CD usprawni procesy związane z utrzymaniem i rozwojem systemu, zapewniając jego długoterminową stabilność.
 

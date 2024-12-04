@@ -13,7 +13,7 @@ Zgodnie z założeniami co do architektury, podczas implementacji stworzono gł�
 
 \paragraph{Frontend} -- zbudowany w React jako aplikacja wielostronicowa (MPA), odpowiada za prezentację danych i interakcję z użytkownikami. Podzielono go na moduły odpowiadające różnym domenom funkcjonalnym. Moduł blockchain prezentuje dane związane z blockchainami Bitcoin, Ethereum i Solana, w tym szczegóły transakcji, bloków oraz kont. Ten moduł zawiera podkomponenty obsługujące wyszukiwanie oraz wyświetlanie szczegółowych informacji. Moduł kryptowalut zarządza kategoriami kryptowalut, danymi historycznymi, rynkiem globalnym oraz rankingami. Dodatkowo frontend oferuje widoki użytkownika, takie jak logowanie, rejestracja oraz strona główna. Komunikacja z backendem odbywa się za pomocą biblioteki axios, z uwierzytelnianiem opartym na tokenach JWT przechowywanych w \texttt{localStorage}.
 
-\paragraph{Backend} -- zaimplementowany w Spring Boot 3 przy użyciu Javy 21 jest centralnym komponent systemu. Integruje funkcjonalności związane z logiką biznesową, bazą danych oraz zewnętrznymi dostawcami informacji. Backend udostępnia API REST dla frontendu i obsługuje kilka kluczowych domen, takich jak kryptowaluty, NFT oraz zasoby zewnętrzne. Moduł kryptowalut oferuje funkcje zarządzania kategoriami, danymi historycznymi oraz danymi rynkowymi. Moduł NFT zarządza tokenami, kolekcjami oraz ich statystykami. Backend również integruje dane blockchainowe, takie jak transakcje i bloki, które są dynamicznie pobierane z zewnętrznych API, takich jak Etherscan czy CoinMarketCap. Ponadto backend wywołuje dedykowane skrypty w Node.js w celu realizacji zaawansowanych operacji blockchainowych, takich jak symulacje transakcji i airdropy oraz skrypt w kontenerze Pythonowym, tak aby uzyskać dane o cenie kryptowalut na dany dzień.
+\paragraph{Backend} -- zaimplementowany w Spring Boot 3 przy użyciu Javy 21 jest centralnym komponentem systemu. Integruje funkcjonalności związane z logiką biznesową, bazą danych oraz zewnętrznymi dostawcami informacji. Backend udostępnia API REST dla frontendu i obsługuje kilka kluczowych domen, takich jak kryptowaluty, NFT oraz zasoby zewnętrzne. Moduł kryptowalut oferuje funkcje zarządzania kategoriami, danymi historycznymi oraz danymi rynkowymi. Moduł NFT zarządza tokenami, kolekcjami oraz ich statystykami. Backend również integruje dane blockchainowe, takie jak transakcje i bloki, które są dynamicznie pobierane z zewnętrznych API, takich jak Etherscan czy CoinMarketCap. Ponadto backend wywołuje dedykowane skrypty w Node.js w celu realizacji zaawansowanych operacji blockchainowych, takich jak symulacje transakcji i airdropy oraz skrypt w kontenerze Pythonowym, tak aby uzyskać dane o cenie kryptowalut na dany dzień.
 \newline
 Część backendu odpowiada również za bezpieczeństwo, realizowane poprzez mechanizm OAuth2 i tokeny JWT. Tokeny te są wykorzystywane do uwierzytelniania użytkowników oraz zabezpieczania komunikacji między frontendem a backendem. W backendzie zastosowano również bazę danych PostgreSQL, która przechowuje trwałe dane, takie jak użytkownicy, dane NFT oraz kryptowaluty, podczas gdy dane blockchainowe są dynamicznie pobierane i nie są przechowywane.
 
@@ -39,7 +39,7 @@ Skrypt pythonowy działa w osobnym kontenerze i pełni rolę wspierającą backe
 
 Baza danych PostgreSQL przechowuje dane trwałe, takie jak informacje o użytkownikach, kategoriach kryptowalut, danych historycznych oraz NFT. Backend komunikuje się z bazą danych za pomocą warstwy repozytoriów opartej na interfejsach CrudRepository. Gdy użytkownik żąda danych dostępnych w bazie, backend odczytuje je i przekształca w odpowiedzi API, które następnie są przesyłane do frontendu. W przypadku danych blockchainowych, które są dynamiczne, backend bezpośrednio pobiera je z zewnętrznych API, bez konieczności korzystania z bazy danych.
 
-Podsumowując, interakcja między komponentami opiera się na wyraźnym podziale ról i odpowiedzialności. Frontend obsługuje interfejs użytkownika i komunikuje się z backendem poprzez REST API. Backend pełni funkcję centralnego punktu przetwarzania, współpracując zarówno z bazą danych PostgreSQL, jak i z zewnętrznymi dostawcami danych blockchainowych. Skrypty Node.js wspierają backend w realizacji specyficznych operacji blockchainowych, a baza danych zapewnia trwałe przechowywanie kluczowych informacji. Wszystkie komponenty współpracują w sposób zintegrowany, zapewniając elastyczność, wydajność i bezpieczeństwo działania systemu.
+Podsumowując, interakcja między komponentami opiera się na wyraźnym podziale ról i odpowiedzialności. Frontend obsługuje interfejs użytkownika i komunikuje się z backendem poprzez REST API. Backend pełni funkcję centralnego punktu przetwarzania, współpracując zarówno z bazą danych PostgreSQL, jak i z zewnętrznymi dostawcami danych blockchainowych. Skrypty Node.js oraz Python wspierają backend w realizacji specyficznych operacji blockchainowych, a baza danych zapewnia trwałe przechowywanie kluczowych informacji. Wszystkie komponenty współpracują w sposób zintegrowany, zapewniając elastyczność, wydajność i bezpieczeństwo działania systemu.
 
 \section{Podział fizyczny}
 Podział logiczny aplikacji przełożył się na jej podział fizyczny. Organizacja źródeł kodu odpowiada temu podziałowi. Dzięki takiemu podejściu struktura aplikacji stała się czytelna i modularna. Umożliwia to łatwą rozbudowę i modyfikację poszczególnych komponentów. 
@@ -69,7 +69,7 @@ W backendzie każda funkcjonalność została wydzielona do oddzielnych metod w 
     \item \texttt{registerUser}: Funkcja tworząca nowego użytkownika w bazie danych.
     \item \texttt{createSolanaAccount}: Funkcja tworząca konto na Solana devnet.
     \item \texttt{getERC20TokenTransfers}: Funkcja pobierająca wszystkie transfery tokenów ERC-20 związane z podanym adresem Ethereum w określonym zakresie bloków (od startBlock do endBlock). Funkcja zwraca listę transakcji w postaci obiektów \texttt{EthereumTransactionDto}.
-		\item \texttt{predictPrices}: Funkcja zwracająca przewidywane ceny na następny tydzień dla wybranej kryptowaluty.
+		\item \texttt{predictPrices}: Funkcja zwracająca przewidywane ceny na dany dzień dla Bitcoina, Etheru i Sol.
 \end{itemize}
 
 
@@ -123,7 +123,7 @@ Kontener frontendowy współpracuje z backendem, który realizuje logikę aplika
     \item \textbf{Kontener backendowy i baza danych PostgreSQL}: Aplikacja backendowa komunikuje się z bazą danych PostgreSQL w celu przechowywania i pobierania danych. Backend korzysta z JPA (Java Persistence API) do wykonywania operacji CRUD na bazie danych.
     \item \textbf{Kontener backendowy i kontener Node.js}: Kontener Node.js pełni rolę interfejsu między aplikacją backendową a blockchainem Solany w kontekście wykonywania operacji na blockchainie, a nie pobieraniu danych z niego. Backend wysyła zapytania do kontenera Node.js w celu wykonania skryptów Solany, które mogą tworzyć konto, symulować transakcję oraz wykonywać operację airdrop. Kontener Node.js uruchamia odpowiednie skrypty do interakcji z blockchainem, wykorzystując bibliotekę @solana/web3.js.
 		\item \textbf{Kontener backendowy i kontener ModelContainer}: Aplikacja backendowa wysyła zapytanie na kontener ModelContainer, tak aby uzyskać dane dotyczące przewidzianych cen. 
-    \item \textbf{Kontener Node.js i blockchain Solany}: Kontener Node.js, uruchamiający skrypty Solany, komunikuje się z siecią blockchain Solany poprzez RPC endpointy (np. Solana Mainnet Beta). Skrypty w kontenerze Node.js są odpowiedzialne za tworzenie konta, symulowanie transakcji oraz wykonywanie operacji airdrop. Wyniki tych skryptów są następnie odbierane przez klasę serwisą, i zwracane do kontrolera, który wysyłaja je na frontend.
+    \item \textbf{Kontener Node.js i blockchain Solany}: Kontener Node.js, uruchamiający skrypty Solany, komunikuje się z siecią blockchain Solany poprzez RPC endpointy. Skrypty w kontenerze Node.js są odpowiedzialne za tworzenie konta, symulowanie transakcji oraz wykonywanie operacji airdrop. Wyniki tych skryptów są następnie odbierane przez klasę serwisą, i zwracane do kontrolera, który wysyłaja je na frontend.
     \item \textbf{Kontener pgAdmin i baza danych PostgreSQL}: Kontener pgAdmin umożliwia zarządzanie bazą danych PostgreSQL poprzez interfejs graficzny. Administratorzy mogą monitorować, modyfikować oraz zarządzać strukturą bazy danych, korzystając z pgAdmin, który łączy się z kontenerem bazy danych PostgreSQL.
 \end{itemize}
 
@@ -133,71 +133,24 @@ W ramach projektu zastosowano narzędzia Maven i Docker w procesie budowy aplika
 
 \subsection{Rola Maven w budowie aplikacji}
 
-Maven został wykorzystany jako system zarządzania projektem, wspierający kompilację, testowanie i pakowanie aplikacji. Maven dodatkowo pomaga w zarządzaniu akietami potrzebnymi do działania aplikacji.
+Maven został wykorzystany jako system zarządzania projektem, wspierający kompilację, testowanie i pakowanie aplikacji. Maven dodatkowo pomaga w zarządzaniu pakietami potrzebnymi do działania aplikacji.
 
 \subsection{Zastosowanie Dockera w konteneryzacji}
 
-Docker umożliwił konteneryzację aplikacji, zapewniając spójność środowiska uruchomieniowego niezależnie od platformy. Każdy kontener opiera się na obrazie zdefiniowanym w pliku \texttt{Dockerfile}, który określa wszystkie zależności i konfiguracje potrzebne do uruchomienia aplikacji. Przykładową zawartość pliku \texttt{Dockerfile} dla aplikacji backendowej (Spring Boot) pokazano na listingu poniżej.
-\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
-# Use amazoncorretto as the base image
-FROM amazoncorretto:21-alpine
-
-# Install required tools
-RUN apk add --no-cache maven openssl
-
-# Set the working directory
-WORKDIR /app
-
-# Copy the pom.xml file and download dependencies
-COPY pom.xml .
-RUN mvn dependency:go-offline
-
-# Copy the source code
-COPY src ./src
-
-# Build the application
-RUN mvn package -DskipTests
-
-# Generate RSA key pair
-RUN openssl genrsa -out keypair.pem 2048
-
-# Extract the public key
-RUN openssl rsa -in keypair.pem -pubout -out publicKey.pem
-
-# Convert the private key to PKCS#8 format
-RUN openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in keypair.pem -out privateKey.pem
-
-# Expose port 8080
-EXPOSE 8080
-
-# Run the application with SSL settings and the corrected password
-ENTRYPOINT ["java", "-jar", "target/backend-0.0.1-SNAPSHOT.jar", \
-    "--server.port=8080", \
-    "--spring.security.oauth2.resourceserver.jwt.public-key-location=classpath:publicKey.pem", \
-    "--spring.security.oauth2.resourceserver.jwt.private-key-location=classpath:privateKey.pem"]
-\end{lstlisting}
+Docker umożliwił konteneryzację aplikacji, zapewniając spójność środowiska uruchomieniowego niezależnie od platformy. Każdy kontener opiera się na obrazie zdefiniowanym w pliku \texttt{Dockerfile}, który określa wszystkie zależności i konfiguracje potrzebne do uruchomienia aplikacji. 
 
 Aby zbudować obraz dla aplikacji backendowej należy wykonać:
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 docker build -t backend_image .
 \end{lstlisting}
 
-Aplikacja frontendowa oparta na React będzie miała swój \texttt{Dockerfile}, który zawiera instrukcje do budowy aplikacji:
-\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
-FROM node:16-slim
-WORKDIR /app
-COPY package.json /app/
-RUN npm install
-COPY . /app
-RUN npm run build
-CMD ["npm", "start"]
-\end{lstlisting}
+Aplikacja frontendowa oparta na React ma swój własny plik \texttt{Dockerfile}, który zawiera instrukcje do budowy aplikacji. Aby go zbudować należy wpisać komendę:
 
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 docker build -t frontend_image .
 \end{lstlisting}
 
-Analogicznie należy postąpić dla obrazu solana\_scripts\_image i model\_server
+%Analogicznie należy postąpić dla obrazu solana_scripts\_image i model\_server
 
 Po zbudowaniu obrazów kontenery mogą zostać uruchomione przy pomocy \texttt{docker compose up}. Poniżej przykład pliku \texttt{docker-compose.yml}, który definiuje kontener frontend:
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
@@ -374,7 +327,7 @@ version: '3'
 
 \begin{enumerate}
     \item W sekcji \texttt{services} zdefiniowane są dwa serwisy: \texttt{backend\_app} i \texttt{frontend\_app}.
-    \item \texttt{image} określa, jakie obraz ma być wykorzystany przy stawianiu kontenera. Dla każdego serwisu (odpowiednio \texttt{./backend\_app} i \texttt{./frontend\_app}).
+    \item \texttt{image} określa, jakie obraz ma być wykorzystany przy stawianiu kontenera. Dla każdego serwisu (odpowiednio \texttt{./backend\_image} i \texttt{./frontend\_image}).
     \item \texttt{ports} mapuje porty z kontenera na porty hosta, aby aplikacje były dostępne z zewnątrz.
     \item \texttt{depends\_on} zapewnia, że kontener frontendowy będzie uruchamiany po backendzie.
 		\item \texttt{container\_name} określa nazwę kontenera.
@@ -393,39 +346,6 @@ Polecenie to uruchamia aplikacje w oddzielnych kontenerach, z odpowiednimi zale�
 \subsection{Struktura katalogów}
 Kod aplikacji zamieszczono w plikach zogranizowanych w strukturze jak niżej.
 \subsubsection{Frontend}
-\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
-frontend
-|-- node_modules        # Zainstalowane zależności npm
-|-- public              # Pliki statyczne, np. HTML, obrazy
-|-- src                 # Katalog z kodem źródłowym aplikacji
-    |-- blockchain      # Moduły związane z blockchainami
-        |-- accounts
-        |-- blocks
-        |-- transactions
-    |-- clientOptions   # Opcje związane z interakcjami klienta
-        |-- predictPrices
-        |-- simulateTransaction
-    |-- cryptocurrency  # Moduły związane z kryptowalutami
-        |-- categories
-        |-- gainersAndLosers
-        |-- globalMarket
-        |-- historicalData
-        |-- ranking
-    |-- login            # Moduł logowania
-    |-- mainpage        # Strona główna aplikacji
-    |-- resources       # Pliki wspólne dla wielu modułów
-        |-- converter
-        |-- directory
-        |-- news
-        |-- predictPrices
-        |-- simulateTransaction
-    |-- signup           # Moduł rejestracji
-    |-- tokens           # Moduł zarządzania tokenami
-        |-- collections
-        |-- nftStatistics
-\end{lstlisting}
-
-
 % TO DO: w tekście dwukrotnie pojawił sie opis źródeł kodu aplikacji frontendowej. I to był różny opis. Proszę to uspójnić !!!!
 \subsubsection{Struktura źródeł kodu aplikacji frontendowej}
 Struktura katalogów w aplikacji frontendowej jest zorganizowana w sposób, który umożliwia łatwą skalowalność i utrzymanie kodu. Poniżej przedstawiono główną strukturę folderów aplikacji, która jest typowa dla aplikacji React.
@@ -551,7 +471,7 @@ Kontrolery umieszcza się zwykle w warstwie przyjmującej żądania. Ich zadanie
 W budowanej aplikacji zastosowano je do obsługi zapytań HTTP. Przykłady klas, w których skorzystano z tego wzorca: \texttt{EthereumController} (obsługuje zapytania związane z blockchainem Ethereum), \texttt{CryptocurrencyController} (obsługuje zapytania dotyczące danych kryptowalutowych), \texttt{NFTController} (zarządza operacjami związanymi z NFT). Dane przesyłane do kontrolerów mają postać obiektów typu DTO (ang.~\emph{Data Transfer Object}).
 
 \paragraph{Service Layer}
-Warstwa repozytoriów pozwala na realizację przejrzystego dostępu do danych w odseparowaniu od reszty aplikacji. Realizuje ona logikę biznesową, przetwarzając i udostępniając dane, Wzorzec ten jest powszechnie stosowany po stronie backendowej, gdzie logika biznesowa jest oddzielona od kontrolerów. 
+Warstwa serwisowa pozwala na realizację przejrzystego dostępu do danych w odseparowaniu od reszty aplikacji. Realizuje ona logikę biznesową, przetwarzając i udostępniając dane, Wzorzec ten jest powszechnie stosowany po stronie backendowej, gdzie logika biznesowa jest oddzielona od kontrolerów. 
 W implementacji warstwa ta opowiada za zarządzanie operacjami na blockchainach, kryptowalutach i NFT czy na danych użytkowników.
 Taki podział umożliwia łatwą rozbudowę aplikacji oraz ponowne wykorzystanie kodu w różnych częściach aplikacji.
 Przykłady klas, w których użyto tego wzorca: \texttt{BlockchainService}, \texttt{CryptocurrencyService}, \texttt{NFTService}
@@ -571,7 +491,7 @@ Modele służą do reprezentowania danych w postaci obiektowej. W aplikacji wyr�
 W kodzie aplikacji zdefiniowano różne klasy. Odpowiadają one za zarządzanie danymi blockchainowymi, danymi o kryptowalutach, transakcjami, a także za logikę biznesową i interakcje z API i i innymi kontenerami. Poniżej przedstawiono opis klas pełniących kluczowe role.
 
 \subsection{Klasy do obsługi danych blockchainowych}
-Podczas implementacji stworzono kilka klas mających pomóc w zarządzaniu danymi blockchainowymi. Umieszczono je w w paczce \texttt{blockchain}
+Podczas implementacji stworzono kilka klas mających pomóc w zarządzaniu danymi blockchainowymi. Umieszczono je w w paczce \texttt{blockchain}.
 Choć mają one podobny cel, to jednak różnią się szczegółami implementacyjnymi. Poniżej scharakteryzowano klasy należące do tej paczki.
 \begin{itemize}
 \item \texttt{Account} -- reprezentuje dane konta w blockchainie. Zawiera informacje takie jak adres konta, saldo oraz inne szczegóły konta. 
@@ -596,7 +516,7 @@ Przetwarzanie danych dotyczących kryptowalut wymagało zaimplementowania paru k
 \end{itemize}
 
 \subsubsection{Klasy odpowiedzialne za NFT}
-Obsługa NFT wymagała zaimplementowania kilku klasy. Ich szczegóły opisano poniżej.
+Obsługa NFT wymagała zaimplementowania kilku klas. Ich szczegóły opisano poniżej.
 
 \begin{itemize}
 \item \texttt{NFT} -- reprezentuje pojedynczy token NFT (Non-Fungible Token) w systemie, przechowując szczegóły dotyczące tokena, takie jak identyfikator, standard tokena, nazwę, opis, URL do obrazu, animacji, oraz metadanych. Dodatkowo, klasa ta zawiera informacje na temat platformy, statusu tokena (czy jest wyłączony, NSFW, podejrzany), a także jego twórcy.\newline
@@ -609,47 +529,7 @@ Klasa \texttt{Collection} posiada również flagi opisujące, czy kolekcja jest 
 
 
 \subsubsection{Struktura źródeł kodu aplikacji frontendowej}
-Struktura katalogów w aplikacji frontendowej jest zorganizowana w sposób, który umożliwia łatwą skalowalność i utrzymanie kodu. Poniżej przedstawiono główną strukturę folderów aplikacji, która jest typowa dla aplikacji React.
-\begin{multicols}{2}
-\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
-frontend
-|-- node_modules
-|-- public
-|-- src
-    |-- blockchain
-        |-- accounts
-        |-- blocks
-        |-- transactions
-    |-- clientOptions
-        |-- predictPrices
-        |-- simulateTransaction
-    |-- cryptocurrency
-        |-- categories
-        |-- gainersAndLosers
-        |-- globalMarket
-        |-- historicalData
-        |-- ranking
-    |-- login
-    |-- mainpage
-    |-- resources
-        |-- converter
-        |-- directory
-        |-- news
-    |-- signup
-    |-- tokens
-        |-- collections
-        |-- nftStatistics
-    |-- App.css
-    |-- App.js
-    |-- App.test.js
-    |-- header.css
-    |-- header.js
-    |-- index.css
-    |-- index.js
-    |-- logo.svg
-\end{lstlisting}
-\end{multicols}
-
+Struktura katalogów w aplikacji frontendowej jest zorganizowana w sposób, który umożliwia łatwą skalowalność i utrzymanie kodu. Poniżej przedstawiono opis folderów, zgodnie z zaleceniami dla aplikacji typu React.
 \paragraph{Opis folderów}
 \begin{itemize}
     \item \texttt{node\_modules/}: Zawiera zainstalowane zależności.
@@ -687,7 +567,7 @@ solanaScripts/
 
 Skrypty w folderze \texttt{solanaScripts} są wywoływane z aplikacji backendowej w momencie, gdy użytkownik wysyła odpowiednie zapytanie. Aplikacja backendowa wysyła zapytanie do kontenera Nodejs, który korzystając z biblioteki \texttt{'@solana/web3.js'} uruchamia odpowiednie skrypty Solany. \texttt{@solana/web3.js} to oficjalna biblioteka JavaScript służąca do interakcji z blockchainem Solany.  
 
-Poniżej pokazano fragment implementacji skryptu \texttt{airdrop}:
+Poniżej pokazano fragment implementacji skryptu \texttt{airdrop} z wykorzystaniem biblioteki \texttt{'@solana/web3.js'}:
 \begin{lstlisting}[style=JavaScriptStyle]
 const { Connection, clusterApiUrl, PublicKey, LAMPORTS_PER_SOL } = require('@solana/web3.js');
 const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
@@ -726,52 +606,10 @@ if (!publicKeyBase58) {
 requestAirdrop(publicKeyBase58);
 \end{lstlisting}
 
-Poniżej pokazano przykład użycia biblioteki \texttt{@solana/web3.js} do stworzenia konta.
-\begin{lstlisting}[style=JavaScriptStyle]
-const { Keypair } = require('@solana/web3.js');
-
-function createSolanaAccount() {
-    const newAccount = Keypair.generate();
-    const publicKey = newAccount.publicKey.toBase58();
-    const secretKey = Buffer.from(newAccount.secretKey).toString('base64');
-    console.log(JSON.stringify({ publicKey, secretKey }));
-}
-
-createSolanaAccount();
-  \end{lstlisting}
-
 
 \subsubsection{Konfiguracja budowy i uruchamiania kontenerów}
-Skrypty w folderze \texttt{solanaScripts} są częścią aplikacji uruchamianej w kontenerze Docker. W celu zbudowania środowiska, w którym skrypty te będą działać, stworzono plik \texttt{Dockerfile} o zawartości jak niżej. Jest on potrzebny do utworzenia dockerowego obrazu.
-\begin{lstlisting}
-FROM node:18
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-EXPOSE 3001
-CMD ["npm", "start"]
-\end{lstlisting}
-Znaczenie kolejnych linii w tym pliku jest następujące:
-\begin{itemize}
-\item \texttt{FROM node:18-slim} -- używa obrazu bazowego Node.js w wersji 18, który jest lekki i odpowiedni do uruchamiania skryptów JavaScript.
-\item \texttt{WORKDIR /app} -- ustawia katalog roboczy w kontenerze na \texttt{/app}.
-\item \texttt{COPY package.json ./} -- kopiuje pliki konfiguracyjne npm, które zawierają zależności do zainstalowania.
-\item \texttt{RUN npm install} -- instaluje zależności zapisane w \texttt{package.json}.
-\item \texttt{COPY . .} -- kopiuje foldery do katalogu roboczego w kontenerze.
-\item \texttt{CMD ["npm", "run"]} -- uruchamia serwer do słuchania na zapytania.
-\end{itemize}
-Obraz należy zbudować wykorzystując komendę:
-\begin{lstlisting}
-docker build -t solana\_scritps\_image . --no-cache
-\end{lstlisting}
+Skrypty w folderze \texttt{solanaScripts} są częścią aplikacji uruchamianej w kontenerze Docker. W celu zbudowania środowiska, w którym skrypty te będą działać, stworzono plik \texttt{Dockerfile} analogicznie do pliku dla aplikacji Frontend. 
 
-Kontener zostanie utworzony wraz z innymi kontenerami po wpisaniu komendy:
-\begin{lstlisting}
-docker compose up
-\end{lstlisting}
-
-	
 \section{Opis modelu predykcji cen}
 Model stworzony został stworzony z wykorzystaniem technologii sieci neuronowych typu LSTM (Long Short-Term Memory), zaprojektowaną do przewidywania cen Bitcoina, Etheru i Sol. Użyto danych historycznych od momentu powstania danych kryptowalut.
 
@@ -867,5 +705,5 @@ Klasa \texttt{RSAKeyRecord} przechowuje klucze RSA (publiczny i prywatny), któr
 
 \subsection{Podstawowa autentykacja} (\texttt{BasicAuthenticationSecurityConfiguration.java})
 
-Klasa \texttt{BasicAuthenticationSecurityConfiguration} wprowadza mechanizm podstawowej autentykacji. Choć nie zawiera jeszcze pełnej logiki konfiguracyjnej, jest przygotowana do użycia w przyszłości w celu rozszerzenia mechanizmów uwierzytelniania w aplikacji.	
+Klasa \texttt{BasicAuthenticationSecurityConfiguration} wprowadza mechanizm podstawowej autentykacji.
 	
