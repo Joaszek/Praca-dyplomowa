@@ -3,9 +3,15 @@
 Wdrożenie aplikacji jest ostatnim etapem procesu tworzenia oprogramowania. Proces ten polega na przygotowaniu odpowiedniej konfiguracji środowiska i infrastruktury pod kątem skalowalności, bezpieczeństwa i ochrony przed awarią serwera. W projekcie wykorzystano technologię Docker oraz AWS, jednak ze względu na koszty AWS nie będzie wykorzystywany w dłuższym okresie czasu.
 
 \section{Lokalne środowisko}
-\subsection{Pobranie projektu}
-Aby pobrać projekt, należy wpisać w terminal:
-\texttt{git clone --recurse-submodules https://github.com/Bachelor-Thesis-Szewior-Joachim/deployment.git}
+% TO DO: sekcja nie może składać się z jednego akapitu. Sekcja jest fragmentem rozdziału, musi więc w sobie nieść nieco więcej treści. 
+% Proszę więc albo rozwinąć nieco bardziej opis, albo zamienić sekcję na coś innego (paragraf, wyliczenie czy inny blok tekstu - odpowiednio do potrzeb)
+\subsection{Pobranie źródeł projektu}
+Pierwszym krokiem do wdrożenia aplikacji jest pobranie źródeł projekt. Aby to zrobić należy wpisać w terminal:
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesite]
+git clone --recurse-submodules https://github.com/Bachelor-Thesis-Szewior-Joachim/deployment.git
+\end{lstlisting}
+Polecenie to utworzy lokalny klon zdalnego repozytorium kodu. Aby dało się to polecenie uruchomić, na komputerze użytkownika musi być zaistalowane narzędzie git.
+Po pobarni źródeł można przejść do następnych kroków, tj.\ do zbudowania i uruchomienia odpowiednich dockerowych obrazów.
 
 \subsection{Budowanie obrazów}
 Aby uruchomić aplikację, należy zbudować obrazy dla 4 kontenerów:

@@ -127,17 +127,8 @@ Kontener frontendowy współpracuje z backendem, który realizuje logikę aplika
     \item \textbf{Kontener pgAdmin i baza danych PostgreSQL}: Kontener pgAdmin umożliwia zarządzanie bazą danych PostgreSQL poprzez interfejs graficzny. Administratorzy mogą monitorować, modyfikować oraz zarządzać strukturą bazy danych, korzystając z pgAdmin, który łączy się z kontenerem bazy danych PostgreSQL.
 \end{itemize}
 
-\section{Budowanie Aplikacji za pomocą Maven i Docker}
-
-W ramach projektu zastosowano narzędzia Maven i Docker w procesie budowy aplikacji, co pozwoliło na efektywne zarządzanie zarówno zależnościami projektowymi, jak i środowiskiem uruchomieniowym.
-
-\subsection{Rola Maven w budowie aplikacji}
-
-Maven został wykorzystany jako system zarządzania projektem, wspierający kompilację, testowanie i pakowanie aplikacji. Maven dodatkowo pomaga w zarządzaniu pakietami potrzebnymi do działania aplikacji.
-
-\subsection{Zastosowanie Dockera w konteneryzacji}
-
-Docker umożliwił konteneryzację aplikacji, zapewniając spójność środowiska uruchomieniowego niezależnie od platformy. Każdy kontener opiera się na obrazie zdefiniowanym w pliku \texttt{Dockerfile}, który określa wszystkie zależności i konfiguracje potrzebne do uruchomienia aplikacji. 
+\section{Budowa aplikacji za pomocą Maven i Docker}
+W ramach projektu zastosowano narzędzia Maven i Docker w procesie budowy aplikacji, co pozwoliło na efektywne zarządzanie zarówno zależnościami projektowymi, jak i środowiskiem uruchomieniowym. Maven został wykorzystany jako system zarządzania projektem, wspierający kompilację, testowanie i pakowanie aplikacji. Maven dodatkowo pomaga w zarządzaniu pakietami potrzebnymi do działania aplikacji. Docker umożliwił konteneryzację aplikacji, zapewniając spójność środowiska uruchomieniowego niezależnie od platformy. Każdy kontener dockerowy opierał się na obrazie zdefiniowanym w pliku \texttt{Dockerfile}, zawierającym definicje wszystkich zależności i konfiguracji potrzebnych do uruchomienia aplikacji. 
 
 Aby zbudować obraz dla aplikacji backendowej należy wykonać:
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
@@ -145,7 +136,6 @@ docker build -t backend_image .
 \end{lstlisting}
 
 Aplikacja frontendowa oparta na React ma swój własny plik \texttt{Dockerfile}, który zawiera instrukcje do budowy aplikacji. Aby go zbudować należy wpisać komendę:
-
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 docker build -t frontend_image .
 \end{lstlisting}
@@ -170,7 +160,6 @@ Po zbudowaniu obrazów kontenery mogą zostać uruchomione przy pomocy \texttt{d
 
 \subsubsection{Zależności i wtyczki Maven}
 W projekcie wykorzystano szereg pluginów Maven, które automatyzują procesy związane z budową aplikacji. Głównie wykorzystane pluginy \texttt{maven-clean-plugin}, \texttt{maven-compiler-plugin}, \texttt{maven-jar-plugin}, \texttt{maven-surefire-plugin}, oraz \texttt{spring-boot-maven-plugin}.
-
 Jeśli chodzi o zależności, projekt korzysta z kluczowych bibliotek jak \texttt{spring-boot-starter-web}, \texttt{spring-boot-starter-data-jpa}, \texttt{postgresql}, \texttt{spring-security}, \texttt{lombok}, i \texttt{mysql-connector-java}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -455,11 +444,10 @@ backend
 
 
 
-\section{Organizacja źródeł kodu}
+\section{Wykorzystane wzorce projektowe}
 Aplikację zbudowano w podzielone na różne warstwy abstrakcji. Wyróżniono: warstwę kontrolerów, warstwę serwisów, warstwę repozytoriów oraz warstwę modeli. Obsługa każdej z nich wymagała implementacji odpowiednich klas. Każda z nich odpowiedzialna była za określoną funkcjonalność. Podejście to pokrywa się z koncepcją tworzenia tzw. czystej architektury, z separację odpowiedzialności. 
 
-Podczas implementacji zastosowano kilka popularnych wzorców projektowych, jak DTO, Singleton, Service Layer oraz Repository. Wzorce te pomagają w organizacji kodu, ułatwiają jego rozbudowę oraz zapewniają dobrą separację odpowiedzialności. Dzięki nim aplikacja stała się skalowalna, łatwa do utrzymania i elastyczna w rozwoju. 
-Ma to również swoje odzwierciedlenie w strukturze kodu.
+Podczas implementacji zastosowano kilka popularnych wzorców projektowych, jak DTO, Singleton, Service Layer oraz Repository. Wzorce te pomagają w organizacji kodu, ułatwiają jego rozbudowę oraz zapewniają dobrą separację odpowiedzialności. Dzięki nim aplikacja stała się skalowalna, łatwa do utrzymania i elastyczna w rozwoju. Miało to również odzwierciedlenie w strukturze kodu.
 
 Zastosowane wzorce pozwalają na skuteczne zarządzanie danymi blockchainowymi, integrację z różnymi usługami zewnętrznymi oraz utrzymanie wysokiej jakości kodu, który może być łatwo testowany i rozszerzany. Poniżej przedstawiono najważniejsze wzorce projektowe użyte zarówno po stronie frontendowej, jak i backendowej aplikacji.
 
@@ -490,7 +478,7 @@ Modele służą do reprezentowania danych w postaci obiektowej. W aplikacji wyr�
 \subsection{Opis zaprojektowanych klas}
 W kodzie aplikacji zdefiniowano różne klasy. Odpowiadają one za zarządzanie danymi blockchainowymi, danymi o kryptowalutach, transakcjami, a także za logikę biznesową i interakcje z API i i innymi kontenerami. Poniżej przedstawiono opis klas pełniących kluczowe role.
 
-\subsection{Klasy do obsługi danych blockchainowych}
+\paragraph{Klasy do obsługi danych blockchainowych}
 Podczas implementacji stworzono kilka klas mających pomóc w zarządzaniu danymi blockchainowymi. Umieszczono je w w paczce \texttt{blockchain}.
 Choć mają one podobny cel, to jednak różnią się szczegółami implementacyjnymi. Poniżej scharakteryzowano klasy należące do tej paczki.
 \begin{itemize}
@@ -499,38 +487,31 @@ Choć mają one podobny cel, to jednak różnią się szczegółami implementacy
 \item \textbf{\texttt{Block}} -- reprezentuje pojedynczy blok w blockchainie. Zawiera informacje o numerze bloku, dacie utworzenia, liście transakcji zawartych w bloku. 
 \end{itemize}
 
-\subsubsection{Klasa do obsługi danych użytkownika}
+\paragraph{Klasa do obsługi danych użytkownika}
 Klasa \texttt{Client} reprezentuje użytkownika w systemie i zawiera wszystkie istotne informacje o kliencie, takie jak identyfikator, nazwa użytkownika, hasło, klucze publiczne i prywatne oraz saldo konta. Klasa ta implementuje interfejs \texttt{UserDetails}, co oznacza, że jest wykorzystywana w systemie uwierzytelniania i autoryzacji opartym na Spring Security. Wraz z klasą \texttt{ClientDto} pełni rolę obiektu transferu danych (DTO), umożliwiając przesyłanie danych o kliencie pomiędzy warstwami aplikacji.
 
-\subsubsection{Klasa do obsługi kryptowalut}
+\paragraph{Klasa do obsługi kryptowalut}
 Przetwarzanie danych dotyczących kryptowalut wymagało zaimplementowania paru klas. Ich szczegóły opisano poniżej.
-
 \begin{itemize}
-\item \texttt{Cryptocurrency} -- reprezentuje kryptowalutę w systemie, zawierającą szczegółowe informacje o jej identyfikatorze w systemie CoinMarketCap (\texttt{cmcId}), nazwie, symbolu, rankingu, podaży cyrkulującej, cenie, wolumenie oraz procentowej zmianie ceny w różnych okresach (1h, 24h, 7d). Klasa ta posiada również powiązanie z historią cen przez relację \texttt{OneToMany} z klasą \texttt{HistoricalData}, a także z platformą, na której kryptowaluta jest notowana, za pomocą relacji \texttt{OneToOne} z klasą \texttt{Platform}.
-
-\item \texttt{Category} -- reprezentuje kategorię kryptowalut w systemie. Zawiera informacje o identyfikatorze kategorii, nazwie, tytule, opisie oraz dodatkowe dane statystyczne, takie jak liczba tokenów, średnia zmiana ceny, kapitalizacja rynkowa i wolumen. Klasa ta jest powiązana z klasą \texttt{Cryptocurrency} poprzez relację \texttt{OneToMany}, co oznacza, że każda kategoria może zawierać wiele kryptowalut. 
-
-\item \texttt{FearAndGreed} -- reprezentuje dane dotyczące wskaźnika strachu i chciwości, który jest często wykorzystywany w analizach rynków finansowych, w tym kryptowalut. Klasa ta przechowuje informacje o wartości wskaźnika (\texttt{value}), jego klasyfikacji (\texttt{valueClassification}), oraz dacie, kiedy wskaźnik został zmierzony (\texttt{date}).
-
+	\item \texttt{Cryptocurrency} -- reprezentuje kryptowalutę w systemie, zawierającą szczegółowe informacje o jej identyfikatorze w systemie CoinMarketCap (\texttt{cmcId}), nazwie, symbolu, rankingu, podaży cyrkulującej, cenie, wolumenie oraz procentowej zmianie ceny w różnych okresach (1h, 24h, 7d). Klasa ta posiada również powiązanie z historią cen przez relację \texttt{OneToMany} z klasą \texttt{HistoricalData}, a także z platformą, na której kryptowaluta jest notowana, za pomocą relacji \texttt{OneToOne} z klasą \texttt{Platform}.
+	\item \texttt{Category} -- reprezentuje kategorię kryptowalut w systemie. Zawiera informacje o identyfikatorze kategorii, nazwie, tytule, opisie oraz dodatkowe dane statystyczne, takie jak liczba tokenów, średnia zmiana ceny, kapitalizacja rynkowa i wolumen. Klasa ta jest powiązana z klasą \texttt{Cryptocurrency} poprzez relację \texttt{OneToMany}, co oznacza, że każda kategoria może zawierać wiele kryptowalut. 
+	\item \texttt{FearAndGreed} -- reprezentuje dane dotyczące wskaźnika strachu i chciwości, który jest często wykorzystywany w analizach rynków finansowych, w tym kryptowalut. Klasa ta przechowuje informacje o wartości wskaźnika (\texttt{value}), jego klasyfikacji (\texttt{valueClassification}), oraz dacie, kiedy wskaźnik został zmierzony (\texttt{date}).
 % TO DO: a gdzie opis klasy Platform?
 \end{itemize}
 
-\subsubsection{Klasy odpowiedzialne za NFT}
+\paragraph{Klasy odpowiedzialne za NFT}
 Obsługa NFT wymagała zaimplementowania kilku klas. Ich szczegóły opisano poniżej.
-
 \begin{itemize}
-\item \texttt{NFT} -- reprezentuje pojedynczy token NFT (Non-Fungible Token) w systemie, przechowując szczegóły dotyczące tokena, takie jak identyfikator, standard tokena, nazwę, opis, URL do obrazu, animacji, oraz metadanych. Dodatkowo, klasa ta zawiera informacje na temat platformy, statusu tokena (czy jest wyłączony, NSFW, podejrzany), a także jego twórcy.\newline
+	\item \texttt{NFT} -- reprezentuje pojedynczy token NFT (Non-Fungible Token) w systemie, przechowując szczegóły dotyczące tokena, takie jak identyfikator, standard tokena, nazwę, opis, URL do obrazu, animacji, oraz metadanych. Dodatkowo, klasa ta zawiera informacje na temat platformy, statusu tokena (czy jest wyłączony, NSFW, podejrzany), a także jego twórcy.\newline
 Klasa \texttt{NFT} jest powiązana z klasą \texttt{Collection} przez relację \texttt{ManyToOne}, co oznacza, że jeden NFT należy do jednej kolekcji. Ponadto, klasa ta posiada relację \texttt{OneToMany} z klasami \texttt{NFTTrait} i \texttt{NFTOwner}, reprezentującymi cechy i właścicieli tokena, odpowiednio. 
-
-\item \texttt{Collection} -- klasa ta reprezentuje kolekcję NFT, która zawiera szereg informacji o grupie powiązanych tokenów. Klasa ta przechowuje dane takie jak unikalny identyfikator kolekcji, jej nazwę, opis, obrazek kolekcji, adresy kontraktów blockchain oraz linki do zewnętrznych stron, takich jak OpenSea, Discord, Twitter, czy Instagram.
+	\item \texttt{Collection} -- klasa ta reprezentuje kolekcję NFT, która zawiera szereg informacji o grupie powiązanych tokenów. Klasa ta przechowuje dane takie jak unikalny identyfikator kolekcji, jej nazwę, opis, obrazek kolekcji, adresy kontraktów blockchain oraz linki do zewnętrznych stron, takich jak OpenSea, Discord, Twitter, czy Instagram.
 \newline
 Klasa \texttt{Collection} posiada również flagi opisujące, czy kolekcja jest wyłączona, oraz czy oferowanie przedmiotów (traits) i ofert kolekcji jest włączone. Związana jest z klasą \texttt{NFT} przez relację \texttt{OneToMany}, co oznacza, że kolekcja może zawierać wiele tokenów NFT. Ponadto, lista kontraktów powiązanych z kolekcją jest przechowywana za pomocą adnotacji \texttt{@ElementCollection}.
 \end{itemize}
 
-
-\subsubsection{Struktura źródeł kodu aplikacji frontendowej}
+\subsection{Struktura źródeł kodu}
+\paragraph{Struktura aplikacji frontendowej}
 Struktura katalogów w aplikacji frontendowej jest zorganizowana w sposób, który umożliwia łatwą skalowalność i utrzymanie kodu. Poniżej przedstawiono opis folderów, zgodnie z zaleceniami dla aplikacji typu React.
-\paragraph{Opis folderów}
 \begin{itemize}
     \item \texttt{node\_modules/}: Zawiera zainstalowane zależności.
     \item \texttt{public/}: Zawiera pliki statyczne.
@@ -550,8 +531,7 @@ Struktura katalogów w aplikacji frontendowej jest zorganizowana w sposób, któ
     \end{itemize}
 \end{itemize}
 
-\subsection{Skrypty wykonywalne i konfiguracyjne}
-\subsubsection{Skrypty do interakcji z blockchinem Solany}
+\paragraph{Skrypty do interakcji z blockchinem Solany}
 %działanie, wywoływanie, Dockerfile i biblioteki
 Folder \texttt{solanaScripts} zawiera skrypty odpowiedzialne za interakcję z blockchainem Solany. Umożliwiają one wykonywanie takich operacji, jak tworzenie konta, wykonywanie operacji \texttt{airdrop} oraz symulowanie transakcji. Do obsługi interakcji z blockchainem Solany wykorzystuje się w nich bibliotekę \texttt{@solana/web3.js}
 
@@ -607,83 +587,70 @@ requestAirdrop(publicKeyBase58);
 \end{lstlisting}
 
 
-\subsubsection{Konfiguracja budowy i uruchamiania kontenerów}
+\paragraph{Konfiguracja budowy i uruchamiania kontenerów}
 Skrypty w folderze \texttt{solanaScripts} są częścią aplikacji uruchamianej w kontenerze Docker. W celu zbudowania środowiska, w którym skrypty te będą działać, stworzono plik \texttt{Dockerfile} analogicznie do pliku dla aplikacji Frontend. 
 
 \section{Opis modelu predykcji cen}
-Model stworzony został stworzony z wykorzystaniem technologii sieci neuronowych typu LSTM (Long Short-Term Memory), zaprojektowaną do przewidywania cen Bitcoina, Etheru i Sol. Użyto danych historycznych od momentu powstania danych kryptowalut.
+Model predykcji cen stworzono z wykorzystaniem technologii sieci neuronowych typu LSTM (ang.~\emph{Long Short-Term Memory}). Użyto sieć zaprojektowaną do przewidywania cen Bitcoina, Etheru i Sol. Posłużono się danymi historycznymi, zbieranymi od momentu powstania tych kryptowalut. Wykorzystano też wybrane biblioteki. Szczegóły implementacji oraz treningu sieci opisano poniżej.
 
-\paragraph{Biblioteki}
-Najpierw zaimportowano biblioteki do budowy modelu:
-
+\paragraph{Zależności}
+Do stworzenia modelu konieczne było zaimportowanie następujących bibliotek
 \begin{itemize}
-    \item \texttt{pandas} i \texttt{numpy} do manipulacji danymi,
-    \item \texttt{matplotlib} do wizualizacji,
-    \item \texttt{MinMaxScaler} z \texttt{sklearn.preprocessing} do skalowania danych wejściowych,
-    \item Keras (\texttt{Sequential}, \texttt{LSTM}, \texttt{Dense}, \texttt{Dropout}) do budowy i trenowania modelu LSTM.
+    \item \texttt{pandas} i \texttt{numpy} -- do manipulacji danymi,
+    \item \texttt{matplotlib} -- do wizualizacji,
+    \item \texttt{MinMaxScaler} z \texttt{sklearn.preprocessing} -- do skalowania danych wejściowych,
+    \item Keras (\texttt{Sequential}, \texttt{LSTM}, \texttt{Dense}, \texttt{Dropout}) -- do budowy i trenowania modelu LSTM.
 \end{itemize}
 
-\paragraph{Źródło danych}
-Dane załadowano z plików CSV:
-
+\paragraph{Przygotowanie zestawów danych}
+Do wytrenowania modelu konieczne było odpowiednie przygotowanie danych. Proces ten składał się z kilku opisanych poniżej kroków.
 \begin{itemize}
-    \item \texttt{bitcoin\_data} – dane dotyczące Bitcoina,
-\end{itemize}
-
-\paragraph{Dane do nauki}
-Następnie wyodrębniono kolumnę \texttt{Price}, aby model uczył się na cenach z każdego dnia.
-
-\paragraph{Skalowanie danych}
-Do skalowania danych zastosowano \texttt{MinMaxScaler}, aby wartości cen zostały przekształcone w przedział \([0, 1]\).
-
-
-\paragraph{Przygotowanie sekwencji}
-Dane zostały podzielone na sekwencje o długości 60 kroków czasowych, gdzie każda sekwencja \texttt{X} zawiera 60 poprzednich punktów cenowych, a zmienna \texttt{y} zawiera cenę w kolejnym kroku czasowym:
+\item \emph{Pozyskanie danych} -- dane do uczenia pozyskano w formie plików CSV. W przypadku Bitcoina było to plik \texttt{bitcoin\_data}.
+\item \emph{Wyodrębnienie danych} -- z tabel wyodrębniono interesujące kolumny. W omawianym przypadku wybrano kolumnę \texttt{Price}, co miało gwarantować uczenia na bazie cen z każdego dnia.
+\item \emph{Skalowanie danych} -- do skalowania danych zastosowano \texttt{MinMaxScaler}, aby wartości cen zostały przekształcone w przedział \([0, 1]\).
+\item \emph{Przygotowanie sekwencji} -- dane podzielono na sekwencje o długości 60 kroków czasowych, gdzie każda sekwencja \texttt{X} zawiera 60 poprzednich punktów cenowych, a zmienna \texttt{y} zawiera cenę w kolejnym kroku czasowym:
 \begin{itemize}
     \item \texttt{X} – wejściowe dane dla modelu,
     \item \texttt{y} – docelowe dane (przewidywana cena).
 \end{itemize}
+\item \emph{Podział na dane treningowe i testowe} -- dane zostały podzielone w stosunku 80\%/20\%, tak aby można było przetestować model.
+\end{itemize}
 
-\paragraph{Podział na dane treningowe i testowe}
-Dane zostały podzielone w stosunku 80\%/20\%, tak aby można było przetestować model.
-
-\paragraph{Architektura modelu}
-
-Pierwsza wersja modelu oparta jest na klasycznych warstwach LSTM:
+\paragraph{Architektura i trening modelu}
+\begin{itemize}
+\item \emph{Wesje modelu} -- wyjściową wersję modelu oparto na klasycznych warstwach LSTM:
 \begin{itemize}
     \item Trzy warstwy LSTM z 128, 128 i 64 jednostkami,
     \item Warstwy Dropout z wartościami 30\% i 20\% dla zapobiegania przeuczeniu,
     \item Dwie warstwy Dense, gdzie pierwsza ma 50 jednostek z funkcją aktywacji ReLU, a druga 1 jednostkę wyjściową.
 \end{itemize}
-
-\paragraph{Kompilacja i trening modelu}
+\item \emph{Kompilacja i trening modelu}
 Model został skompilowany z odpowiednią funkcją straty i optymalizatorem. Model został następnie trenowany na zestawie treningowym przez 50 epok.
+\end{itemize}
 
-\paragraph{Wyniki}
-
+\paragraph{Wyniki i wnioski}
+\begin{itemize}
+\item \emph{Zebrane wyniki} -- zebrane wyniki przeprowadzonych testów i walidacji zilustrowano na wykresie pokazanym na rysunku~\ref{fig:Wyniki_testowe_i_walidacyjne}.
 \begin{figure}[htb]
     \centering
     \includegraphics[width=0.8\linewidth]{Wyniki_testowe_i_walidacyjne.png}
     \caption{Wyniki testowe i walidacyjne}
     \label{fig:Wyniki_testowe_i_walidacyjne}
 \end{figure}
+\item \emph{Wnioski} -- zauważono, że strata na zbiorze treningowym szybko maleje. Może to wskazywać na efektywne uczenie się modelu na danych treningowych. Jednak strata na zbiorze walidacyjnym po początkowym spadku zaczyna się stabilizować. Może to być znakiem, że dochodzi do efektu przeuczenia. Rozwiązaniem tego może być zastosowanie technik regularyzacji takich jak Dropout.
+\end{itemize}
 
-\paragraph{Wnioski}
-Po wykresie widać, że strata na zbiorze treningowym szybko maleje, co może wskazywać na efektywne uczenie się modelu na danych treningowych. Jednak strata na zbiorze walidacyjnym po początkowym spadku, zaczyna się stabilizować. Może to być znakiem, że dochodzi do efektu przeuczenia. Rozwiązaniem tego może być zastosowanie technik regularyzacji takich jak Dropout.
 
 \section{Bezpieczeństwo aplikacji}
-
 Aplikacja wykorzystuje framework \texttt{Spring Security} w celu zapewnienia bezpieczeństwa i kontrolowania dostępu do zasobów. Dzięki zastosowaniu różnych mechanizmów uwierzytelniania i autoryzacji, takich jak \texttt{JWT} (JSON Web Tokens), oraz \texttt{Basic Authentication}, aplikacja jest chroniona przed nieautoryzowanym dostępem. Poniżej przedstawiono kluczowe komponenty zapewniające bezpieczeństwo aplikacji.
 
-\subsection{Konfiguracja bezpieczeństwa} (\texttt{SecurityConfig.java})
-
-Klasa \texttt{SecurityConfig} zawiera pełną konfigurację bezpieczeństwa aplikacji, w tym ustawienia filtrów bezpieczeństwa, które kontrolują dostęp do zasobów. Endpotiny \texttt{/client/register} i \texttt{/client/login}, służą użytkownikowi do rejestracji lub logowania, tak aby mógł mieć dostęp do platformy. 
+\paragraph{Konfiguracja bezpieczeństwa (\texttt{SecurityConfig.java})}  
+Pełną konfigurację bezpieczeństwa aplikacji zwiera klasa \texttt{SecurityConfig}. Definiuje ona ustawienia filtrów bezpieczeństwa, które kontrolują dostęp do zasobów. Endpointy \texttt{/client/register} i \texttt{/client/login}, służą użytkownikowi do rejestracji lub logowania, tak aby mógł mieć dostęp do platformy. 
 
 Klasa ta zawiera również konfigurację \texttt{CORS}, która zezwala na dostęp do zasobów aplikacji z określonych domen (np. \texttt{http://localhost:3000}). Dzięki temu aplikacja ma możliwość komunikacji z frontendem.
 
-\subsection{Generowanie i weryfikacja JWT} (\texttt{JwtTokenUtils.java})
-
-Klasa \texttt{JwtTokenUtils} odpowiedzialna jest za generowanie oraz weryfikację tokenów \texttt{JWT}. Tokeny te są wykorzystywane do uwierzytelniania użytkowników i zapewnienia im dostępu zasobów aplikacji. Klasa ta wykonuje następujące operacje:
+\paragraph{Generowanie i weryfikacja JWT (\texttt{JwtTokenUtils.java})} 
+za generowanie oraz weryfikację tokenów \texttt{JWT} odpowiada klasa \texttt{JwtTokenUtils}. Tokeny te są wykorzystywane do uwierzytelniania użytkowników i zapewnienia im dostępu zasobów aplikacji. Klasa ta wykonuje następujące operacje:
 \begin{itemize}
     \item Generowanie tokenów \texttt{JWT} z unikalnymi danymi użytkownika.
     \item Weryfikacja ważności tokenu, w tym sprawdzanie daty wygaśnięcia.
@@ -691,19 +658,16 @@ Klasa \texttt{JwtTokenUtils} odpowiedzialna jest za generowanie oraz weryfikacj�
 \end{itemize}
 Po weryfikacji tokenu, użytkownik zostaje uwierzytelniony i przypisany do kontekstu bezpieczeństwa aplikacji.
 
-\subsection{Filtrowanie tokenów JWT} (\texttt{JwtAccessTokenFilter.java})
+\paragraph{Filtrowanie tokenów JWT (\texttt{JwtAccessTokenFilter.java})} 
+Za filtrację przychodzących żądań HTTP jest odpowiedzialna klasa \texttt{JwtAccessTokenFilter}. Filtr ten sprawdza nagłówek \texttt{Authorization} w żądaniach, aby wyodrębnić i zweryfikować token \texttt{JWT}. Jeśli token jest ważny, uzyskuje dostęp do platformy. W przypadku, gdy token jest nieważny lub nie istnieje, aplikacja zwraca odpowiedź o statusie \texttt{UNAUTHORIZED}.
 
-Klasa \texttt{JwtAccessTokenFilter} jest odpowiedzialna za filtrację przychodzących żądań HTTP. Filtr ten sprawdza nagłówek \texttt{Authorization} w żądaniach, aby wyodrębnić i zweryfikować token \texttt{JWT}. Jeśli token jest ważny, uzyskuje dostęp do platformy. W przypadku, gdy token jest nieważny lub nie istnieje, aplikacja zwraca odpowiedź o statusie \texttt{UNAUTHORIZED}.
-
-\subsection{Zarządzanie danymi użytkowników} (\texttt{UserInfoManager.java})
-
+\paragraph{Zarządzanie danymi użytkowników (\texttt{UserInfoManager.java})} 
 Klasa \texttt{UserInfoManager} implementuje interfejs \texttt{UserDetailsService} i jest odpowiedzialna za załadowanie użytkownika z bazy danych na podstawie nazwy użytkownika. Metoda \texttt{loadUserByUsername} korzysta z repozytorium \texttt{ClientRepository}, aby odnaleźć użytkownika, a następnie dostarcza jego dane do kontekstu bezpieczeństwa aplikacji, co pozwala na uwierzytelnianie.
 
-\subsection{Rekordy RSA} (\texttt{RSAKeyRecord.java})
-
+\paragraph{Rekordy RSA (\texttt{RSAKeyRecord.java})} 
 Klasa \texttt{RSAKeyRecord} przechowuje klucze RSA (publiczny i prywatny), które są wykorzystywane do weryfikacji i generowania tokenów \texttt{JWT}. Klucz publiczny jest używany do weryfikacji podpisu tokenu, natomiast klucz prywatny służy do jego generowania. Jest to istotny element systemu autoryzacji, zapewniający integralność i bezpieczeństwo transmisji danych.
 
-\subsection{Podstawowa autentykacja} (\texttt{BasicAuthenticationSecurityConfiguration.java})
-
-Klasa \texttt{BasicAuthenticationSecurityConfiguration} wprowadza mechanizm podstawowej autentykacji.
+\paragraph{Podstawowe uwierzytelnienie (\texttt{BasicAuthenticationSecurityConfiguration.java})
+} 
+Klasa \texttt{BasicAuthenticationSecurityConfiguration} wprowadza mechanizm podstawowego uwierzytelnienia.
 	
