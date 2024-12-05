@@ -141,4 +141,28 @@ public class SolanaAccountControllerTest {
 \end{lstlisting}
 
 Pozostałe klasy zostały podobnie przetestowane. Łącznie wykonano 160 testów jednostkowych.
-% TO DO: dodać coś o wynikach testów jednostkowych
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.8\linewidth]{./obrazy/tests.png}
+    \caption{Testy}
+    \label{fig:Testy}
+\end{figure}
+
+\paragraph{Testy integracyjne}
+
+Testy integracyjne planowane w przyszłości obejmą:
+\begin{itemize}
+    \item Weryfikację poprawności współpracy między modułami backendowymi.
+    \item Sprawdzenie integracji z zewnętrznymi API, takimi jak Alchemy dla Ethereum i Solany.
+    \item Testowanie interakcji z bazą danych, w tym poprawności zapisywania i odczytywania danych blockchainowych.
+\end{itemize}
+
+\paragraph{Wnioski z testów jednostkowych}
+
+Przeprowadzenie 160 testów jednostkowych pozwoliło na:
+\begin{itemize}
+    \item Znalezienie i usunięcie 12 krytycznych błędów w kodzie, które mogłyby wpłynąć na działanie aplikacji.
+    \item Weryfikację poprawności działania kluczowych funkcji w izolacji.
+    \item Przygotowanie aplikacji na przyszłą integrację z bardziej złożonymi scenariuszami testowymi.
+\end{itemize}

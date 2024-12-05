@@ -335,7 +335,6 @@ Polecenie to uruchamia aplikacje w oddzielnych kontenerach, z odpowiednimi zale�
 \subsection{Struktura katalogów}
 Kod aplikacji zamieszczono w plikach zogranizowanych w strukturze jak niżej.
 \subsubsection{Frontend}
-% TO DO: w tekście dwukrotnie pojawił sie opis źródeł kodu aplikacji frontendowej. I to był różny opis. Proszę to uspójnić !!!!
 \subsubsection{Struktura źródeł kodu aplikacji frontendowej}
 Struktura katalogów w aplikacji frontendowej jest zorganizowana w sposób, który umożliwia łatwą skalowalność i utrzymanie kodu. Poniżej przedstawiono główną strukturę folderów aplikacji, która jest typowa dla aplikacji React.
 \begin{multicols}{2}
@@ -495,8 +494,8 @@ Przetwarzanie danych dotyczących kryptowalut wymagało zaimplementowania paru k
 \begin{itemize}
 	\item \texttt{Cryptocurrency} -- reprezentuje kryptowalutę w systemie, zawierającą szczegółowe informacje o jej identyfikatorze w systemie CoinMarketCap (\texttt{cmcId}), nazwie, symbolu, rankingu, podaży cyrkulującej, cenie, wolumenie oraz procentowej zmianie ceny w różnych okresach (1h, 24h, 7d). Klasa ta posiada również powiązanie z historią cen przez relację \texttt{OneToMany} z klasą \texttt{HistoricalData}, a także z platformą, na której kryptowaluta jest notowana, za pomocą relacji \texttt{OneToOne} z klasą \texttt{Platform}.
 	\item \texttt{Category} -- reprezentuje kategorię kryptowalut w systemie. Zawiera informacje o identyfikatorze kategorii, nazwie, tytule, opisie oraz dodatkowe dane statystyczne, takie jak liczba tokenów, średnia zmiana ceny, kapitalizacja rynkowa i wolumen. Klasa ta jest powiązana z klasą \texttt{Cryptocurrency} poprzez relację \texttt{OneToMany}, co oznacza, że każda kategoria może zawierać wiele kryptowalut. 
+	\item \textbf{Platform} Przechowuje szczegóły platform, na których działają kryptowaluty (np.\ Ethereum, Solana). System powinien obsługiwać mapowanie kryptowalut na platformy.
 	\item \texttt{FearAndGreed} -- reprezentuje dane dotyczące wskaźnika strachu i chciwości, który jest często wykorzystywany w analizach rynków finansowych, w tym kryptowalut. Klasa ta przechowuje informacje o wartości wskaźnika (\texttt{value}), jego klasyfikacji (\texttt{valueClassification}), oraz dacie, kiedy wskaźnik został zmierzony (\texttt{date}).
-% TO DO: a gdzie opis klasy Platform?
 \end{itemize}
 
 \paragraph{Klasy odpowiedzialne za NFT}
