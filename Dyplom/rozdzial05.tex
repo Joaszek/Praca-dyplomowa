@@ -1,27 +1,28 @@
 \chapter{Wdrożenie}
-\subsubsection{Wstęp}
-Wdrożenie aplikacji jest ostatnim etapem procesu tworzenia oprogramowania. Proces ten polega na przygotowaniu odpowiedniej konfiguracji środowiska i infrastruktury pod kątem skalowalności, bezpieczeństwa i ochrony przed awarią serwera. W projekcie wykorzystano technologię Docker oraz AWS, jednak ze względu na koszty AWS nie będzie wykorzystywany w dłuższym okresie czasu.
+Wdrożenie aplikacji jest ostatnim etapem procesu tworzenia oprogramowania. Proces ten polega na przygotowaniu odpowiedniej konfiguracji środowiska i infrastruktury pod kątem skalowalności, bezpieczeństwa i ochrony przed awarią serwera. W projekcie wykorzystano technologię Docker oraz AWS, jednak ze względu na koszty AWS nie będzie wykorzystywany w dłuższym okresie czasu. Poniżej opisano szczegóły.
 
-\subsubsection{Lokalne środowisko}
-\paragraph{Pobranie źródeł projektu} 
-
+\section{Środowisko lokalne}
+\textbf{Pobranie źródeł projektu~~} 
 Pierwszym krokiem do wdrożenia aplikacji jest pobranie źródeł projekt. Aby to zrobić należy wpisać w terminal:
-\begin{lstlisting}[basicstyle=\ttfamily\footnotesite]
+\begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 git clone --recurse-submodules https://github.com/Bachelor-Thesis-Szewior-Joachim/deployment.git
 \end{lstlisting}
 Polecenie to utworzy lokalny klon zdalnego repozytorium kodu. Aby dało się to polecenie uruchomić, na komputerze użytkownika musi być zaistalowane narzędzie git.
-Po pobarni źródeł można przejść do następnych kroków, tj.\ do zbudowania i uruchomienia odpowiednich dockerowych obrazów.
+Po pobarni źródeł można przejść do następnych kroków, tj.\ do zbudowania i uruchomienia odpowiednich dockerowych obrazów.\\[-10pt]
 
-\paragraph{Budowanie obrazów}
+\noindent \textbf{Budowanie obrazów~~}
 Aby uruchomić aplikację, należy zbudować obrazy dla 4 kontenerów:
-\begin{itemize}
-    \item \texttt{frontend}
-    \item \texttt{backend}
-    \item \texttt{solana\_scripts}
-    \item \texttt{model\_server}
-\end{itemize}
 
-Obrazy można także pobrać z Docker Hub:
+\noindent
+\begin{tabularx}{\linewidth}{XXXX}
+$\bullet$ \texttt{frontend} &
+$\bullet$  \texttt{backend} &
+$\bullet$ \texttt{solana\_scripts} &
+$\bullet$ \texttt{model\_server} 
+\end{tabularx}\\[-10pt]
+
+\noindent 
+Obrazy można także pobrać z Docker Hub komendami:
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 docker pull joaszek/bachelor-thesis:model_server_image
 docker pull joaszek/bachelor-thesis:solana_scripts_image
@@ -30,6 +31,8 @@ docker pull joaszek/bachelor-thesis:frontend_image
 docker pull joaszek/bachelor-thesis:postgres_image
 \end{lstlisting}
 
+\noindent
+Przykład zawartości pobranego pliku konfiguracyjnego:
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily,tabsize=2]
 version: "3.8"
 
@@ -127,9 +130,9 @@ networks:
 
 Następnie należy uruchomić komendę \texttt{docker compose up} w folderze, w którym jest \texttt{docker-compose.yml} aby postawić aplikację na swoim komputerze.
 
-\subsubsection{Środowisko AWS}
-\paragraph{Serwisy}
-Aplikacja została wdrożona w środowisku AWS z wykorzystaniem usługi ECS (Elastic Container Service) w trybie Fargate. Skonfigurowano następujące serwisy:
+\section{Środowisko AWS}
+\textbf{Serwisy~~}
+Aplikacja została wdrożona w środowisku AWS z wykorzystaniem usługi ECS (ang.~\emph{Elastic Container Service}) w trybie Fargate. Skonfigurowano następujące serwisy:
 \begin{itemize}
     \item \textbf{Postgres}:
     \begin{itemize}
@@ -185,7 +188,7 @@ Aplikacja została wdrożona w środowisku AWS z wykorzystaniem usługi ECS (Ela
     \end{itemize}
 \end{itemize}
 
-\paragraph{Skalowanie i infrastruktura}
+\textbf{Skalowanie i infrastruktura~~}
 W ramach infrastruktury AWS zostały skonfigurowane:
 \begin{itemize}
     \item Dwa subnety:
@@ -194,7 +197,7 @@ W ramach infrastruktury AWS zostały skonfigurowane:
         \item \textbf{Prywatny subnet} dla wewnętrznych usług, takich jak baza danych.
     \end{itemize}
     \item Specjalna sieć VPC (\textit{Virtual Private Cloud}) dedykowana dla tej aplikacji.
-    \item Security Group z odpowiednimi regułami dostępu, zezwalającymi na ruch przychodzący i wychodzący na portach używanych przez aplikację (3000, 8080, 5432, 5050, 5000).
+    \item Security Group z odpowiednimi regułami dostępu, zezwalającymi na ruch przychodzący i~wychodzący na portach używanych przez aplikację (3000, 8080, 5432, 5050, 5000).
     \item Rola IAM o nazwie \texttt{ECS\_Role}, która umożliwia ECS dostęp do obrazów w ECR i logowanie do CloudWatch.
     \item Load Balancer, który rozdziela ruch do aplikacji i zapewnia wysoką dostępność.
 \end{itemize}

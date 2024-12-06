@@ -1,14 +1,13 @@
 \chapter{Testy aplikacji backendowej}
 
-\section{Wprowadzenie do testów jednostkowych}
-
+\section{Testy jednostkowe}
 Testowanie aplikacji backendowej jest kluczowym elementem zapewniającym jakość i stabilność oprogramowania. W tym rozdziale przedstawiono strukturę testów jednostkowych zaimplementowanych w projecie z wykorzystaniem frameworków Spring Boot oraz JUnit 5. Testy podzielono na różne moduły, takie jak blockchain, kryptowaluty, NFT, oraz zasoby. Pozwoliło to na łatwiejsze zarządzanie i rozwój aplikacji. Testy integracyjne i wydajnościowe zostaną przeprowadzone w przyszłości.
 
-\section{Testy w module Blockchain}
+\subsection{Testy w module Blockchain}
 
 Moduł blockchain zawiera testy związane z obsługą różnych łańcuchów bloków, takich jak Bitcoin, Ethereum i Solana. Poniżej przedstawiano przykłady testów dla różnych podkategorii.
 
-\subsection{Testy dla Bitcoin}
+\subsubsection{Testy dla Bitcoin}
 
 Przykładowy test dla klasy \texttt{BitcoinAccountControllerTest}
 
@@ -55,7 +54,7 @@ class BitcoinAccountControllerTest {
 }
 \end{lstlisting}
 
-\subsection{Testy dla Ethereum}
+\subsubsection{Testy dla Ethereum}
 Przykładowy test dla klasy \texttt{EthereumAccountControllerTest}
 
 \begin{lstlisting}[language=Java, style=JavaStyle]
@@ -101,7 +100,7 @@ class EthereumAccountControllerTest {
 }
 \end{lstlisting}
 
-\subsection{Testy dla Solana}
+\subsubsection{Testy dla Solana}
 
 Przykładowy test dla klasy \texttt{SolanaAccountControllerTest}
 
@@ -140,29 +139,24 @@ public class SolanaAccountControllerTest {
 }
 \end{lstlisting}
 
-Pozostałe klasy zostały podobnie przetestowane. Łącznie wykonano 160 testów jednostkowych.
+Pozostałe klasy przetestowano podobnie. Łącznie wykonano 160 testów jednostkowych. % (patrz rysunek~\ref{fig:Testy}). 
+Pozwoliły one na:
+\begin{itemize}
+    \item znalezienie i usunięcie 12 krytycznych błędów w kodzie,
+    \item weryfikację poprawności działania kluczowych funkcji w izolacji,
+    \item przygotowanie aplikacji na przyszłą integrację z bardziej złożonymi scenariuszami testowymi.
+\end{itemize}
+%%\begin{figure}[htb] % ten rysunek nic specjalnego nie wnosi, poza tym raportuje 159 testów, a nie 160
+    %%\centering
+    %%\includegraphics[width=0.8\linewidth]{./obrazy/tests.png}
+    %%\caption{Testy}
+    %%\label{fig:Testy}
+%%\end{figure}
 
-\begin{figure}[htb]
-    \centering
-    \includegraphics[width=0.8\linewidth]{./obrazy/tests.png}
-    \caption{Testy}
-    \label{fig:Testy}
-\end{figure}
-
-\paragraph{Testy integracyjne}
-
+\section{Testy integracyjne}
 Testy integracyjne planowane w przyszłości obejmą:
 \begin{itemize}
     \item Weryfikację poprawności współpracy między modułami backendowymi.
     \item Sprawdzenie integracji z zewnętrznymi API, takimi jak Alchemy dla Ethereum i Solany.
     \item Testowanie interakcji z bazą danych, w tym poprawności zapisywania i odczytywania danych blockchainowych.
-\end{itemize}
-
-\paragraph{Wnioski z testów jednostkowych}
-
-Przeprowadzenie 160 testów jednostkowych pozwoliło na:
-\begin{itemize}
-    \item Znalezienie i usunięcie 12 krytycznych błędów w kodzie, które mogłyby wpłynąć na działanie aplikacji.
-    \item Weryfikację poprawności działania kluczowych funkcji w izolacji.
-    \item Przygotowanie aplikacji na przyszłą integrację z bardziej złożonymi scenariuszami testowymi.
 \end{itemize}

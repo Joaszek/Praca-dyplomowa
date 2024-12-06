@@ -4,55 +4,56 @@
 %        musiałem sporo przeredagować w tym rodziale, zmieniając jego układ, bo było bardzo dużo powtórzeń.
 
 Przystępując do realizacji projektu założono, że budowana platforma będzie oferować użytkownikom szeroki wachlarz funkcji, umożliwiając im nie tylko naukę, ale także interakcję z rzeczywistymi danymi blockchainowymi. Zakres tych interakcji opisano w punktach poniżej.
-\begin{enumerate}[labelwidth=1em]
-\item \textbf{Sprawdzanie danych z blockchainów}: użytkownicy będą mogli przeglądać aktualne informacje o transakcjach, stanie kont i opłatach w wybranych blockchainach. Dzięki integracji z Alchemy, platforma będzie zapewniała bezpośredni dostęp do danych blockchainowych w czasie rzeczywistym. 
+\begin{itemize}
+\item \textbf{Wybór konkretnego blockchaina do analiz i operacji:} platforma będzie oferowała możliwość wyboru obsługiwanego blockchaina, czym różnić się będzie od istniejących serwisów, takich jak Etherscan (skoncentrowanego na Ethereum) czy Solscan (dedykowanego Solanie).
+\item \textbf{Sprawdzanie danych z blockchainów}: użytkownicy będą mogli przeglądać aktualne informacje o transakcjach, stanie kont i opłatach w wybranych blockchainach. Dzięki integracji z Alchemy, platforma będzie zapewniała bezpośredni dostęp do danych blockchainowych w~czasie rzeczywistym. 
 \item \textbf{Symulacja transakcji na blockchainie Solana}: platforma umożliwi użytkownikom przeprowadzenie symulowanych transakcji, co pozwoli na lepsze zrozumienie mechanizmów przesyłania środków bez ryzyka utraty realnych środków. 
-\item \textbf{Przewidywanie cen kryptowalut}: z wykorzystaniem modeli sztucznej inteligencji użytkownicy będą mogli uzyskać prognozy dotyczące cen kryptowalut, co pomoże im w podejmowaniu decyzji inwestycyjnych. 
+\item \textbf{Przewidywanie cen kryptowalut}: użytkownicy będą mogli uzyskać prognozy dotyczące cen kryptowalut dzięki wykorzystaniu modeli sztucznej inteligencji, co pomoże im w podejmowaniu decyzji inwestycyjnych. Model ten będzie analizować dane historyczne i bieżące, generując prognozy, które będą udostępniane użytkownikom w aplikacji.
 \item \textbf{Dostęp do materiałów edukacyjnych}: platforma będzie zawierać linki do kursów wideo, artykułów oraz innych materiałów edukacyjnych, które pozwolą użytkownikom poszerzać wiedzę na temat technologii blockchain. 
 \item \textbf{Konwersja walut i kryptowalut}: funkcja konwertera ułatwi przeliczenia pomiędzy walutami tradycyjnymi a kryptowalutami, co jest istotne dla inwestorów. 
-\end{enumerate}
-
-Platforma będzie oferowała możliwość \textbf{wyboru konkretnego blockchaina do analiz i operacji}, czym różnić się będzie od istniejących serwisów, takich jak Etherscan (skoncentrowanego na Ethereum) czy Solscan (dedykowanego Solanie). Dzięki integracji z API użytkownicy będą mieli dostęp do bieżących danych o transakcjach i stanie blockchainów, co zwiększy wartość informacyjną platformy i pozwoli na podejmowanie bardziej świadomych decyzji inwestycyjnych.
-
-Pod względem funkcjonalnym aplikacja musi umożliwiać zarządzanie użytkownikami, w tym rejestrację i logowanie za pomocą bezpiecznego mechanizmu autoryzacji opartego na OAuth2 i tokenach JWT. Użytkownicy muszą mieć możliwość przeglądania szczegółowych danych blockchainowych, takich jak transakcje, bloki i konta na blockchainach Bitcoin, Ethereum i Solana. System powinien także umożliwiać dynamiczne wyszukiwanie tych danych za pomocą zapytań REST, które frontend przesyła do backendu.
-
-Kolejnym wymaganiem jest obsługa kryptowalut, obejmująca prezentację kategorii kryptowalut, danych historycznych oraz informacji o rynku globalnym, takich jak wskaźnik strachu i chciwości. Użytkownicy powinni mieć dostęp do danych związanych z NFT, w tym szczegółowych informacji o kolekcjach i tokenach oraz ich statystykach. System musi również umożliwiać realizację operacji blockchainowych, takich jak symulacje transakcji czy airdropy, które są wykonywane za pomocą dedykowanych skryptów Node.js.
-
-Oprócz funkcji użytkowych system musi zapewniać przewidywanie cen kryptowalut dzięki integracji z modelem AI. Model ten będzie analizować dane historyczne i bieżące, generując prognozy, które będą udostępniane użytkownikom w aplikacji.
+\end{itemize}
+Sposób sposobu dostarczenia tych funkcji wymaga dalszego komentarza:
+\begin{itemize}
+\item Aplikacja powinna obsługiwać wielu użytkowników, spełniając przy tym wymogi bezpieczeństwa. Dlatego powinna oferować możliwość zarządzania danymi użytkowników, w~tym rejestrację i logowanie za pomocą bezpiecznego mechanizmu autoryzacji opartego na OAuth2 i~tokenach JWT. 
+\item Użytkownicy muszą mieć możliwość przeglądania szczegółowych danych blockchainowych, takich jak transakcje, bloki i konta na blockchainach Bitcoin, Ethereum i Solana. System powinien także umożliwiać dynamiczne wyszukiwanie tych danych za pomocą zapytań REST, które frontend przesyła do backendu.
+\item Dostęp do bieżących danych o transakcjach i stanie blockchainów będzie możliwy dzięki integracji z ich API. Zwiększy to wartość informacyjną platformy i pozwoli na podejmowanie bardziej świadomych decyzji inwestycyjnych.
+\item Aplikacja powinna zapewniać prezentację kategorii kryptowalut, danych historycznych oraz informacji o rynku globalnym, takich jak wskaźnik strachu i chciwości. 
+\item Użytkownicy powinni mieć dostęp do danych związanych z NFT, w tym szczegółowych informacji o kolekcjach i tokenach oraz ich statystykach. System musi również umożliwiać realizację operacji blockchainowych, takich jak symulacje transakcji czy airdropy, które są wykonywane za pomocą dedykowanych skryptów Node.js.
+\end{itemize}
 
 Pod względem niefunkcjonalnym aplikacja musi być wydajna, obsługując wiele równoczesnych zapytań REST bez znaczącego spadku wydajności. Dynamiczne pobieranie danych blockchainowych z zewnętrznych API, takich jak Etherscan czy CoinMarketCap, musi odbywać się w czasie rzeczywistym z minimalnym opóźnieniem. System musi być skalowalny.
 
 \subsection{Zarys architektury}\label{subsec:ZarysArchitektury}
-Architektura budowanej platformy ma być wielowarstwowa, z wyróżnionymi dwoma głównymi elementami: backendem i frontendem. 
-Zarys architektury tej aplikacji pokazano na rysunku~\ref{fig:ZarysyArchitekturySystemu}.
-\begin{figure}[htb]
+Architektura budowanej platformy ma być wielowarstwowa, z wyróżnionymi dwoma głównymi elementami: backendem i frontendem. Zarys tej architektury pokazano na rysunku~\ref{fig:ZarysyArchitekturySystemu}.
+\begin{figure}[htb] %TO DO: proszę zamiast png wygenerować pdf
     \centering
-    \includegraphics[width=0.9\linewidth]{Diagram.png}
+    \includegraphics[width=0.7\linewidth]{Diagram.png}
     \caption{Zarysy architektury systemu}
     \label{fig:ZarysyArchitekturySystemu}
 \end{figure}
+
 Każdy komponent działać ma jako osobny moduł, uruchamiany w odrębnym kontenerze Docker, co zapewnić ma izolację środowisk oraz łatwość wdrażania i utrzymania. Komunikacja między frontendem a backendem odbywać się ma za pomocą protokołu REST, z odpowiedziami zwracanymi w formacie JSON, w postaci obiektów \texttt{ResponseEntity}, co ułatwi integrację i zapewni spójność przesyłanych danych.
 
 Bezpieczeństwo aplikacji jest priorytetem. Wszystkie dane przesyłane między frontendem a backendem muszą być zabezpieczone za pomocą szyfrowania HTTPS, a tokeny JWT muszą być przechowywane w sposób bezpieczny w przeglądarce użytkownika. System musi być odporny na ataki oraz zapewniać ochronę przed nieautoryzowanym dostępem.
 
 Backend, pełniący rolę centralnego punktu przetwarzania danych, zostanie zaimplementowany w Spring Boot 3 z użyciem Javy 21. Do zarządzania danymi użytkowników oraz NFT w bazie PostgreSQL wykorzystany zostanie \texttt{CrudRepository} ze Spring Data JPA. Informacje blockchainowe, takie jak transakcje i dane tokenów, będą pobierane w czasie rzeczywistym z API dostawców, takich jak Etherscan i CoinMarketCap (zakłada się możliwość zamockowania tych API do celów testowania). Backend dodatkowo wykorzystany zostanie Node.js do realizacji zaawansowanych operacji blockchainowych, w tym symulacji transakcji oraz airdropów.
 
-Frontend, zbudowany w React, działać ma jako aplikacja wielostronicowa MPA (ang.~\emph{Multi-Page Application}). Komunikację z backendem zapewnić ma użycie biblioteki \texttt{axios}. Autoryzacja użytkowników zostanie realizowana za pomocą tokenów JWT przechowywanych w \texttt{localStorage}, co zapewni bezpieczeństwo sesji oraz ochronę komunikacji między komponentami.
+Frontend, zbudowany w React, działać ma jako aplikacja wielostronicowa MPA (ang.~\emph{Multi-Page Application}). Komunikację z backendem zapewnić ma użycie biblioteki \texttt{axios}. Autoryzacja użytkowników zostanie realizowana za pomocą tokenów JWT przechowywanych w~\texttt{localStorage}, co zapewni bezpieczeństwo sesji oraz ochronę komunikacji między komponentami.
 
 System musi być również łatwy w utrzymaniu. Kod aplikacji musi być zgodny z najlepszymi praktykami programistycznymi. Planowane jest wdrożenie pipeline’u CI/CD do automatyzacji procesu budowy, testowania i wdrażania.
 
 % TO DO: tutaj jeszcze tryb niedokonany - planujemy, co ma być wykonane
 
 \section{Analiza wymagań}
-Na podstawie założeń ogólnych sformułowano wymagania szczegółowe. Zestawiono je poniżej w kolejnych podrozdziałach. Stanowią one uzupełnienie do opisanych już wymagań. 
-\subsection{Wymagania funkcjonalne}
-Wymagania funkcjonalne systemu zostały podzielone na grupy w zależności od ich domeny zastosowania. Poniżej przedstawiono szczegóły każdej z tych grup.
+Na podstawie założeń ogólnych sformułowano wymagania szczegółowe. Zestawiono je poniżej. Stanowią one uzupełnienie do opisanych już założeń ogólnych. 
+\subsection{Wymagania dziedzinowe}
+Zebrane poniżej wymagania podzielono na grupy w zależności od ich domeny zastosowania. Poniżej przedstawiono szczegóły każdej z tych grup.
 
 \subsubsection{Kategorie i dane rynkowe}
 \begin{itemize}
 \item \textbf{Category} -- reprezentuje kategorię kryptowalut (np.\ DeFi, NFT), z jej nazwą i opcjonalnym opisem. System powinien umożliwiać wyświetlanie kategorii kryptowalut.
 \item \textbf{Cryptocurrency} -- reprezentuje kryptowalutę, jej nazwę, symbol i dane rynkowe.
-\item \textbf{HistoricalData} -- reprezentuje dane historyczne kryptowalut (cena, wolumen, kapitalizacja). System powinien umożliwiać przechowywanie danych historycznych i zapytanie o dane w określonym dniu w przeszłości.
+\item \textbf{HistoricalData} -- reprezentuje dane historyczne kryptowalut (cena, wolumen, kapitalizacja). System powinien umożliwiać przechowywanie danych historycznych i zapytanie o dane w~określonym dniu w przeszłości.
 \item \textbf{FearAndGreed} -- reprezentuje wskaźnik strachu i chciwości na rynku kryptowalut. System powinien umożliwiać pobieranie bieżących.
 \end{itemize}
 
@@ -140,5 +141,5 @@ Architektura systemu opiera się na modularnym podejściu, z wyraźnym podziałe
 
 Wymagania niefunkcjonalne aplikacji koncentrują się na wydajności, skalowalności oraz niezawodności. Planowane wdrożenie w chmurze AWS z wykorzystaniem Elastic Load Balancer (ELB) pozwoli na dynamiczne zarządzanie zasobami i równoważenie obciążenia. Dodatkowo, zastosowanie pipeline’u CI/CD usprawni procesy związane z utrzymaniem i rozwojem systemu, zapewniając jego długoterminową stabilność.
 
-Podsumowując, aplikacja jest wszechstronnym narzędziem, które dzięki modularnej architekturze i zaawansowanym funkcjom sprosta wymaganiom zarówno inwestorów, jak i entuzjastów blockchainów. System oferuje wysoką elastyczność i bezpieczeństwo, co czyni go odpowiednim rozwiązaniem dla dynamicznie zmieniającego się rynku kryptowalut i technologii blockchain.
+Podsumowując, aplikacja ma być wszechstronnym narzędziem, które dzięki modularnej architekturze i zaawansowanym funkcjom sprosta wymaganiom zarówno inwestorów, jak i entuzjastów blockchainów. System oferować ma wysoką elastyczność i bezpieczeństwo, co uczyni go odpowiednim rozwiązaniem dla dynamicznie zmieniającego się rynku kryptowalut i technologii blockchain.
 

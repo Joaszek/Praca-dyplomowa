@@ -9,43 +9,45 @@ Podczas implementacji, szczególną uwagę poświęcono skalowalności aplikacji
 
 \section{Podział logiczny}
 \subsection{Komponenty systemu}
-Zgodnie z założeniami co do architektury, podczas implementacji stworzono główne moduły systemu: frontend oraz backend (patrz podrozdział~\ref{subsec:ZarysArchitektury}).
+Zgodnie z założeniami co do architektury, podczas implementacji stworzono główne moduły systemu: frontend oraz backend (patrz podrozdział~\ref{subsec:ZarysArchitektury}).\\[-10pt]
 
-\paragraph{Frontend} -- zbudowany w React jako aplikacja wielostronicowa (MPA), odpowiada za prezentację danych i interakcję z użytkownikami. Podzielono go na moduły odpowiadające różnym domenom funkcjonalnym. Moduł blockchain prezentuje dane związane z blockchainami Bitcoin, Ethereum i Solana, w tym szczegóły transakcji, bloków oraz kont. Ten moduł zawiera podkomponenty obsługujące wyszukiwanie oraz wyświetlanie szczegółowych informacji. Moduł kryptowalut zarządza kategoriami kryptowalut, danymi historycznymi, rynkiem globalnym oraz rankingami. Dodatkowo frontend oferuje widoki użytkownika, takie jak logowanie, rejestracja oraz strona główna. Komunikacja z backendem odbywa się za pomocą biblioteki axios, z uwierzytelnianiem opartym na tokenach JWT przechowywanych w \texttt{localStorage}.
+\noindent \textbf{Frontend} -- %zbudowany w React jako aplikacja wielostronicowa (MPA), % to już było w założeniach ogólnych
+odpowiada za prezentację danych i interakcję z użytkownikami. Podzielono go na moduły odpowiadające różnym domenom funkcjonalnym. Moduł blockchain prezentuje dane związane z blockchainami Bitcoin, Ethereum i Solana, w tym szczegóły transakcji, bloków oraz kont. Ten moduł zawiera podkomponenty obsługujące wyszukiwanie oraz wyświetlanie szczegółowych informacji. Moduł kryptowalut zarządza kategoriami kryptowalut, danymi historycznymi, rynkiem globalnym oraz rankingami. Dodatkowo frontend oferuje widoki użytkownika, takie jak logowanie, rejestracja oraz strona główna. Komunikacja z backendem odbywa się za pomocą biblioteki axios, z uwierzytelnianiem opartym na tokenach JWT przechowywanych w \texttt{localStorage}.\\[-10pt]
 
-\paragraph{Backend} -- zaimplementowany w Spring Boot 3 przy użyciu Javy 21 jest centralnym komponentem systemu. Integruje funkcjonalności związane z logiką biznesową, bazą danych oraz zewnętrznymi dostawcami informacji. Backend udostępnia API REST dla frontendu i obsługuje kilka kluczowych domen, takich jak kryptowaluty, NFT oraz zasoby zewnętrzne. Moduł kryptowalut oferuje funkcje zarządzania kategoriami, danymi historycznymi oraz danymi rynkowymi. Moduł NFT zarządza tokenami, kolekcjami oraz ich statystykami. Backend również integruje dane blockchainowe, takie jak transakcje i bloki, które są dynamicznie pobierane z zewnętrznych API, takich jak Etherscan czy CoinMarketCap. Ponadto backend wywołuje dedykowane skrypty w Node.js w celu realizacji zaawansowanych operacji blockchainowych, takich jak symulacje transakcji i airdropy oraz skrypt w kontenerze Pythonowym, tak aby uzyskać dane o cenie kryptowalut na dany dzień.
-\newline
-Część backendu odpowiada również za bezpieczeństwo, realizowane poprzez mechanizm OAuth2 i tokeny JWT. Tokeny te są wykorzystywane do uwierzytelniania użytkowników oraz zabezpieczania komunikacji między frontendem a backendem. W backendzie zastosowano również bazę danych PostgreSQL, która przechowuje trwałe dane, takie jak użytkownicy, dane NFT oraz kryptowaluty, podczas gdy dane blockchainowe są dynamicznie pobierane i nie są przechowywane.
+\noindent \textbf{Backend} -- %zaimplementowany w Spring Boot 3 przy użyciu Javy 21 % to już było w założeniach ogólnych
+jest centralnym komponentem systemu. Integruje funkcje związane z logiką biznesową, bazą danych oraz zewnętrznymi dostawcami informacji. Backend udostępnia API REST dla frontendu i obsługuje kilka kluczowych domen, takich jak kryptowaluty, NFT oraz zasoby zewnętrzne. Moduł kryptowalut oferuje funkcje zarządzania kategoriami, danymi historycznymi oraz danymi rynkowymi. Moduł NFT zarządza tokenami, kolekcjami oraz ich statystykami. Backend również integruje dane blockchainowe, takie jak transakcje i bloki, które są dynamicznie pobierane z zewnętrznych API, takich jak Etherscan czy CoinMarketCap. Ponadto backend wywołuje dedykowane skrypty w Node.js w celu realizacji zaawansowanych operacji blockchainowych, takich jak symulacje transakcji i airdropy oraz skrypt w kontenerze Pythonowym, tak aby uzyskać dane o cenie kryptowalut na dany dzień.
 
-Ponadto elementami systemu są również różne skrypty. 
-\paragraph{Skrypty Node.js} -- stanowią osobny komponent systemu, uruchamiany w dedykowanym kontenerze Docker. Skrypty te obsługują operacje blockchainowe, takie jak symulacje transakcji, tworzenie nowych kont oraz airdropy tokenów. Współpracują one z backendem, zapewniając wsparcie dla bardziej zaawansowanych funkcjonalności systemu.
+Część backendu odpowiada również za bezpieczeństwo, realizowane poprzez mechanizm OAuth2 i tokeny JWT. Tokeny te są wykorzystywane do uwierzytelniania użytkowników oraz zabezpieczania komunikacji między frontendem a backendem. W backendzie baza danych PostgreSQL przechowuje trwałe dane, takie jak użytkownicy, dane NFT oraz kryptowaluty, podczas gdy dane blockchainowe są dynamicznie pobierane i nie są przechowywane.\\[-10pt]
 
-\paragraph{Skrypt pythonowy} -- stanowi osobny komponent systemu, uruchamiany w dedykowanym kontenerze Docker. Skrypt obsługuje zapytania o przewidywaną wartość kryptowalut na dany dzień. Współpracuje on z backendem zapewniajać dodatkową funkcjonalnośc.
+\noindent Ponadto elementami systemu są również różne skrypty. \\[-10pt]
 
-System jest w pełni konteneryzowany, co oznacza, że każdy z jego komponentów — frontend, backend, baza danych, Node.js i ModelContainer — działają w odrębnych kontenerach Docker. Taka architektura zapewnia izolację środowisk, łatwość wdrażania i możliwość niezależnego skalowania komponentów. W przyszłości system zostanie wdrożony w chmurze AWS z wykorzystaniem Elastic Load Balancer (ELB), co pozwoli na równoważenie obciążenia i zwiększenie wydajności oraz skalowalności.
+\noindent \textbf{Skrypty Node.js} -- stanowią osobny komponent systemu, uruchamiany w dedykowanym kontenerze Docker. Skrypty te obsługują operacje blockchainowe, takie jak symulacje transakcji, tworzenie nowych kont oraz airdropy tokenów. Współpracują one z backendem, zapewniając wsparcie dla bardziej zaawansowanych funkcjonalności systemu.\\[-10pt]
+
+\noindent \textbf{Skrypt pythonowy} -- stanowi osobny komponent systemu, uruchamiany w dedykowanym kontenerze Docker. Skrypt obsługuje zapytania o przewidywaną wartość kryptowalut na dany dzień. Współpracuje on z backendem zapewniajać dodatkową funkcjonalność.\\[-10pt]
+
+System jest w pełni konteneryzowany, co oznacza, że każdy z jego komponentów — frontend, backend, baza danych, Node.js i ModelContainer -- działają w odrębnych kontenerach Docker. Taka architektura zapewnia izolację środowisk, łatwość wdrażania i możliwość niezależnego skalowania komponentów. W przyszłości system zostanie wdrożony w chmurze AWS z wykorzystaniem Elastic Load Balancer (ELB), co pozwoli na równoważenie obciążenia i zwiększenie wydajności oraz skalowalności.
 
 \subsection{Interakcje między komponentami}
 Interakcja między komponentami systemu zaprojektowano korzystając ze standardowych mechanizmów komunikacji, które zapewniają efektywność, bezpieczeństwo i elastyczność działania. System składa się z pięciu głównych komponentów: frontendu, backendu, skryptów Node.js, skryptu w ModelContainer oraz bazy danych PostgreSQL. Każdy z tych komponentów pełni odrębną rolę w architekturze i współpracuje z innymi poprzez jasno zdefiniowane interfejsy.
 
 Frontend pełni rolę warstwy prezentacji. Użytkownicy wchodzą w interakcje z aplikacją korzystając z tego komponentu. Umożliwia on przeglądanie danych blockchainowych, zarządzanie NFT oraz dostęp do funkcji związanych z kryptowalutami. Frontend komunikuje się z backendem za pomocą protokołu REST, korzystając z biblioteki axios. Żądania wysyłane przez frontend zawierają tokeny JWT w nagłówkach, co pozwala na autoryzację użytkowników oraz zapewnia bezpieczeństwo przesyłanych danych. Backend przetwarza żądania, odwołuje się do bazy danych lub zewnętrznych API i zwraca odpowiedzi w formacie JSON.
 
-Komunikacja między frontendem a backendem jest synchroniczna i odbywa się za pomocą REST API. Backend udostępnia RESTful API, które umożliwia frontendowi wykonywanie operacji takich jak tworzenie, pobieranie, aktualizowanie danych. Frontend, korzystając z React, wysyła żądania HTTP do backendu za pomocą axios i renderuje odpowiednie dane na interfejsie użytkownika.
+Komunikacja między frontendem a backendem jest synchroniczna i odbywa się za pomocą REST API. Backend udostępnia RESTful API, które umożliwia frontendowi tworzenie, pobieranie, aktualizowanie danych. Frontend, korzystając z React, wysyła żądania HTTP do backendu za pomocą axios i renderuje odpowiednie dane na interfejsie użytkownika.
 
-Backend działa również jako pośrednik między frontendem a zewnętrznymi dostawcami informacji blockchainowych, takimi jak Etherscan, CoinMarketCap czy Solana RPC, co pozwala na dynamiczne pobieranie danych transakcji, bloków i kont w czasie rzeczywistym. W przypadku bardziej zaawansowanych operacji blockchainowych lub przewidzenia cen, backend wywołuje dedykowane skrypty.
+Backend działa również jako pośrednik między frontendem a zewnętrznymi dostawcami informacji blockchainowych, takimi jak Etherscan, CoinMarketCap czy Solana RPC, co pozwala na dynamiczne pobieranie danych transakcji, bloków i kont w czasie rzeczywistym. W przypadku bardziej zaawansowanych operacji blockchainowych lub przewidzenia cen, backend wywołuje odpowiednie skrypty. % Dedykować można komuś książkę
 
 Skrypty Node.js działają w osobnym kontenerze i pełnią rolę wspierającą backend w realizacji specyficznych operacji blockchainowych. Skrypty te są wywoływane przez backend za pomocą mechanizmów interfejsowych i umożliwiają wykonywanie działań takich jak generowanie nowych transakcji, symulacje przepływu środków czy zarządzanie airdropami tokenów. Skrypty te operują na danych dynamicznych, które są bezpośrednio pobierane z blockchaina, co eliminuje potrzebę ich zapisywania w bazie danych.
 
 Skrypt pythonowy działa w osobnym kontenerze i pełni rolę wspierającą backend w realizacji przewidywania cen kryptowalut. Skrypt ten jest wykonywany przez backend za pomocą wysłania odpowiedniego żadania na kontener ModelContainer, gdzie serwer odbierze zapytanie i wykona operację przewidzenia ceny. Dane te są następnie zwracane do kontenera backend, tak aby ten mógł je przesłać na frontend.
 
-Baza danych PostgreSQL przechowuje dane trwałe, takie jak informacje o użytkownikach, kategoriach kryptowalut, danych historycznych oraz NFT. Backend komunikuje się z bazą danych za pomocą warstwy repozytoriów opartej na interfejsach CrudRepository. Gdy użytkownik żąda danych dostępnych w bazie, backend odczytuje je i przekształca w odpowiedzi API, które następnie są przesyłane do frontendu. W przypadku danych blockchainowych, które są dynamiczne, backend bezpośrednio pobiera je z zewnętrznych API, bez konieczności korzystania z bazy danych.
+Baza danych PostgreSQL, jak już wspomniano, przechowuje dane trwałe, takie jak informacje o użytkownikach, kategoriach kryptowalut, danych historycznych oraz NFT. Backend komunikuje się z bazą danych za pomocą warstwy repozytoriów opartej na interfejsach CrudRepository. Gdy użytkownik żąda danych dostępnych w bazie, backend odczytuje je i przekształca w odpowiedzi API, które następnie są przesyłane do frontendu. W przypadku danych blockchainowych, które są dynamiczne, backend bezpośrednio pobiera je z zewnętrznych API, bez konieczności korzystania z bazy danych.
 
 Podsumowując, interakcja między komponentami opiera się na wyraźnym podziale ról i odpowiedzialności. Frontend obsługuje interfejs użytkownika i komunikuje się z backendem poprzez REST API. Backend pełni funkcję centralnego punktu przetwarzania, współpracując zarówno z bazą danych PostgreSQL, jak i z zewnętrznymi dostawcami danych blockchainowych. Skrypty Node.js oraz Python wspierają backend w realizacji specyficznych operacji blockchainowych, a baza danych zapewnia trwałe przechowywanie kluczowych informacji. Wszystkie komponenty współpracują w sposób zintegrowany, zapewniając elastyczność, wydajność i bezpieczeństwo działania systemu.
 
 \section{Podział fizyczny}
-Podział logiczny aplikacji przełożył się na jej podział fizyczny. Organizacja źródeł kodu odpowiada temu podziałowi. Dzięki takiemu podejściu struktura aplikacji stała się czytelna i modularna. Umożliwia to łatwą rozbudowę i modyfikację poszczególnych komponentów. 
+Podział logiczny aplikacji przełożył się na jej podział fizyczny i organizację źródeł kodu. Dzięki takiemu podejściu struktura aplikacji stała się czytelna i modularna. Wpłynęło to na łatwość rozbudowy i modyfikacji poszczególnych komponentów. 
 
-Zarówno backend, jak i frontend zostały podzielone na funkcje, co pozwala na lepszą organizację kodu oraz łatwiejsze testowanie poszczególnych części aplikacji. Integracja pomiędzy frontendem a backendem została zrealizowana przy pomocy API, co zapewnia elastyczność i łatwość w komunikacji między różnymi warstwami systemu.
-Poniżej przedstawiono szczegółowy opis dwóch głównych części: frontendu i backendu.
+Zarówno backend, jak i frontend podzielono na funkcje, co skutkowało lepszą organizację kodu oraz łatwiejszym testowaniem. Integrację frontendu z backendem zrealizowano przy pomocy API. Poniżej przedstawiono szczegółowy opis tych dwóch głównych części aplikacji.
 
 \subsection{Backend}
 Backend aplikacji jest napisany w języku Java z wykorzystaniem frameworku Spring Boot. Struktura kodu backendowego jest zgodna z najlepszymi praktykami w zakresie organizacji projektów opartych na tym frameworku. Kluczowe elementy struktury backendu to:
@@ -63,7 +65,6 @@ Backend jest podzielony na różne warstwy:
     \item \textbf{Service}: Warstwa logiki biznesowej, która przetwarza dane i wykonuje operacje na modelach.
     \item \textbf{Repository}: Warstwa odpowiedzialna za komunikację z bazą danych przy użyciu JPA (Java Persistence API).
 \end{itemize}
-
 W backendzie każda funkcjonalność została wydzielona do oddzielnych metod w odpowiednich klasach. Przykłady funkcji backendowych:
 \begin{itemize}
     \item \texttt{registerUser}: Funkcja tworząca nowego użytkownika w bazie danych.
@@ -74,14 +75,13 @@ W backendzie każda funkcjonalność została wydzielona do oddzielnych metod w 
 
 
 \subsection{Frontend}
-Frontend aplikacji jest stworzony z użyciem React, popularnego frameworku JavaScript, który umożliwia tworzenie dynamicznych interfejsów użytkownika. Struktura kodu frontendowego obejmuje:
+Frontend stworzono z użyciem React -- popularnego frameworku JavaScript, stosowanego do tworzenie dynamicznych interfejsów użytkownika. Struktura kodu frontendowego obejmuje:
 \begin{itemize}
     \item \texttt{src/}: Główna część aplikacji frontendowej, zawierająca komponenty, funkcje oraz logikę.
     \item \texttt{public/}: Pliki statyczne, takie jak HTML, obrazy, czcionki itp.
     \item \texttt{package.json}: Plik konfiguracyjny npm, zarządzający zależnościami aplikacji.
     \item \texttt{Dockerfile.dev}: Plik konfiguracyjny Docker dla środowiska deweloperskiego.
 \end{itemize}
-
 Frontend jest podzielony na następujące elementy:
 \begin{itemize}
     \item \textbf{Komponenty}: Aplikacja frontendowa jest zbudowana w oparciu o komponenty React, które reprezentują poszczególne elementy interfejsu użytkownika.
@@ -128,7 +128,7 @@ Kontener frontendowy współpracuje z backendem, który realizuje logikę aplika
 \end{itemize}
 
 \section{Budowa aplikacji za pomocą Maven i Docker}
-W ramach projektu zastosowano narzędzia Maven i Docker w procesie budowy aplikacji, co pozwoliło na efektywne zarządzanie zarówno zależnościami projektowymi, jak i środowiskiem uruchomieniowym. Maven został wykorzystany jako system zarządzania projektem, wspierający kompilację, testowanie i pakowanie aplikacji. Maven dodatkowo pomaga w zarządzaniu pakietami potrzebnymi do działania aplikacji. Docker umożliwił konteneryzację aplikacji, zapewniając spójność środowiska uruchomieniowego niezależnie od platformy. Każdy kontener dockerowy opierał się na obrazie zdefiniowanym w pliku \texttt{Dockerfile}, zawierającym definicje wszystkich zależności i konfiguracji potrzebnych do uruchomienia aplikacji. 
+Podczas budowy aplikacji wykorzystano narzędzia Maven i Docker. Pozwoliło to na efektywne zarządzanie  zależnościami projektowymi oraz środowiskiem uruchomieniowym. Maven posłużył jako system zarządzania projektem, wspierający kompilację, testowanie i pakowanie aplikacji. Dodatkowo pomógł on w zarządzaniu pakietami potrzebnymi do działania aplikacji. Docker umożliwił konteneryzację aplikacji, zapewniając spójność środowiska uruchomieniowego niezależnie od platformy. Obrazy kontenerów budowano w oparciu o pliki \texttt{Dockerfile}, zawierające definicje zależności oraz konfiguracje potrzebne do uruchomienia aplikacji. 
 
 Aby zbudować obraz dla aplikacji backendowej należy wykonać:
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
@@ -159,22 +159,22 @@ Po zbudowaniu obrazów kontenery mogą zostać uruchomione przy pomocy \texttt{d
 \subsection{Konfiguracja narzędzi} 
 
 \subsubsection{Zależności i wtyczki Maven}
-W projekcie wykorzystano szereg pluginów Maven, które automatyzują procesy związane z budową aplikacji. Głównie wykorzystane pluginy \texttt{maven-clean-plugin}, \texttt{maven-compiler-plugin}, \texttt{maven-jar-plugin}, \texttt{maven-surefire-plugin}, oraz \texttt{spring-boot-maven-plugin}.
+W projekcie wykorzystano pluginy Maven automatyzujące budowę aplikacji. Były to głównie pluginy: \texttt{maven-clean-plugin}, \texttt{maven-compiler-plugin}, \texttt{maven-jar-plugin}, \texttt{maven-surefire-plugin}, oraz \texttt{spring-boot-maven-plugin}.
 Jeśli chodzi o zależności, projekt korzysta z kluczowych bibliotek jak \texttt{spring-boot-starter-web}, \texttt{spring-boot-starter-data-jpa}, \texttt{postgresql}, \texttt{spring-security}, \texttt{lombok}, i \texttt{mysql-connector-java}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Struktura pliku Dockerfile dla aplikacji backendowej}
 
-Plik \texttt{Dockerfile} zawiera instrukcje, które definiują sposób budowy obrazu Docker dla aplikacji. Poniżej opisano strukturę pliku \texttt{Dockerfile}, z uwzględnieniem najważniejszych instrukcji, bazujących na dwufazowej budowie obrazu.
+Plik \texttt{Dockerfile} zawiera instrukcje, które definiują sposób budowy obrazu Docker dla aplikacji. Poniżej opisano strukturę pliku \texttt{Dockerfile}, z uwzględnieniem najważniejszych instrukcji, bazujących na dwufazowej budowie obrazu.\\[-10pt]
 
-\paragraph{Podstawowy obraz}
-Pierwszym krokiem w pliku \texttt{Dockerfile} jest zdefiniowanie obrazu bazowego. W pracy używany jest obraz \texttt{amazoncorretto:21-alpine} w pierwszej fazie budowy, który zawiera OpenJDK 21, a także obraz \texttt{ubuntu:24.04} w drugiej fazie. Obraz \texttt{amazoncorretto:21-alpine} jest używany do budowy aplikacji w kontenerze, a \texttt{ubuntu:24.04} do uruchamiania jej w drugim etapie. Obraz bazowy jest ustawiany za pomocą komendy \texttt{FROM}:
+\noindent \textbf{Podstawowy obraz~~}
+Plik \texttt{Dockerfile} pozwala zdefiniować obraz bazowy. W pracy skorzystano z dwóch obrazów: do budowy aplikacji w pierwszej fazie oraz do jej uruchomienia w drugiej fazie. Do budowy użyto obrazu \texttt{amazoncorretto:21-alpine}, który zawiera OpenJDK 21, zaś do uruchomienia obraz \texttt{ubuntu:24.04}. Obraz bazowy definiuje się komendą \texttt{FROM}:
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 FROM amazoncorretto:21-alpine AS build
 \end{lstlisting}
 
-\paragraph{Instalowanie Maven i kompilacja aplikacji}
-W pierwszej fazie budowy obrazu instalowany jest Maven za pomocą komendy \texttt{RUN apk add --no-cache maven}, aby pobrać zależności aplikacji i ją skompilować. następnie kopiowany jest plik \texttt{pom.xml} oraz kod źródłowy aplikacji do obrazu. Następnie uruchamiany jest Maven do pobrania zależności i zbudowania aplikacji:
+\noindent \textbf{Instalowanie Maven i kompilacja aplikacji~~}
+W pierwszej fazie instalowany jest Maven za pomocą komendy \texttt{RUN apk add --no-cache maven}, aby pobrać zależności aplikacji i ją skompilować. następnie kopiowany jest plik \texttt{pom.xml} oraz kod źródłowy aplikacji do obrazu. Następnie uruchamiany jest Maven do pobrania zależności i zbudowania aplikacji:
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 RUN apk add --no-cache maven
 COPY pom.xml .
@@ -183,8 +183,8 @@ COPY src ./src
 RUN mvn package -DskipTests
 \end{lstlisting}
 
-\paragraph{Tworzenie obrazu do uruchomienia aplikacji}
-Po zakończeniu kompilacji, w drugiej fazie budowy obrazu instalowane są wszystkie niezbędne zależności do uruchomienia aplikacji. Używany jest obraz \texttt{ubuntu:24.04}, aby zainstalować wymagane pakiety, takie jak \texttt{openjdk-21-jdk}, \texttt{openssl}, \texttt{docker.io} oraz \texttt{curl}:
+\noindent \textbf{Tworzenie obrazu do uruchomienia aplikacji~~}
+W drugiej fazie instalowane są wszystkie niezbędne zależności do uruchomienia aplikacji. Używany jest obraz \texttt{ubuntu:24.04}, aby zainstalować wymagane pakiety, takie jak \texttt{openjdk-21-jdk}, \texttt{openssl}, \texttt{docker.io} oraz \texttt{curl}:
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 FROM ubuntu:24.04
 RUN apt-get update && \
@@ -198,7 +198,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 \end{lstlisting}
 
-\paragraph{Kopiowanie pliku JAR i generowanie kluczy RSA}
+\noindent \textbf{Kopiowanie pliku JAR i generowanie kluczy RSA~~}
 Po zainstalowaniu zależności, kopiowany jest plik JAR do obrazu i generowane są klucze RSA, które będą używane przez aplikację do obsługi autoryzacji OAuth2. Wygenerowane klucze publiczny i prywatny są następnie konwertowane do formatu PKCS\#8.
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 COPY --from=build /app/target/*.jar app.jar
@@ -207,7 +207,7 @@ RUN openssl rsa -in keypair.pem -pubout -out publicKey.pem
 RUN openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in keypair.pem -out privateKey.pem
 \end{lstlisting}
 
-\paragraph{Uruchamianie aplikacji}
+\noindent \textbf{Uruchamianie aplikacji}
 Po zbudowaniu obrazu, kontener jest uruchamiany. Użyta zostaje komenda \texttt{ENTRYPOINT}, aby określić, jak uruchomić aplikację. W tym przypadku aplikacja jest uruchamiana za pomocą komendy \texttt{java -jar} z odpowiednimi parametrami konfiguracyjnymi dla serwera i kluczy publicznego oraz prywatnego.
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 ENTRYPOINT ["java", "-jar", "app.jar", \
@@ -216,7 +216,7 @@ ENTRYPOINT ["java", "-jar", "app.jar", \
     "--spring.security.oauth2.resourceserver.jwt.private-key-location=classpath:privateKey.pem"]
 \end{lstlisting}
 
-\paragraph{Podsumowanie struktury}
+\noindent \textbf{Podsumowanie struktury}
 Plik \texttt{Dockerfile} składa się z kilku kluczowych sekcji:
 \begin{itemize}
     \item \textbf{Obraz bazowy}: Definiowanie obrazu, z którego kontener będzie korzystać w pierwszej fazie (np. \texttt{amazoncorretto:21-alpine} do kompilacji) oraz w drugiej fazie (np. \texttt{ubuntu:24.04} do uruchomienia aplikacji).
@@ -229,60 +229,59 @@ Powyższe instrukcje tworzą podstawową strukturę pliku \texttt{Dockerfile}, k
 
 \subsubsection{Struktura pliku Dockerfile dla aplikacji Frontend}
 
-Plik \texttt{Dockerfile} zawiera instrukcje, które definiują sposób budowy obrazu Docker dla aplikacji Frontend. Poniżej opisano strukturę pliku \texttt{Dockerfile} z uwzględnieniem najważniejszych instrukcji, które tworzą obraz kontenera i uruchamiają aplikację.
+Plik \texttt{Dockerfile} zawiera instrukcje, które definiują sposób budowy obrazu Docker dla aplikacji Frontend. Poniżej opisano strukturę pliku \texttt{Dockerfile} z uwzględnieniem najważniejszych instrukcji, które tworzą obraz kontenera i uruchamiają aplikację.\\[-10pt]
 
-\paragraph{Podstawowy obraz}
+\noindent \textbf{Podstawowy obraz~~}
 Pierwszym krokiem w pliku \texttt{Dockerfile} jest zdefiniowanie obrazu bazowego. W tym przypadku użyto z obrazu \texttt{node:20-alpine}, który zawiera środowisko uruchomieniowe Node.js w wersji 20, oparte na Alpine Linux, co zapewnia mały rozmiar obrazu.
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 FROM node:20-alpine
 \end{lstlisting}
 
-\paragraph{Ustawienia katalogu roboczego}
+\noindent \textbf{Ustawienia katalogu roboczego~~}
 Kolejnym krokiem jest określenie katalogu roboczego, w którym będą przechowywane pliki aplikacji w kontenerze. W tym przypadku ustawiono katalog roboczy na \texttt{/usr/app} za pomocą instrukcji \texttt{WORKDIR}.
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 WORKDIR /usr/app
 \end{lstlisting}
 
-\paragraph{Instalacja zależności aplikacji}
+\noindent \textbf{Instalacja zależności aplikacji~~}
 Aby zainstalować wymagane zależności, skopiowano plik \texttt{package.json} z lokalnego systemu do katalogu roboczego w kontenerze, a następnie uruchomiono komendę \texttt{npm install}, która pobiera zależności zdefiniowane w pliku \texttt{package.json}.
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 COPY ./package.json ./
 RUN npm install
 \end{lstlisting}
 
-\paragraph{Kopiowanie plików aplikacji do obrazu}
+\noindent \textbf{Kopiowanie plików aplikacji do obrazu~~}
 Po zainstalowaniu zależności, skopiowano resztę plików aplikacji z lokalnego systemu do kontenera za pomocą instrukcji \texttt{COPY}. Dzięki temu wszystkie pliki niezbędne do działania aplikacji będą dostępne w kontenerze.
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 COPY ./ ./
 \end{lstlisting}
 
-\paragraph{Eksponowanie portu}
+\noindent \textbf{Eksponowanie portu~~}
 Aby umożliwić dostęp do aplikacji uruchomionej w kontenerze, wyeksportowano port 3000, na którym aplikacja Frontend będzie nasłuchiwać.
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 EXPOSE 3000
 \end{lstlisting}
 
-\paragraph{Uruchamianie aplikacji}
+\noindent \textbf{Uruchamianie aplikacji~~}
 Użyto instrukcji \texttt{CMD} do określenia domyślnej komendy, która zostanie wykonana po uruchomieniu kontenera. W tym przypadku uruchamiamy aplikację Frontend za pomocą komendy \texttt{npm start}.
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 CMD [ "npm", "start" ]
 \end{lstlisting}
 
-\paragraph{Podsumowanie struktury}
+\noindent \textbf{Podsumowanie struktury~~}
 Plik \texttt{Dockerfile} składa się z kilku kluczowych sekcji:
 \begin{itemize}
-    \item \textbf{Obraz bazowy}: Definiowanie obrazu, z którego kontener będzie korzystać (np. \texttt{node:20-alpine}).
+    \item \textbf{Obraz bazowy}: Definiowanie obrazu dla kontenera (np.\ \texttt{node:20-alpine}).
     \item \textbf{Ustawienia katalogu roboczego}: Określenie katalogu, w którym będą wykonywane operacje w kontenerze.
-    \item \textbf{Instalacja zależności}: Zainstalowanie wymaganych zależności aplikacji z pliku \texttt{package.json}.
+    \item \textbf{Instalacja zależności}: Zainstalowanie wymaganych zależności z pliku \texttt{package.json}.
     \item \textbf{Kopiowanie plików}: Przeniesienie plików aplikacji do kontenera.
     \item \textbf{Uruchamianie aplikacji}: Określenie komendy uruchamiającej aplikację po starcie kontenera.
 \end{itemize}
 
-Przedstawione instrukcje tworzą strukturę pliku \texttt{Dockerfile}, który pozwala na utworzenie obrazu aplikacji Frontend, który będzie można uruchomić w kontenerze Docker. Analogicznie wykonano plik Dockerfile dla kontenera Nodejs, gdzie uruchamiane są skrypty Solany.
+\noindent Przedstawione instrukcje tworzą strukturę pliku \texttt{Dockerfile} niezbędną do utworzenie obrazu frontendu uruchamianego w kontenerze Docker. Analogicznie wykonano plik Dockerfile dla kontenera Nodejs, gdzie uruchamiane są skrypty Solany.
 
 \subsubsection{Integracja z Docker Compose}
 W celu uruchamienia zarówno aplikacji frontendowej, jak i backendowej w kontenerach można użyć komendy docker compose up. Część pliku \texttt{docker-compose.yml} wygląda następująco:
-
 \begin{lstlisting}[tabsize=2,basicstyle=\footnotesize\ttfamily]
 version: '3'
 	services:
@@ -313,8 +312,7 @@ version: '3'
 			networks:
 				- my_network
 \end{lstlisting}
-
-\begin{enumerate}
+\begin{enumerate}[labelwidth=1em]
     \item W sekcji \texttt{services} zdefiniowane są dwa serwisy: \texttt{backend\_app} i \texttt{frontend\_app}.
     \item \texttt{image} określa, jakie obraz ma być wykorzystany przy stawianiu kontenera. Dla każdego serwisu (odpowiednio \texttt{./backend\_image} i \texttt{./frontend\_image}).
     \item \texttt{ports} mapuje porty z kontenera na porty hosta, aby aplikacje były dostępne z zewnątrz.
@@ -322,7 +320,7 @@ version: '3'
 		\item \texttt{container\_name} określa nazwę kontenera.
 		\item \texttt{volumes} określa dane na temat gdzie będą składowane dane.
 		\item \texttt{command} określa jaka komenda zostanie uruchomiona na starcie kontenera.
-		\item \texttt{networks} zapewnia, że kontenery będą działać na jednej sieci, aby umożliwić im komunikację.
+		\item \texttt{networks} zapewnia działanie kontenerów w jednej sieci, co umożliwia im komunikację.
 \end{enumerate}
 
 Aby uruchomić wszystkie serwisy z pliku \texttt{docker-compose.yml} należy najpierw pobrać potrzebne obrazy z DockerHub, a następnie użyć polecenia:
@@ -448,36 +446,35 @@ Aplikację zbudowano w podzielone na różne warstwy abstrakcji. Wyróżniono: w
 
 Podczas implementacji zastosowano kilka popularnych wzorców projektowych, jak DTO, Singleton, Service Layer oraz Repository. Wzorce te pomagają w organizacji kodu, ułatwiają jego rozbudowę oraz zapewniają dobrą separację odpowiedzialności. Dzięki nim aplikacja stała się skalowalna, łatwa do utrzymania i elastyczna w rozwoju. Miało to również odzwierciedlenie w strukturze kodu.
 
-Zastosowane wzorce pozwalają na skuteczne zarządzanie danymi blockchainowymi, integrację z różnymi usługami zewnętrznymi oraz utrzymanie wysokiej jakości kodu, który może być łatwo testowany i rozszerzany. Poniżej przedstawiono najważniejsze wzorce projektowe użyte zarówno po stronie frontendowej, jak i backendowej aplikacji.
+Zastosowane wzorce pozwalają na skuteczne zarządzanie danymi blockchainowymi, integrację z różnymi usługami zewnętrznymi oraz utrzymanie wysokiej jakości kodu, który może być łatwo testowany i rozszerzany. Poniżej przedstawiono najważniejsze wzorce projektowe użyte zarówno po stronie frontendowej, jak i backendowej aplikacji.\\[-10pt]
 
-\paragraph{DTO}
-Wzorzec ten jest używany do przenoszenia danych między warstwami aplikacji w ujednoliconej formie. W implementacji zastosowano go do transferu danych między backendem a frontendem. DTO pozwala na standaryzację struktury danych, szczególnie przy interakcji z różnymi API blockchainowymi, umożliwiając jednolitą formę danych do wysyłania i odbierania. Przykłady klas, w których go użyto: \texttt{AccountDTO}, \texttt{TransactionDTO}, \texttt{BlockDTO}.
+\noindent \textbf{DTO~~}
+Wzorzec ten jest używany do przenoszenia danych między warstwami aplikacji w ujednoliconej formie. W implementacji zastosowano go do transferu danych między backendem a frontendem. DTO pozwala na standaryzację struktury danych, szczególnie przy interakcji z różnymi API blockchainowymi, umożliwiając jednolitą formę danych do wysyłania i odbierania. Przykłady klas, w których go użyto: \texttt{AccountDTO}, \texttt{TransactionDTO}, \texttt{BlockDTO}.\\[-10pt]
 
-\paragraph{Controlers}
+\noindent \textbf{Controlers~~}
 Kontrolery umieszcza się zwykle w warstwie przyjmującej żądania. Ich zadaniem jest obsługa tych żądań, w trakcie której wykorzystywane są kolejne warstwy abstrakcji.
-W budowanej aplikacji zastosowano je do obsługi zapytań HTTP. Przykłady klas, w których skorzystano z tego wzorca: \texttt{EthereumController} (obsługuje zapytania związane z blockchainem Ethereum), \texttt{CryptocurrencyController} (obsługuje zapytania dotyczące danych kryptowalutowych), \texttt{NFTController} (zarządza operacjami związanymi z NFT). Dane przesyłane do kontrolerów mają postać obiektów typu DTO (ang.~\emph{Data Transfer Object}).
+W budowanej aplikacji zastosowano je do obsługi zapytań HTTP. Przykłady klas, w których skorzystano z tego wzorca: \texttt{EthereumController} (obsługuje zapytania związane z blockchainem Ethereum), \texttt{CryptocurrencyController} (obsługuje zapytania dotyczące danych kryptowalutowych), \texttt{NFTController} (zarządza operacjami związanymi z NFT). Dane przesyłane do kontrolerów mają postać obiektów typu DTO (ang.~\emph{Data Transfer Object}).\\[-10pt]
 
-\paragraph{Service Layer}
+\noindent \textbf{Service Layer~~}
 Warstwa serwisowa pozwala na realizację przejrzystego dostępu do danych w odseparowaniu od reszty aplikacji. Realizuje ona logikę biznesową, przetwarzając i udostępniając dane, Wzorzec ten jest powszechnie stosowany po stronie backendowej, gdzie logika biznesowa jest oddzielona od kontrolerów. 
 W implementacji warstwa ta opowiada za zarządzanie operacjami na blockchainach, kryptowalutach i NFT czy na danych użytkowników.
 Taki podział umożliwia łatwą rozbudowę aplikacji oraz ponowne wykorzystanie kodu w różnych częściach aplikacji.
-Przykłady klas, w których użyto tego wzorca: \texttt{BlockchainService}, \texttt{CryptocurrencyService}, \texttt{NFTService}
+Przykłady klas, w których użyto tego wzorca: \texttt{BlockchainService}, \texttt{CryptocurrencyService}, \texttt{NFTService}.\\[-10pt]
 
-\paragraph{Repository Pattern}
-Wzorzec Repository jest stosowany w backendzie do zarządzania danymi. Repozytoria stanowią abstrakcję nad bazą danych, umożliwiając łatwą wymianę technologii bazodanowej bez zmiany logiki aplikacji. W przypadku korzystania z frameworka Spring Boot, wyróżnia się klasy repozytoriów odpowiedzialne za komunikację z bazą danych. W implementacji repozytoriów użyto ich do interakcji bazą danych PostreSQL. Pozwoliło to  na łatwą manipulację danymi użytkowników, transakcjami czy innymi encjami. Przykłady klas, w których użyto tego wzorca: \texttt{CategoryRepository}, \texttt{ClientRepository} (odpowiada za dostęp do danych konta użytkownika), \texttt{NFTRepository},   \texttt{CategoryRepository} (obsługuje dane związane z kategoriami), \texttt{CryptocurrencyRepository} (zarządza danymi kryptowalut).
+\noindent \textbf{Repository Pattern~~}
+Wzorzec Repository jest stosowany w backendzie do zarządzania danymi. Repozytoria stanowią abstrakcję nad bazą danych, umożliwiając łatwą wymianę technologii bazodanowej bez zmiany logiki aplikacji. W przypadku korzystania z frameworka Spring Boot, wyróżnia się klasy repozytoriów odpowiedzialne za komunikację z bazą danych. W implementacji repozytoriów użyto ich do interakcji bazą danych PostreSQL. Pozwoliło to  na łatwą manipulację danymi użytkowników, transakcjami czy innymi encjami. Przykłady klas, w których użyto tego wzorca: \texttt{CategoryRepository}, \texttt{ClientRepository} (odpowiada za dostęp do danych konta użytkownika), \texttt{NFTRepository},   \texttt{CategoryRepository} (obsługuje dane związane z kategoriami), \texttt{CryptocurrencyRepository} (zarządza danymi kryptowalut).\\[-10pt]
 
-\paragraph{Singleton}
-Ten wzorzec zapewnia utworzenie współdzielonego obiektu, który istnieje w aplikacji jako pojedyncza instancja. W backendzie użyto go w serwisach, które zarządzają danymi blockchain, np.\ w usługach odpowiedzialnych za integrację z różnymi blockchainami. Wzorzec ten zapewnia, że obiekt usługi zostanie utworzony tylko raz, a następnie będzie używany w całej aplikacji, co pozwala na efektywne zarządzanie stanem.
+\noindent \textbf{Singleton~~}
+Ten wzorzec zapewnia utworzenie współdzielonego obiektu, który istnieje w aplikacji jako pojedyncza instancja. W backendzie użyto go w serwisach, które zarządzają danymi blockchain, np.\ w usługach odpowiedzialnych za integrację z różnymi blockchainami. Wzorzec ten zapewnia, że obiekt usługi zostanie utworzony tylko raz, a następnie będzie używany w całej aplikacji, co pozwala na efektywne zarządzanie stanem.\\[-10pt]
 
-\paragraph{Model}
-Modele służą do reprezentowania danych w postaci obiektowej. W aplikacji wyróżniono klasy: \texttt{SolanaAccount}, \texttt{SolanaTransaction}, \texttt{EthereumBlock} (reprezentują one dane związane z blockchainami, głównie do przenoszenia danych) oraz klasy: \texttt{Cryptocurrency}, \texttt{Categories}, \texttt{GlobalMarket}, \texttt{NFT}
-(reprezentują one dane kryptowalutowe i NFT, kluczowe dla funkcji aplikacji).
+\noindent \textbf{Model~~}
+Modele służą do reprezentowania danych w postaci obiektowej. W aplikacji wyróżniono klasy: \texttt{SolanaAccount}, \texttt{SolanaTransaction}, \texttt{EthereumBlock} (reprezentują one dane związane z blockchainami, głównie do przenoszenia danych) oraz klasy: \texttt{Cryptocurrency}, \texttt{Categories}, \texttt{GlobalMarket}, \texttt{NFT} (reprezentują one dane kryptowalutowe i NFT, kluczowe dla funkcji aplikacji).
 
 
 \subsection{Opis zaprojektowanych klas}
-W kodzie aplikacji zdefiniowano różne klasy. Odpowiadają one za zarządzanie danymi blockchainowymi, danymi o kryptowalutach, transakcjami, a także za logikę biznesową i interakcje z API i i innymi kontenerami. Poniżej przedstawiono opis klas pełniących kluczowe role.
+W kodzie aplikacji zdefiniowano różne klasy. Odpowiadają one za zarządzanie danymi blockchainowymi, danymi o kryptowalutach, transakcjami, a także za logikę biznesową i interakcje z API i i innymi kontenerami. Poniżej przedstawiono opis klas pełniących kluczowe role.\\[-10pt]
 
-\paragraph{Klasy do obsługi danych blockchainowych}
+\noindent \textbf{Klasy do obsługi danych blockchainowych~~}
 Podczas implementacji stworzono kilka klas mających pomóc w zarządzaniu danymi blockchainowymi. Umieszczono je w w paczce \texttt{blockchain}.
 Choć mają one podobny cel, to jednak różnią się szczegółami implementacyjnymi. Poniżej scharakteryzowano klasy należące do tej paczki.
 \begin{itemize}
@@ -486,10 +483,10 @@ Choć mają one podobny cel, to jednak różnią się szczegółami implementacy
 \item \textbf{\texttt{Block}} -- reprezentuje pojedynczy blok w blockchainie. Zawiera informacje o numerze bloku, dacie utworzenia, liście transakcji zawartych w bloku. 
 \end{itemize}
 
-\paragraph{Klasa do obsługi danych użytkownika}
-Klasa \texttt{Client} reprezentuje użytkownika w systemie i zawiera wszystkie istotne informacje o kliencie, takie jak identyfikator, nazwa użytkownika, hasło, klucze publiczne i prywatne oraz saldo konta. Klasa ta implementuje interfejs \texttt{UserDetails}, co oznacza, że jest wykorzystywana w systemie uwierzytelniania i autoryzacji opartym na Spring Security. Wraz z klasą \texttt{ClientDto} pełni rolę obiektu transferu danych (DTO), umożliwiając przesyłanie danych o kliencie pomiędzy warstwami aplikacji.
+\noindent \textbf{Klasa do obsługi danych użytkownika~~}
+Klasa \texttt{Client} reprezentuje użytkownika w systemie i zawiera wszystkie istotne informacje o kliencie, takie jak identyfikator, nazwa użytkownika, hasło, klucze publiczne i prywatne oraz saldo konta. Klasa ta implementuje interfejs \texttt{UserDetails}, co oznacza, że jest wykorzystywana w systemie uwierzytelniania i autoryzacji opartym na Spring Security. Wraz z klasą \texttt{ClientDto} pełni rolę obiektu transferu danych (DTO), umożliwiając przesyłanie danych o kliencie pomiędzy warstwami aplikacji.\\[-10pt]
 
-\paragraph{Klasa do obsługi kryptowalut}
+\noindent \textbf{Klasa do obsługi kryptowalut~~}
 Przetwarzanie danych dotyczących kryptowalut wymagało zaimplementowania paru klas. Ich szczegóły opisano poniżej.
 \begin{itemize}
 	\item \texttt{Cryptocurrency} -- reprezentuje kryptowalutę w systemie, zawierającą szczegółowe informacje o jej identyfikatorze w systemie CoinMarketCap (\texttt{cmcId}), nazwie, symbolu, rankingu, podaży cyrkulującej, cenie, wolumenie oraz procentowej zmianie ceny w różnych okresach (1h, 24h, 7d). Klasa ta posiada również powiązanie z historią cen przez relację \texttt{OneToMany} z klasą \texttt{HistoricalData}, a także z platformą, na której kryptowaluta jest notowana, za pomocą relacji \texttt{OneToOne} z klasą \texttt{Platform}.
@@ -498,7 +495,7 @@ Przetwarzanie danych dotyczących kryptowalut wymagało zaimplementowania paru k
 	\item \texttt{FearAndGreed} -- reprezentuje dane dotyczące wskaźnika strachu i chciwości, który jest często wykorzystywany w analizach rynków finansowych, w tym kryptowalut. Klasa ta przechowuje informacje o wartości wskaźnika (\texttt{value}), jego klasyfikacji (\texttt{valueClassification}), oraz dacie, kiedy wskaźnik został zmierzony (\texttt{date}).
 \end{itemize}
 
-\paragraph{Klasy odpowiedzialne za NFT}
+\noindent \textbf{Klasy odpowiedzialne za NFT~~}
 Obsługa NFT wymagała zaimplementowania kilku klas. Ich szczegóły opisano poniżej.
 \begin{itemize}
 	\item \texttt{NFT} -- reprezentuje pojedynczy token NFT (Non-Fungible Token) w systemie, przechowując szczegóły dotyczące tokena, takie jak identyfikator, standard tokena, nazwę, opis, URL do obrazu, animacji, oraz metadanych. Dodatkowo, klasa ta zawiera informacje na temat platformy, statusu tokena (czy jest wyłączony, NSFW, podejrzany), a także jego twórcy.\newline
@@ -509,7 +506,7 @@ Klasa \texttt{Collection} posiada również flagi opisujące, czy kolekcja jest 
 \end{itemize}
 
 \subsection{Struktura źródeł kodu}
-\paragraph{Struktura aplikacji frontendowej}
+\noindent \textbf{Struktura aplikacji frontendowej~~}
 Struktura katalogów w aplikacji frontendowej jest zorganizowana w sposób, który umożliwia łatwą skalowalność i utrzymanie kodu. Poniżej przedstawiono opis folderów, zgodnie z zaleceniami dla aplikacji typu React.
 \begin{itemize}
     \item \texttt{node\_modules/}: Zawiera zainstalowane zależności.
@@ -530,7 +527,7 @@ Struktura katalogów w aplikacji frontendowej jest zorganizowana w sposób, któ
     \end{itemize}
 \end{itemize}
 
-\paragraph{Skrypty do interakcji z blockchinem Solany}
+\noindent \textbf{Skrypty do interakcji z blockchinem Solany~~}
 %działanie, wywoływanie, Dockerfile i biblioteki
 Folder \texttt{solanaScripts} zawiera skrypty odpowiedzialne za interakcję z blockchainem Solany. Umożliwiają one wykonywanie takich operacji, jak tworzenie konta, wykonywanie operacji \texttt{airdrop} oraz symulowanie transakcji. Do obsługi interakcji z blockchainem Solany wykorzystuje się w nich bibliotekę \texttt{@solana/web3.js}
 
@@ -586,13 +583,13 @@ requestAirdrop(publicKeyBase58);
 \end{lstlisting}
 
 
-\paragraph{Konfiguracja budowy i uruchamiania kontenerów}
+\noindent \textbf{Konfiguracja budowy i uruchamiania kontenerów~~}
 Skrypty w folderze \texttt{solanaScripts} są częścią aplikacji uruchamianej w kontenerze Docker. W celu zbudowania środowiska, w którym skrypty te będą działać, stworzono plik \texttt{Dockerfile} analogicznie do pliku dla aplikacji Frontend. 
 
 \section{Opis modelu predykcji cen}
-Model predykcji cen stworzono z wykorzystaniem technologii sieci neuronowych typu LSTM (ang.~\emph{Long Short-Term Memory}). Użyto sieć zaprojektowaną do przewidywania cen Bitcoina, Etheru i Sol. Posłużono się danymi historycznymi, zbieranymi od momentu powstania tych kryptowalut. Wykorzystano też wybrane biblioteki. Szczegóły implementacji oraz treningu sieci opisano poniżej.
+Model predykcji cen stworzono z wykorzystaniem technologii sieci neuronowych typu LSTM (ang.~\emph{Long Short-Term Memory}). Użyto sieć zaprojektowaną do przewidywania cen Bitcoina, Etheru i Sol. Posłużono się danymi historycznymi, zbieranymi od momentu powstania tych kryptowalut. Wykorzystano też wybrane biblioteki. Szczegóły implementacji oraz treningu sieci opisano poniżej.\\[-10pt]
 
-\paragraph{Zależności}
+\noindent \textbf{Zależności~~}
 Do stworzenia modelu konieczne było zaimportowanie następujących bibliotek
 \begin{itemize}
     \item \texttt{pandas} i \texttt{numpy} -- do manipulacji danymi,
@@ -601,7 +598,7 @@ Do stworzenia modelu konieczne było zaimportowanie następujących bibliotek
     \item Keras (\texttt{Sequential}, \texttt{LSTM}, \texttt{Dense}, \texttt{Dropout}) -- do budowy i trenowania modelu LSTM.
 \end{itemize}
 
-\paragraph{Przygotowanie zestawów danych}
+\noindent \textbf{Przygotowanie zestawów danych~~}
 Do wytrenowania modelu konieczne było odpowiednie przygotowanie danych. Proces ten składał się z kilku opisanych poniżej kroków.
 \begin{itemize}
 \item \emph{Pozyskanie danych} -- dane do uczenia pozyskano w formie plików CSV. W przypadku Bitcoina było to plik \texttt{bitcoin\_data}.
@@ -615,7 +612,7 @@ Do wytrenowania modelu konieczne było odpowiednie przygotowanie danych. Proces 
 \item \emph{Podział na dane treningowe i testowe} -- dane zostały podzielone w stosunku 80\%/20\%, tak aby można było przetestować model.
 \end{itemize}
 
-\paragraph{Architektura i trening modelu}
+\noindent \textbf{Architektura i trening modelu~~}
 \begin{itemize}
 \item \emph{Wesje modelu} -- wyjściową wersję modelu oparto na klasycznych warstwach LSTM:
 \begin{itemize}
@@ -623,50 +620,47 @@ Do wytrenowania modelu konieczne było odpowiednie przygotowanie danych. Proces 
     \item Warstwy Dropout z wartościami 30\% i 20\% dla zapobiegania przeuczeniu,
     \item Dwie warstwy Dense, gdzie pierwsza ma 50 jednostek z funkcją aktywacji ReLU, a druga 1 jednostkę wyjściową.
 \end{itemize}
-\item \emph{Kompilacja i trening modelu}
-Model został skompilowany z odpowiednią funkcją straty i optymalizatorem. Model został następnie trenowany na zestawie treningowym przez 50 epok.
+\item \emph{Kompilacja i trening modelu} -- model skompilowano z odpowiednią funkcją straty i~optymalizatorem. Model następnie trenowano na zestawie treningowym przez 50 epok.
 \end{itemize}
 
-\paragraph{Wyniki i wnioski}
+\noindent \textbf{Wyniki i wnioski~~}
 \begin{itemize}
 \item \emph{Zebrane wyniki} -- zebrane wyniki przeprowadzonych testów i walidacji zilustrowano na wykresie pokazanym na rysunku~\ref{fig:Wyniki_testowe_i_walidacyjne}.
+\item \emph{Wnioski} -- zauważono, że strata na zbiorze treningowym szybko maleje. Może to wskazywać na efektywne uczenie się modelu na danych treningowych. Jednak strata na zbiorze walidacyjnym po początkowym spadku zaczyna się stabilizować. Może to być znakiem efektu przeuczenia. Rozwiązaniem tego może być zastosowanie technik regularyzacji takich jak Dropout.
+\end{itemize}
 \begin{figure}[htb]
     \centering
     \includegraphics[width=0.8\linewidth]{Wyniki_testowe_i_walidacyjne.png}
     \caption{Wyniki testowe i walidacyjne}
     \label{fig:Wyniki_testowe_i_walidacyjne}
 \end{figure}
-\item \emph{Wnioski} -- zauważono, że strata na zbiorze treningowym szybko maleje. Może to wskazywać na efektywne uczenie się modelu na danych treningowych. Jednak strata na zbiorze walidacyjnym po początkowym spadku zaczyna się stabilizować. Może to być znakiem, że dochodzi do efektu przeuczenia. Rozwiązaniem tego może być zastosowanie technik regularyzacji takich jak Dropout.
-\end{itemize}
-
 
 \section{Bezpieczeństwo aplikacji}
-Aplikacja wykorzystuje framework \texttt{Spring Security} w celu zapewnienia bezpieczeństwa i kontrolowania dostępu do zasobów. Dzięki zastosowaniu różnych mechanizmów uwierzytelniania i autoryzacji, takich jak \texttt{JWT} (JSON Web Tokens), oraz \texttt{Basic Authentication}, aplikacja jest chroniona przed nieautoryzowanym dostępem. Poniżej przedstawiono kluczowe komponenty zapewniające bezpieczeństwo aplikacji.
+Aplikacja wykorzystuje framework \texttt{Spring Security} w celu zapewnienia bezpieczeństwa i kontrolowania dostępu do zasobów. Dzięki zastosowaniu różnych mechanizmów uwierzytelniania i autoryzacji, takich jak \texttt{JWT} (JSON Web Tokens), oraz \texttt{Basic Authentication}, aplikacja jest chroniona przed nieautoryzowanym dostępem. Poniżej przedstawiono kluczowe komponenty zapewniające bezpieczeństwo aplikacji.\\[-10pt]
 
-\paragraph{Konfiguracja bezpieczeństwa (\texttt{SecurityConfig.java})}  
+\noindent \textbf{Konfiguracja bezpieczeństwa (\texttt{SecurityConfig.java})~~}  
 Pełną konfigurację bezpieczeństwa aplikacji zwiera klasa \texttt{SecurityConfig}. Definiuje ona ustawienia filtrów bezpieczeństwa, które kontrolują dostęp do zasobów. Endpointy \texttt{/client/register} i \texttt{/client/login}, służą użytkownikowi do rejestracji lub logowania, tak aby mógł mieć dostęp do platformy. 
 
-Klasa ta zawiera również konfigurację \texttt{CORS}, która zezwala na dostęp do zasobów aplikacji z określonych domen (np. \texttt{http://localhost:3000}). Dzięki temu aplikacja ma możliwość komunikacji z frontendem.
+Klasa ta zawiera również konfigurację \texttt{CORS}, która zezwala na dostęp do zasobów aplikacji z określonych domen (np. \texttt{http://localhost:3000}). Dzięki temu aplikacja ma możliwość komunikacji z frontendem.\\[-10pt]
 
-\paragraph{Generowanie i weryfikacja JWT (\texttt{JwtTokenUtils.java})} 
+\noindent \textbf{Generowanie i weryfikacja JWT (\texttt{JwtTokenUtils.java})~~} 
 za generowanie oraz weryfikację tokenów \texttt{JWT} odpowiada klasa \texttt{JwtTokenUtils}. Tokeny te są wykorzystywane do uwierzytelniania użytkowników i zapewnienia im dostępu zasobów aplikacji. Klasa ta wykonuje następujące operacje:
 \begin{itemize}
     \item Generowanie tokenów \texttt{JWT} z unikalnymi danymi użytkownika.
     \item Weryfikacja ważności tokenu, w tym sprawdzanie daty wygaśnięcia.
     \item Ustalenie, czy użytkownik w tokenie jest tym samym, który jest zapisany w bazie danych.
 \end{itemize}
-Po weryfikacji tokenu, użytkownik zostaje uwierzytelniony i przypisany do kontekstu bezpieczeństwa aplikacji.
+Po weryfikacji tokenu, użytkownik zostaje uwierzytelniony i przypisany do kontekstu bezpieczeństwa aplikacji.\\[-10pt]
 
-\paragraph{Filtrowanie tokenów JWT (\texttt{JwtAccessTokenFilter.java})} 
-Za filtrację przychodzących żądań HTTP jest odpowiedzialna klasa \texttt{JwtAccessTokenFilter}. Filtr ten sprawdza nagłówek \texttt{Authorization} w żądaniach, aby wyodrębnić i zweryfikować token \texttt{JWT}. Jeśli token jest ważny, uzyskuje dostęp do platformy. W przypadku, gdy token jest nieważny lub nie istnieje, aplikacja zwraca odpowiedź o statusie \texttt{UNAUTHORIZED}.
+\noindent \textbf{Filtrowanie tokenów JWT (\texttt{JwtAccessTokenFilter.java})~~} 
+Za filtrację przychodzących żądań HTTP jest odpowiedzialna klasa \texttt{JwtAccessTokenFilter}. Filtr ten sprawdza nagłówek \texttt{Authorization} w żądaniach, aby wyodrębnić i zweryfikować token \texttt{JWT}. Jeśli token jest ważny, uzyskuje dostęp do platformy. W przypadku, gdy token jest nieważny lub nie istnieje, aplikacja zwraca odpowiedź o statusie \texttt{UNAUTHORIZED}.\\[-10pt]
 
-\paragraph{Zarządzanie danymi użytkowników (\texttt{UserInfoManager.java})} 
-Klasa \texttt{UserInfoManager} implementuje interfejs \texttt{UserDetailsService} i jest odpowiedzialna za załadowanie użytkownika z bazy danych na podstawie nazwy użytkownika. Metoda \texttt{loadUserByUsername} korzysta z repozytorium \texttt{ClientRepository}, aby odnaleźć użytkownika, a następnie dostarcza jego dane do kontekstu bezpieczeństwa aplikacji, co pozwala na uwierzytelnianie.
+\noindent \textbf{Zarządzanie danymi użytkowników (\texttt{UserInfoManager.java})~~} 
+Klasa \texttt{UserInfoManager} implementuje interfejs \texttt{UserDetailsService} i jest odpowiedzialna za załadowanie użytkownika z bazy danych na podstawie nazwy użytkownika. Metoda \texttt{loadUserByUsername} korzysta z repozytorium \texttt{ClientRepository}, aby odnaleźć użytkownika, a następnie dostarcza jego dane do kontekstu bezpieczeństwa aplikacji, co pozwala na uwierzytelnianie.\\[-10pt]
 
-\paragraph{Rekordy RSA (\texttt{RSAKeyRecord.java})} 
-Klasa \texttt{RSAKeyRecord} przechowuje klucze RSA (publiczny i prywatny), które są wykorzystywane do weryfikacji i generowania tokenów \texttt{JWT}. Klucz publiczny jest używany do weryfikacji podpisu tokenu, natomiast klucz prywatny służy do jego generowania. Jest to istotny element systemu autoryzacji, zapewniający integralność i bezpieczeństwo transmisji danych.
+\noindent \textbf{Rekordy RSA (\texttt{RSAKeyRecord.java})~~} 
+Klasa \texttt{RSAKeyRecord} przechowuje klucze RSA (publiczny i prywatny), które są wykorzystywane do weryfikacji i generowania tokenów \texttt{JWT}. Klucz publiczny jest używany do weryfikacji podpisu tokenu, natomiast klucz prywatny służy do jego generowania. Jest to istotny element systemu autoryzacji, zapewniający integralność i~bezpieczeństwo transmisji danych.\\[-10pt]
 
-\paragraph{Podstawowe uwierzytelnienie (\texttt{BasicAuthenticationSecurityConfiguration.java})
-} 
+\noindent \textbf{Podstawowe uwierzytelnienie (\texttt{BasicAuthenticationSecurityConfiguration.java})}
 Klasa \texttt{BasicAuthenticationSecurityConfiguration} wprowadza mechanizm podstawowego uwierzytelnienia.
 	
