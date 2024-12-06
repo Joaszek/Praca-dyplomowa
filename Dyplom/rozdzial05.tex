@@ -201,3 +201,118 @@ W ramach infrastruktury AWS zostały skonfigurowane:
     \item Rola IAM o nazwie \texttt{ECS\_Role}, która umożliwia ECS dostęp do obrazów w ECR i logowanie do CloudWatch.
     \item Load Balancer, który rozdziela ruch do aplikacji i zapewnia wysoką dostępność.
 \end{itemize}
+
+
+\section{Użytkowanie aplikacji}
+\subsection{Logowanie i rejestracja}
+Aby móc skorzystać z aplikacji potrzebne jest konto na stronie. Strona startowa aplikacji jest stroną do logowania. Pokazano ją na rysunku~\ref{fig:Logowanie}a. Jeżeli użytkownik nie ma konta, należy kliknąć w przycisk \texttt{Sign up}, aby się zarejestrować. 
+% TO DO: do każdego rysunku trzeba jawnie się odnieść. Pisałem o tym w szablonie pracy !!!!!
+%        prosze odpowiednio przeradagować tekst poniżej
+%        Czy da się jeszcze bardziej zawęzić okna przed zrobieniem zrzutów z ekranu? Jeśli tak, to proszę zrobić nowe zrzuty.
+\subsection{Strona główna}
+Po zalogowaniu, użytkownik zostanie przeniesiony na główną stronę o wyglądzie jak na rysunku~\ref{fig:Logowanie}.
+Na górze każdej strony będzie pasek z opcjami: Blockchain, Tokens, Cryptocurrency, Resources.
+\begin{figure}[htb]
+    \centering
+		\begin{tabular}{ll}
+    a) & \vtop{\vskip-2ex\hbox{\includegraphics[width=0.7\linewidth]{./instrukcja/Login.png}}}\\ & \\
+		b) & \vtop{\vskip-2ex\hbox{\includegraphics[width=0.7\linewidth]{./instrukcja/mainpage.png}}}\\ & \\
+		c) & \vtop{\vskip-2ex\hbox{\includegraphics[width=0.7\linewidth]{./instrukcja/Check_account.png}}} \\ & \\
+		d) & \vtop{\vskip-2ex\hbox{\includegraphics[width=0.7\linewidth]{./instrukcja/Account_details.png}}}
+		\end{tabular}
+    \caption{Interfejs użytkownika: a) logowanie, b) strona główna, c) znajdź konto, d) dane konta}
+    \label{fig:Logowanie}
+\end{figure}
+\clearpage
+
+\subsubsection{Zakładka Blockchain}
+Zakładka ta daje dostęp do opcji: Accounts, View Blocks, Transactions.
+
+\paragraph{Konto}
+Aby wyszukować konto należy wpisać adres oraz wybrać blockchain, z którego pochodzi dany adres (patrz rysunek~\ref{fig:Logowanie}c).
+Po tej akcji system automatycznie przeniesie użytkownika na nową stronę z danymi konta (patrz rysunek~\ref{fig:Logowanie}d).
+Sprawdzanie bloków oraz transakcji działa analogicznie.
+
+\paragraph{Zakładka Tokens}
+Zakładka ta oferuje dwie opcje: Collection oraz General NFT statistics. Jeśli użytkownik wybierze, opcję Collection, to zostanie przeniesiony na stronę z listami kolekcji zaprezentowaną na rysunku~\ref{fig:Collections}a.
+Drugą opcją do wyboru jest \texttt{General NFT statistics}. Po jej wybraniu użytkownik zostanie przeniesiony na stronę jak rysunku~\ref{fig:Collections}b.
+Na tej stronie użytkownik może szukać tokenów po atrybutach: Kontrakt, Identyfikator, Nazwa, Kolekcja.
+\begin{figure}[htb]
+    \centering
+		\begin{tabular}{ll}
+    a) & \vtop{\vskip-2ex\hbox{\includegraphics[width=0.8\linewidth]{./instrukcja/Collections.png}}}\\ & \\
+		b) & \vtop{\vskip-2ex\hbox{\includegraphics[width=0.8\linewidth]{./instrukcja/Tokens.png}}}
+		\end{tabular}
+    \caption{Collections}
+    \label{fig:Collections}
+\end{figure}
+
+\subsection{Zakładka Cryptocurrency}
+Na zakładce \texttt{Cryptocurrency} użytkownik może wybrać jedną z opcji: Ranking, Categories, Global market, Historical data, Gainers \& Losers.
+
+\paragraph{Ranking}
+Opcja \texttt{Ranking} pokaże listę tokenów jak na rysunku~\ref{fig:Ranking}.
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.8\linewidth]{./instrukcja/Ranking.png}
+    \caption{Ranking}
+    \label{fig:Ranking}
+\end{figure}
+
+\paragraph{Kategorie}
+Opcja \texttt{Categories} pozwala na zobaczenie listy kategorii
+
+\paragraph{Rynek światowy}
+Opcja \texttt{Global market} oraz \texttt{Gainers and Losers} pokazuje wykresy na temat globalnych rynków oraz na statystykę \texttt{Gainers and Losers} odpowiednio.
+
+
+\paragraph{Dane historyczne}
+Opcja \texttt{Historical Data} pokaże kalendarz, z którego można wybrać dowolną datę sprzed dwóch lat, aby zobaczyć stan rankingu na dany dzień
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.8\linewidth]{./instrukcja/HistoricalData.png}
+    \caption{Dane historyczne}
+    \label{fig:Dane historyczne}
+\end{figure}
+
+
+\subsection{Resources}
+Opcja \texttt{Resources} pozwala użytkownikowi na:
+\begin{enumerate}
+    \item Converter
+    \item Directory
+    \item News
+    \item Simulate Transaction
+    \item Predict Prices
+\end{enumerate}
+\subsubsection{Konwerter} 
+Opcja konwerter pozwala na przekonwertowanie walut i kryptowalut:
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.8\linewidth]{./instrukcja/Converter.png}
+    \caption{Konwerter}
+    \label{fig:Konwerter}
+\end{figure}
+
+\subsubsection{Nauka}
+Opcja \texttt{Directory} zawiera różne źródła, z których użytkownik może się uczyć na temat technologii blockchain.
+\subsubsection{Wiadomości}
+Opcja \texttt{News} zawiera najnowsze informacje ze świata na temat różnych blockchainów.
+\subsubsection{Symulacja transakcji}
+Opcja \texttt{Simulate Transaction} pozwala użytkowniki na wpisanie tekstu i zasymulowanie transakcji:
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.8\linewidth]{./instrukcja/SimulateTransaction.png}
+    \caption{Symulowanie transakcji}
+    \label{fig:Symulowanie transakcji}
+\end{figure}
+
+\subsubsection{Przewidywanie cen}
+Opcja \texttt{Predict prices} pozwala użytkowniki na poznanie przewidywanych wartości dla kryptowalut Bitcoin, Ether oraz Sol:
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.8\linewidth]{./instrukcja/PredictPrices.png}
+    \caption{Przewidywanie cen}
+    \label{fig:Przewidywanie cen}
+\end{figure}

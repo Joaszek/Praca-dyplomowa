@@ -32,9 +32,9 @@ Architektura budowanej platformy ma być wielowarstwowa, z wyróżnionymi dwoma 
     \label{fig:ZarysyArchitekturySystemu}
 \end{figure}
 
-Każdy komponent działać ma jako osobny moduł, uruchamiany w odrębnym kontenerze Docker, co zapewnić ma izolację środowisk oraz łatwość wdrażania i utrzymania. Komunikacja między frontendem a backendem odbywać się ma za pomocą protokołu REST, z odpowiedziami zwracanymi w formacie JSON, w postaci obiektów \texttt{ResponseEntity}, co ułatwi integrację i zapewni spójność przesyłanych danych.
+Każdy komponent działać ma jako osobny moduł, uruchamiany w odrębnym kontenerze Docker, co zapewnić ma izolację środowisk oraz łatwość wdrażania i utrzymania. Komunikacja między frontendem a~backendem odbywać się ma za pomocą protokołu REST, z odpowiedziami zwracanymi w formacie JSON, w postaci obiektów \texttt{ResponseEntity}, co ułatwi integrację i zapewni spójność przesyłanych danych.
 
-Bezpieczeństwo aplikacji jest priorytetem. Wszystkie dane przesyłane między frontendem a backendem muszą być zabezpieczone za pomocą szyfrowania HTTPS, a tokeny JWT muszą być przechowywane w sposób bezpieczny w przeglądarce użytkownika. System musi być odporny na ataki oraz zapewniać ochronę przed nieautoryzowanym dostępem.
+Bezpieczeństwo aplikacji jest priorytetem. Wszystkie dane przesyłane między frontendem a~backendem muszą być zabezpieczone za pomocą szyfrowania HTTPS, a tokeny JWT muszą być przechowywane w sposób bezpieczny w przeglądarce użytkownika. System musi być odporny na ataki oraz zapewniać ochronę przed nieautoryzowanym dostępem.
 
 Backend, pełniący rolę centralnego punktu przetwarzania danych, zostanie zaimplementowany w Spring Boot 3 z użyciem Javy 21. Do zarządzania danymi użytkowników oraz NFT w bazie PostgreSQL wykorzystany zostanie \texttt{CrudRepository} ze Spring Data JPA. Informacje blockchainowe, takie jak transakcje i dane tokenów, będą pobierane w czasie rzeczywistym z API dostawców, takich jak Etherscan i CoinMarketCap (zakłada się możliwość zamockowania tych API do celów testowania). Backend dodatkowo wykorzystany zostanie Node.js do realizacji zaawansowanych operacji blockchainowych, w tym symulacji transakcji oraz airdropów.
 
@@ -47,9 +47,9 @@ System musi być również łatwy w utrzymaniu. Kod aplikacji musi być zgodny z
 \section{Analiza wymagań}
 Na podstawie założeń ogólnych sformułowano wymagania szczegółowe. Zestawiono je poniżej. Stanowią one uzupełnienie do opisanych już założeń ogólnych. 
 \subsection{Wymagania dziedzinowe}
-Zebrane poniżej wymagania podzielono na grupy w zależności od ich domeny zastosowania. Poniżej przedstawiono szczegóły każdej z tych grup.
+Zebrane poniżej wymagania podzielono na grupy w zależności od ich domeny zastosowania. %Poniżej przedstawiono szczegóły każdej z tych grup.
 
-\subsubsection{Kategorie i dane rynkowe}
+\paragraph{Kategorie i dane rynkowe}
 \begin{itemize}
 \item \textbf{Category} -- reprezentuje kategorię kryptowalut (np.\ DeFi, NFT), z jej nazwą i opcjonalnym opisem. System powinien umożliwiać wyświetlanie kategorii kryptowalut.
 \item \textbf{Cryptocurrency} -- reprezentuje kryptowalutę, jej nazwę, symbol i dane rynkowe.
@@ -57,30 +57,30 @@ Zebrane poniżej wymagania podzielono na grupy w zależności od ich domeny zast
 \item \textbf{FearAndGreed} -- reprezentuje wskaźnik strachu i chciwości na rynku kryptowalut. System powinien umożliwiać pobieranie bieżących.
 \end{itemize}
 
-\subsubsection{Dane NFT}
+\paragraph{Dane NFT}
 \begin{itemize}
 \item \textbf{Collection} -- reprezentuje kolekcję NFT, np.\ Bored Ape Yacht Club. Przechowuje nazwę, opis, liczbę tokenów w kolekcji oraz właścicieli. Powiązana z tokenami NFT.
 \item \textbf{CollectionStats} -- przechowuje dane statystyczne kolekcji NFT, np. średnia cena, wolumen obrotu. Umożliwia aktualizację danych na podstawie transakcji.
 \item \textbf{NFT} -- reprezentuje token NFT, w tym metadane, właściciela i historię transakcji.
 \item \textbf{NFTOwner} -- przechowuje dane właścicieli NFT, np.\ ID użytkownika i adres portfela. Obsługuje powiązania między właścicielami a tokenami.
 \item \textbf{NFTRarity} -- reprezentuje rzadkość tokenu NFT w skali procentowej.
-\item \textbf{NFTTrait} -- przechowuje cechy tokenów NFT, np.\ kolor oczu, tło. Obsługuje mapowanie cech na tokeny.
+\item \textbf{NFTTrait} -- przechowuje cechy tokenów NFT, np.\ tło. Obsługuje mapowanie cech na tokeny.
 \end{itemize}
 
-\subsubsection{Dane blockchainowe Bitcoin}
+\paragraph{Dane blockchainowe Bitcoin}
 \begin{itemize}
 \item \textbf{BitcoinAccount} -- reprezentuje konto w sieci Bitcoin. Umożliwia zmapowanie surowych danych, przekształcając je w strukturę obiektową.
 \item \textbf{BitcoinBlock} -- reprezentuje blok w sieci Bitcoin. Umożliwia zmapowanie surowych danych, przekształcając je w strukturę obiektową.
 \item \textbf{BitcoinTransaction} -- reprezentuje transakcję w sieci Bitcoin. Umożliwia zmapowanie surowych danych, przekształcając je w strukturę obiektową.
 \end{itemize}
 
-Analogicznie będzie dla folderów Etherum oraz Solana
-\subsubsection{Dodatkowe dane blockchainowe Ethereum}
+\noindent Analogicznie będzie dla folderów Etherum oraz Solana.\\[-20pt]
+\paragraph{Dodatkowe dane blockchainowe Ethereum}
 \begin{itemize}
 \item \textbf{Contract} -- reprezentuje inteligentny kontrakt Ethereum. Przechowuje kod, adres i ABI. Umożliwia interakcję z kontraktami i odczyt/zapis danych na blockchainie.
 \end{itemize}
 
-\subsubsection{Dodatkowe dane blockchainowe Solana}
+\paragraph{Dodatkowe dane blockchainowe Solana}
 \begin{itemize}
 \item \textbf{Epoch} -- reprezentuje epokę w sieci Solana, przechowuje liczbę slotów i czas trwania. Obsługuje dynamiczne aktualizacje danych w zależności od stanu sieci.
 \item \textbf{SolanaClusterNode} -- reprezentuje węzeł Solana, zawiera adres IP, status i typ roli (np. walidator). Umożliwia monitorowanie stanu węzłów klastra.
@@ -88,13 +88,13 @@ Analogicznie będzie dla folderów Etherum oraz Solana
 \end{itemize}
 
 \subsection{Przykłady użycia aplikacji}
-Aplikacja powinna umożliwiać realizację różnych scenariuszy użytkowania, dostosowanych do potrzeb użytkowników zainteresowanych blockchainami, kryptowalutami i NFT. Poniżej przedstawiono główne przypadki użycia.
+Aplikacja powinna umożliwiać realizację różnych scenariuszy użytkowania, dostosowanych do potrzeb użytkowników zainteresowanych blockchainami, kryptowalutami i NFT. Poniżej przedstawiono główne przypadki jej potencjalnego użycia.
 
 \paragraph{Przeglądanie danych blockchainowych}
-Użytkownik loguje się do aplikacji, a następnie może przeglądać szczegółowe dane blockchainowe dotyczące Bitcoin, Ethereum i Solana. Na przykład może wyszukiwać adresy blockchainowe, aby uzyskać historię transakcji, saldo lub dane o blokach, takie jak wysokość i czas utworzenia. Dane są pobierane w czasie rzeczywistym z zewnętrznych API, co zapewnia aktualność informacji.
+Użytkownik loguje się do aplikacji, a następnie może przeglądać szczegółowe dane blockchainowe dotyczące Bitcoin, Ethereum i Solana. Na przykład może wyszukiwać adresy blockchainowe, aby uzyskać historię transakcji, saldo lub dane o blokach, takie jak wysokość i czas utworzenia. Dane są pobierane w czasie rzeczywistym z~zewnętrznych API, co zapewnia aktualność informacji.
 
 \paragraph{Analiza kryptowalut i danych rynkowych}
-Użytkownik może przeglądać kategorie kryptowalut, ich dane historyczne oraz informacje o rynku globalnym, takie jak wskaźnik strachu i chciwości. Na przykład może analizować historię cen kryptowalut z ostatnich 2 lat lub uzyskać dane o wolumenie obrotu dla wybranej kategorii. Te funkcje wspierają podejmowanie decyzji inwestycyjnych.
+Użytkownik może przeglądać kategorie kryptowalut, ich dane historyczne oraz informacje o rynku globalnym, takie jak wskaźnik strachu i~chciwości. Na przykład może analizować historię cen kryptowalut z ostatnich 2 lat lub uzyskać dane o wolumenie obrotu dla wybranej kategorii. Te funkcje wspierają podejmowanie decyzji inwestycyjnych.
 
 \paragraph{Zarządzanie kolekcjami NFT}
 Aplikacja pozwala przeglądać szczegóły dotyczące kolekcji NFT. Użytkownik może również wyszukiwać pojedyncze tokeny i sprawdzać ich metadane oraz historię transakcji. To przydatne dla kolekcjonerów i inwestorów NFT.

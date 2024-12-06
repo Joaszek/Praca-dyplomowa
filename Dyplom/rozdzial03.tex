@@ -59,7 +59,7 @@ Backend aplikacji jest napisany w języku Java z wykorzystaniem frameworku Sprin
     \item \texttt{Dockerfile}: Konfiguracja dla Docker, umożliwiająca tworzenie kontenerów dla aplikacji backendowej.
 \end{itemize}
 
-Backend jest podzielony na różne warstwy:
+\noindent Backend jest podzielony na różne warstwy:
 \begin{itemize}
     \item \textbf{Controller}: Warstwa odpowiedzialna za odbiór żądań HTTP i przekazywanie ich do odpowiednich usług.
     \item \textbf{Service}: Warstwa logiki biznesowej, która przetwarza dane i wykonuje operacje na modelach.
@@ -238,7 +238,7 @@ FROM node:20-alpine
 \end{lstlisting}
 
 \noindent \textbf{Ustawienia katalogu roboczego~~}
-Kolejnym krokiem jest określenie katalogu roboczego, w którym będą przechowywane pliki aplikacji w kontenerze. W tym przypadku ustawiono katalog roboczy na \texttt{/usr/app} za pomocą instrukcji \texttt{WORKDIR}.
+Kolejnym krokiem jest określenie katalogu roboczego, w~którym będą przechowywane pliki aplikacji w kontenerze. W tym przypadku ustawiono katalog roboczy na \texttt{/usr/app} za pomocą instrukcji \texttt{WORKDIR}.
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 WORKDIR /usr/app
 \end{lstlisting}
@@ -395,8 +395,9 @@ frontend
     \end{itemize}
 \end{itemize}
 
-
 \subsubsection{Backend}
+\subsubsection{Struktura źródeł kodu aplikacji backendowej}
+Źródeł kodu aplikacji backendowej umieszczono w strukturze odpowiadającej standardowej strukturze projektów mavenowych.
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily]
 backend
 |-- .mvn                # Katalog dla plików konfiguracyjnych Mavena
@@ -444,28 +445,28 @@ backend
 \section{Wykorzystane wzorce projektowe}
 Aplikację zbudowano w podzielone na różne warstwy abstrakcji. Wyróżniono: warstwę kontrolerów, warstwę serwisów, warstwę repozytoriów oraz warstwę modeli. Obsługa każdej z nich wymagała implementacji odpowiednich klas. Każda z nich odpowiedzialna była za określoną funkcjonalność. Podejście to pokrywa się z koncepcją tworzenia tzw. czystej architektury, z separację odpowiedzialności. 
 
-Podczas implementacji zastosowano kilka popularnych wzorców projektowych, jak DTO, Singleton, Service Layer oraz Repository. Wzorce te pomagają w organizacji kodu, ułatwiają jego rozbudowę oraz zapewniają dobrą separację odpowiedzialności. Dzięki nim aplikacja stała się skalowalna, łatwa do utrzymania i elastyczna w rozwoju. Miało to również odzwierciedlenie w strukturze kodu.
+Podczas implementacji zastosowano popularne wzorce projektowe, jak DTO, Singleton, Service Layer oraz Repository. Pomagają one w organizacji kodu, ułatwiają jego rozbudowę, zapewniają dobrą separację odpowiedzialności. Dzięki nim aplikacja stała się skalowalna, łatwa do utrzymania i elastyczna w rozwoju. Miało to również odzwierciedlenie w strukturze kodu.
 
 Zastosowane wzorce pozwalają na skuteczne zarządzanie danymi blockchainowymi, integrację z różnymi usługami zewnętrznymi oraz utrzymanie wysokiej jakości kodu, który może być łatwo testowany i rozszerzany. Poniżej przedstawiono najważniejsze wzorce projektowe użyte zarówno po stronie frontendowej, jak i backendowej aplikacji.\\[-10pt]
 
 \noindent \textbf{DTO~~}
-Wzorzec ten jest używany do przenoszenia danych między warstwami aplikacji w ujednoliconej formie. W implementacji zastosowano go do transferu danych między backendem a frontendem. DTO pozwala na standaryzację struktury danych, szczególnie przy interakcji z różnymi API blockchainowymi, umożliwiając jednolitą formę danych do wysyłania i odbierania. Przykłady klas, w których go użyto: \texttt{AccountDTO}, \texttt{TransactionDTO}, \texttt{BlockDTO}.\\[-10pt]
+Wzorzec ten jest używany do przenoszenia danych między warstwami aplikacji w~ujednoliconej formie. W implementacji zastosowano go do transferu danych między backendem a frontendem. DTO pozwala na standaryzację struktury danych, szczególnie przy interakcji z~różnymi API blockchainowymi, umożliwiając jednolitą formę danych do wysyłania i odbierania. Przykłady klas, w których go użyto: \texttt{AccountDTO}, \texttt{TransactionDTO}, \texttt{BlockDTO}.\\[-10pt]
 
 \noindent \textbf{Controlers~~}
 Kontrolery umieszcza się zwykle w warstwie przyjmującej żądania. Ich zadaniem jest obsługa tych żądań, w trakcie której wykorzystywane są kolejne warstwy abstrakcji.
-W budowanej aplikacji zastosowano je do obsługi zapytań HTTP. Przykłady klas, w których skorzystano z tego wzorca: \texttt{EthereumController} (obsługuje zapytania związane z blockchainem Ethereum), \texttt{CryptocurrencyController} (obsługuje zapytania dotyczące danych kryptowalutowych), \texttt{NFTController} (zarządza operacjami związanymi z NFT). Dane przesyłane do kontrolerów mają postać obiektów typu DTO (ang.~\emph{Data Transfer Object}).\\[-10pt]
+W~budowanej aplikacji zastosowano je do obsługi zapytań HTTP. Przykłady klas, w których skorzystano z tego wzorca: \texttt{EthereumController} (obsługuje zapytania związane z~blockchainem Ethereum), \texttt{CryptocurrencyController} (obsługuje zapytania dotyczące danych kryptowalutowych), \texttt{NFTController} (zarządza operacjami związanymi z NFT). Dane przesyłane do kontrolerów mają postać obiektów typu DTO (ang.~\emph{Data Transfer Object}).\\[-10pt]
 
 \noindent \textbf{Service Layer~~}
-Warstwa serwisowa pozwala na realizację przejrzystego dostępu do danych w odseparowaniu od reszty aplikacji. Realizuje ona logikę biznesową, przetwarzając i udostępniając dane, Wzorzec ten jest powszechnie stosowany po stronie backendowej, gdzie logika biznesowa jest oddzielona od kontrolerów. 
+Warstwa serwisowa pozwala na realizację przejrzystego dostępu do danych w~odseparowaniu od reszty aplikacji. Realizuje ona logikę biznesową, przetwarzając i udostępniając dane, Wzorzec ten jest powszechnie stosowany po stronie backendowej, gdzie logika biznesowa jest oddzielona od kontrolerów. 
 W implementacji warstwa ta opowiada za zarządzanie operacjami na blockchainach, kryptowalutach i NFT czy na danych użytkowników.
 Taki podział umożliwia łatwą rozbudowę aplikacji oraz ponowne wykorzystanie kodu w różnych częściach aplikacji.
 Przykłady klas, w których użyto tego wzorca: \texttt{BlockchainService}, \texttt{CryptocurrencyService}, \texttt{NFTService}.\\[-10pt]
 
 \noindent \textbf{Repository Pattern~~}
-Wzorzec Repository jest stosowany w backendzie do zarządzania danymi. Repozytoria stanowią abstrakcję nad bazą danych, umożliwiając łatwą wymianę technologii bazodanowej bez zmiany logiki aplikacji. W przypadku korzystania z frameworka Spring Boot, wyróżnia się klasy repozytoriów odpowiedzialne za komunikację z bazą danych. W implementacji repozytoriów użyto ich do interakcji bazą danych PostreSQL. Pozwoliło to  na łatwą manipulację danymi użytkowników, transakcjami czy innymi encjami. Przykłady klas, w których użyto tego wzorca: \texttt{CategoryRepository}, \texttt{ClientRepository} (odpowiada za dostęp do danych konta użytkownika), \texttt{NFTRepository},   \texttt{CategoryRepository} (obsługuje dane związane z kategoriami), \texttt{CryptocurrencyRepository} (zarządza danymi kryptowalut).\\[-10pt]
+Wzorzec Repository jest stosowany w backendzie do zarządzania danymi. Repozytoria stanowią abstrakcję nad bazą danych, umożliwiając łatwą wymianę technologii bazodanowej bez zmiany logiki aplikacji. W przypadku korzystania z frameworka Spring Boot, wyróżnia się klasy repozytoriów odpowiedzialne za komunikację z bazą danych. W~implementacji repozytoriów użyto ich do interakcji bazą danych PostreSQL. Pozwoliło to  na łatwą manipulację danymi użytkowników, transakcjami czy innymi encjami. Przykłady klas, w których użyto tego wzorca: \texttt{CategoryRepository}, \texttt{ClientRepository} (odpowiada za dostęp do danych konta użytkownika), \texttt{NFTRepository},   \texttt{CategoryRepository} (obsługuje dane związane z kategoriami), \texttt{CryptocurrencyRepository} (zarządza danymi kryptowalut).\\[-10pt]
 
 \noindent \textbf{Singleton~~}
-Ten wzorzec zapewnia utworzenie współdzielonego obiektu, który istnieje w aplikacji jako pojedyncza instancja. W backendzie użyto go w serwisach, które zarządzają danymi blockchain, np.\ w usługach odpowiedzialnych za integrację z różnymi blockchainami. Wzorzec ten zapewnia, że obiekt usługi zostanie utworzony tylko raz, a następnie będzie używany w całej aplikacji, co pozwala na efektywne zarządzanie stanem.\\[-10pt]
+Ten wzorzec zapewnia utworzenie współdzielonego obiektu, który istnieje w~aplikacji jako pojedyncza instancja. W backendzie użyto go w serwisach, które zarządzają danymi blockchain, np.\ w usługach odpowiedzialnych za integrację z różnymi blockchainami. Wzorzec ten zapewnia, że obiekt usługi zostanie utworzony tylko raz, a następnie będzie używany w~całej aplikacji, co pozwala na efektywne zarządzanie stanem.\\[-10pt]
 
 \noindent \textbf{Model~~}
 Modele służą do reprezentowania danych w postaci obiektowej. W aplikacji wyróżniono klasy: \texttt{SolanaAccount}, \texttt{SolanaTransaction}, \texttt{EthereumBlock} (reprezentują one dane związane z blockchainami, głównie do przenoszenia danych) oraz klasy: \texttt{Cryptocurrency}, \texttt{Categories}, \texttt{GlobalMarket}, \texttt{NFT} (reprezentują one dane kryptowalutowe i NFT, kluczowe dla funkcji aplikacji).
@@ -475,7 +476,7 @@ Modele służą do reprezentowania danych w postaci obiektowej. W aplikacji wyr�
 W kodzie aplikacji zdefiniowano różne klasy. Odpowiadają one za zarządzanie danymi blockchainowymi, danymi o kryptowalutach, transakcjami, a także za logikę biznesową i interakcje z API i i innymi kontenerami. Poniżej przedstawiono opis klas pełniących kluczowe role.\\[-10pt]
 
 \noindent \textbf{Klasy do obsługi danych blockchainowych~~}
-Podczas implementacji stworzono kilka klas mających pomóc w zarządzaniu danymi blockchainowymi. Umieszczono je w w paczce \texttt{blockchain}.
+Podczas implementacji stworzono kilka klas mających pomóc w zarządzaniu danymi blockchainowymi. Umieszczono je w paczce \texttt{blockchain}.
 Choć mają one podobny cel, to jednak różnią się szczegółami implementacyjnymi. Poniżej scharakteryzowano klasy należące do tej paczki.
 \begin{itemize}
 \item \texttt{Account} -- reprezentuje dane konta w blockchainie. Zawiera informacje takie jak adres konta, saldo oraz inne szczegóły konta. 
