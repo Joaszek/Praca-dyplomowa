@@ -12,10 +12,16 @@ Podczas implementacji, szczególną uwagę poświęcono skalowalności aplikacji
 Zgodnie z założeniami co do architektury, podczas implementacji stworzono główne moduły systemu: frontend oraz backend (patrz podrozdział~\ref{subsec:ZarysArchitektury}).\\[-10pt]
 
 \noindent \textbf{Frontend} -- %zbudowany w React jako aplikacja wielostronicowa (MPA), % to już było w założeniach ogólnych
-odpowiada za prezentację danych i interakcję z użytkownikami. Podzielono go na moduły odpowiadające różnym domenom funkcjonalnym. Moduł blockchain prezentuje dane związane z blockchainami Bitcoin, Ethereum i Solana, w tym szczegóły transakcji, bloków oraz kont. Ten moduł zawiera podkomponenty obsługujące wyszukiwanie oraz wyświetlanie szczegółowych informacji. Moduł kryptowalut zarządza kategoriami kryptowalut, danymi historycznymi, rynkiem globalnym oraz rankingami. Dodatkowo frontend oferuje widoki użytkownika, takie jak logowanie, rejestracja oraz strona główna. Komunikacja z backendem odbywa się za pomocą biblioteki axios, z uwierzytelnianiem opartym na tokenach JWT przechowywanych w \texttt{localStorage}.\\[-10pt]
+odpowiada za prezentację danych i interakcję z użytkownikami. Podzielono go na moduły odpowiadające różnym domenom funkcjonalnym. Moduł blockchain prezentuje dane związane z blockchainami Bitcoin, Ethereum i Solana, w tym szczegóły transakcji, bloków oraz kont. Ten moduł zawiera podkomponenty obsługujące wyszukiwanie oraz wyświetlanie szczegółowych informacji. Moduł kryptowalut zarządza kategoriami kryptowalut, danymi historycznymi, rynkiem globalnym oraz rankingami. Dodatkowo frontend oferuje widoki użytkownika, takie jak logowanie, rejestracja oraz strona główna. Komunikacja z back
+\begin{center}
+\begin{flushleft}
+
+\end{flushleft}
+\end{center}
+endem odbywa się za pomocą biblioteki axios, z uwierzytelnianiem opartym na tokenach JWT przechowywanych w \texttt{localStorage}.\\[-10pt]
 
 \noindent \textbf{Backend} -- %zaimplementowany w Spring Boot 3 przy użyciu Javy 21 % to już było w założeniach ogólnych
-jest centralnym komponentem systemu. Integruje funkcje związane z logiką biznesową, bazą danych oraz zewnętrznymi dostawcami informacji. Backend udostępnia API REST dla frontendu i obsługuje kilka kluczowych domen, takich jak kryptowaluty, NFT oraz zasoby zewnętrzne. Moduł kryptowalut oferuje funkcje zarządzania kategoriami, danymi historycznymi oraz danymi rynkowymi. Moduł NFT zarządza tokenami, kolekcjami oraz ich statystykami. Backend również integruje dane blockchainowe, takie jak transakcje i bloki, które są dynamicznie pobierane z zewnętrznych API, takich jak Etherscan czy CoinMarketCap. Ponadto backend wywołuje dedykowane skrypty w Node.js w celu realizacji zaawansowanych operacji blockchainowych, takich jak symulacje transakcji i airdropy oraz skrypt w kontenerze Pythonowym, tak aby uzyskać dane o cenie kryptowalut na dany dzień.
+jest centralnym komponentem systemu. Integruje funkcje związane z logiką biznesową, bazą danych oraz zewnętrznymi dostawcami informacji. Backend udostępnia API REST dla frontendu i obsługuje kilka kluczowych domen, takich jak kryptowaluty, NFT oraz zasoby zewnętrzne. Moduł kryptowalut oferuje funkcje zarządzania kategoriami, danymi historycznymi oraz danymi rynkowymi. Moduł NFT zarządza tokenami, kolekcjami oraz ich statystykami. Backend również integruje dane blockchainowe, takie jak transakcje i bloki, które są dynamicznie pobierane z zewnętrznych API, takich jak Etherscan \cite{etherscan_api} czy CoinMarketCap \cite{coinmarketcap_api}. Ponadto backend wywołuje dedykowane skrypty w Node.js w celu realizacji zaawansowanych operacji blockchainowych, takich jak symulacje transakcji i airdropy oraz skrypt w kontenerze Pythonowym, tak aby uzyskać dane o cenie kryptowalut na dany dzień.
 
 Część backendu odpowiada również za bezpieczeństwo, realizowane poprzez mechanizm OAuth2 i tokeny JWT. Tokeny te są wykorzystywane do uwierzytelniania użytkowników oraz zabezpieczania komunikacji między frontendem a backendem. W backendzie baza danych PostgreSQL przechowuje trwałe dane, takie jak użytkownicy, dane NFT oraz kryptowaluty, podczas gdy dane blockchainowe są dynamicznie pobierane i nie są przechowywane.\\[-10pt]
 
@@ -75,7 +81,7 @@ W backendzie każda funkcjonalność została wydzielona do oddzielnych metod w 
 
 
 \subsection{Frontend}
-Frontend stworzono z użyciem React -- popularnego frameworku JavaScript, stosowanego do tworzenie dynamicznych interfejsów użytkownika. Struktura kodu frontendowego obejmuje:
+Frontend stworzono z użyciem React -- popularnego frameworku JavaScript, stosowanego do tworzenia dynamicznych interfejsów użytkownika. Struktura kodu frontendowego obejmuje:
 \begin{itemize}
     \item \texttt{src/}: Główna część aplikacji frontendowej, zawierająca komponenty, funkcje oraz logikę.
     \item \texttt{public/}: Pliki statyczne, takie jak HTML, obrazy, czcionki itp.
@@ -108,7 +114,7 @@ W systemie zostały zaimplementowane następujące kontenery:
 \begin{itemize}
     \item \textbf{Kontener backendowy} – zawiera aplikację backendową, która realizuje logikę biznesową, obsługę żądań HTTP, komunikację z bazą danych oraz integrację z zewnętrznymi API.
     \item \textbf{Kontener frontendowy} – zawiera aplikację frontendową napisaną w React, która komunikuje się z backendem, wyświetlając dane użytkownikowi i obsługując interakcje z interfejsem.
-    \item \textbf{Kontener Node.js} – zawiera środowisko Node.js, które uruchamia skrypty do komunikacji z blockchainem Solany. Kontener ten jest odpowiedzialny za tworzenie konta na blockchainie devnet Solany, symulowanie transakcji oraz wykonywanie operacji airdrop.
+    \item \textbf{Kontener Node.js} – zawiera środowisko Node.js, które uruchamia skrypty do komunikacji z~blockchainem Solany. Kontener ten jest odpowiedzialny za tworzenie konta na blockchainie devnet Solany, symulowanie transakcji oraz wykonywanie operacji airdrop.
     \item \textbf{Kontener bazy danych PostgreSQL} – przechowuje dane aplikacji, w tym dane użytkowników, transakcje, informacje o przedmiotach do wynajmu itp. Komunikacja z bazą danych odbywa się za pośrednictwem warstwy repozytoriów w aplikacji backendowej.
 		\item \textbf{Kontener ModelContainer} - zawiera skrypt napisany w języku Python, który umożliwia dostanie przewidzianej ceny dla danych kryptowalut na dany dzień.
     \item \textbf{Kontener pgAdmin} – jest narzędziem do zarządzania bazą danych PostgreSQL, umożliwiającym administrację i monitorowanie bazy danych za pomocą interfejsu graficznego.
@@ -120,7 +126,7 @@ Kontenery w systemie są ze sobą powiązane, umożliwiając ich współpracę. 
 Kontener frontendowy współpracuje z backendem, który realizuje logikę aplikacji i komunikuje się z bazą danych PostgreSQL. Kontener Node.js odgrywa kluczową rolę w integracji aplikacji z blockchainem Solany, wykonując skrypty do pobierania i przetwarzania danych. Kontener  ModelContainer odpowiedzialny jest za zarządzanie modelami i przewidywanie cen. Dzięki zastosowaniu Docker Compose możliwe jest łatwe zarządzanie tymi kontenerami, ich konfiguracja oraz zapewnienie ich współpracy w ramach jednej sieci. Takie podejście pozwala na łatwą skalowalność aplikacji i rozdzielenie odpowiedzialności między poszczególne komponenty. Poniżej opisano zależności między kontenerami:
 \begin{itemize}
     \item \textbf{Kontener frontendowy i backendowy}: Kontener frontendowy, odpowiedzialny za interfejs użytkownika, wysyła żądania HTTP do kontenera backendowego. Aplikacja frontendowa, napisana w React, korzysta z API udostępnionego przez aplikację backendową za pomocą axios do pobierania i wysyłania danych. Komunikacja odbywa się przez porty udostępnione w konfiguracji Docker Compose.
-    \item \textbf{Kontener backendowy i baza danych PostgreSQL}: Aplikacja backendowa komunikuje się z bazą danych PostgreSQL w celu przechowywania i pobierania danych. Backend korzysta z JPA (Java Persistence API) do wykonywania operacji CRUD na bazie danych.
+    \item \textbf{Kontener backendowy i baza danych PostgreSQL}: Aplikacja backendowa komunikuje się z bazą danych PostgreSQL w celu przechowywania i pobierania danych. Backend korzysta z~JPA (Java Persistence API) do wykonywania operacji CRUD na bazie danych.
     \item \textbf{Kontener backendowy i kontener Node.js}: Kontener Node.js pełni rolę interfejsu między aplikacją backendową a blockchainem Solany w kontekście wykonywania operacji na blockchainie, a nie pobieraniu danych z niego. Backend wysyła zapytania do kontenera Node.js w celu wykonania skryptów Solany, które mogą tworzyć konto, symulować transakcję oraz wykonywać operację airdrop. Kontener Node.js uruchamia odpowiednie skrypty do interakcji z blockchainem, wykorzystując bibliotekę @solana/web3.js.
 		\item \textbf{Kontener backendowy i kontener ModelContainer}: Aplikacja backendowa wysyła zapytanie na kontener ModelContainer, tak aby uzyskać dane dotyczące przewidzianych cen. 
     \item \textbf{Kontener Node.js i blockchain Solany}: Kontener Node.js, uruchamiający skrypty Solany, komunikuje się z siecią blockchain Solany poprzez RPC endpointy. Skrypty w kontenerze Node.js są odpowiedzialne za tworzenie konta, symulowanie transakcji oraz wykonywanie operacji airdrop. Wyniki tych skryptów są następnie odbierane przez klasę serwisą, i zwracane do kontrolera, który wysyłaja je na frontend.
@@ -160,7 +166,7 @@ Po zbudowaniu obrazów kontenery mogą zostać uruchomione przy pomocy \texttt{d
 
 \subsubsection{Zależności i wtyczki Maven}
 W projekcie wykorzystano pluginy Maven automatyzujące budowę aplikacji. Były to głównie pluginy: \texttt{maven-clean-plugin}, \texttt{maven-compiler-plugin}, \texttt{maven-jar-plugin}, \texttt{maven-surefire-plugin}, oraz \texttt{spring-boot-maven-plugin}.
-Jeśli chodzi o zależności, projekt korzysta z kluczowych bibliotek jak \texttt{spring-boot-starter-web}, \texttt{spring-boot-starter-data-jpa}, \texttt{postgresql}, \texttt{spring-security}, \texttt{lombok}, i \texttt{mysql-connector-java}.
+Jeśli chodzi o zależności, projekt korzysta z kluczowych bibliotek jak \texttt{spring-boot-starter-web}, \texttt{spring-boot-starter-data-jpa}, \texttt{postgresql}, \texttt{spring-security}, \texttt{lombok}, i~\texttt{mysql-connector-java}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Struktura pliku Dockerfile dla aplikacji backendowej}
@@ -450,50 +456,490 @@ Podczas implementacji zastosowano popularne wzorce projektowe, jak DTO, Singleto
 Zastosowane wzorce pozwalają na skuteczne zarządzanie danymi blockchainowymi, integrację z różnymi usługami zewnętrznymi oraz utrzymanie wysokiej jakości kodu, który może być łatwo testowany i rozszerzany. Poniżej przedstawiono najważniejsze wzorce projektowe użyte zarówno po stronie frontendowej, jak i backendowej aplikacji.\\[-10pt]
 
 \noindent \textbf{DTO~~}
-Wzorzec ten jest używany do przenoszenia danych między warstwami aplikacji w~ujednoliconej formie. W implementacji zastosowano go do transferu danych między backendem a frontendem. DTO pozwala na standaryzację struktury danych, szczególnie przy interakcji z~różnymi API blockchainowymi, umożliwiając jednolitą formę danych do wysyłania i odbierania. Przykłady klas, w których go użyto: \texttt{AccountDTO}, \texttt{TransactionDTO}, \texttt{BlockDTO}.\\[-10pt]
+Wzorzec ten jest używany do przenoszenia danych między warstwami aplikacji w~ujednoliconej formie. W implementacji zastosowano go do transferu danych między backendem a frontendem. DTO pozwala na standaryzację struktury danych, szczególnie przy interakcji z~różnymi API blockchainowymi, umożliwiając jednolitą formę danych do wysyłania i odbierania. Przykłady klas, w których go użyto: \texttt{EthereumBlockDto}, \texttt{WithdrawalDTO}, \texttt{CryptocurrencyDTO}.\\[-10pt]
+\begin{lstlisting}[language=Java, style=JavaStyle]
+package org.example.backend.blockchain.ethereum.block.entity;
+import ...
 
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+public class EthereumBlockDto {
+	
+	private String baseFeePerGas;
+	private String blobGasUsed;
+	private String difficulty;
+	private String excessBlobGas;
+	private String extraData;
+	private String gasLimit;
+	private String gasUsed;
+	private String hash;
+	private String logsBloom;
+	private String miner;
+	private String blockReward;
+	private String mixHash;
+	private String nonce;
+	private String number;
+	private String parentBeaconBlockRoot;
+	private String parentHash;
+	private String receiptsRoot;
+	private String sha3Uncles;
+	private String size;
+	private String stateRoot;
+	private String timestamp;
+	private String totalDifficulty;
+	private List<String> transactions;  // List of transaction hashes
+	private String transactionsRoot;
+	private List<WithdrawalDto> withdrawals;  // List of withdrawal objects
+	private String withdrawalsRoot;
+}
+
+\end{lstlisting}
 \noindent \textbf{Controlers~~}
 Kontrolery umieszcza się zwykle w warstwie przyjmującej żądania. Ich zadaniem jest obsługa tych żądań, w trakcie której wykorzystywane są kolejne warstwy abstrakcji.
 W~budowanej aplikacji zastosowano je do obsługi zapytań HTTP. Przykłady klas, w których skorzystano z tego wzorca: \texttt{EthereumController} (obsługuje zapytania związane z~blockchainem Ethereum), \texttt{CryptocurrencyController} (obsługuje zapytania dotyczące danych kryptowalutowych), \texttt{NFTController} (zarządza operacjami związanymi z NFT). Dane przesyłane do kontrolerów mają postać obiektów typu DTO (ang.~\emph{Data Transfer Object}).\\[-10pt]
+\begin{lstlisting}[language=Java, style=JavaStyle]
+package org.example.backend.blockchain.bitcoin.accounts.controller;
+import ...
+
+@RestController
+@RequestMapping("/bitcoin/account")
+public class BitcoinAccountController {
+
+	private final BitcoinAccountService bitcoinAccountService;
+	
+	public BitcoinAccountController(BitcoinAccountService bitcoinAccountService) {
+		this.bitcoinAccountService = bitcoinAccountService;
+  }
+  
+	@GetMapping("/data/{address}")
+  public ResponseEntity<BitcoinAccountDto> getAccountData(@PathVariable String address) {
+
+		Optional<BitcoinAccountDto> optionalBitcoinAccountDto = Optional.ofNullable(bitcoinAccountService.getAllAccountData(address));
+		if (optionalBitcoinAccountDto.isPresent()) {
+				return ResponseEntity.ok(optionalBitcoinAccountDto.get());
+		} else {
+				return ResponseEntity.notFound().build();
+		}
+  }
+}
+\end{lstlisting}
 
 \noindent \textbf{Service Layer~~}
 Warstwa serwisowa pozwala na realizację przejrzystego dostępu do danych w~odseparowaniu od reszty aplikacji. Realizuje ona logikę biznesową, przetwarzając i udostępniając dane, Wzorzec ten jest powszechnie stosowany po stronie backendowej, gdzie logika biznesowa jest oddzielona od kontrolerów. 
 W implementacji warstwa ta opowiada za zarządzanie operacjami na blockchainach, kryptowalutach i NFT czy na danych użytkowników.
 Taki podział umożliwia łatwą rozbudowę aplikacji oraz ponowne wykorzystanie kodu w różnych częściach aplikacji.
-Przykłady klas, w których użyto tego wzorca: \texttt{BlockchainService}, \texttt{CryptocurrencyService}, \texttt{NFTService}.\\[-10pt]
+Przykłady klas, w których użyto tego wzorca: \texttt{SolanaTransactionService}, \texttt{CryptocurrencyService}, \texttt{NFTService}.\\[-10pt]
+\begin{lstlisting}[language=Java, style=JavaStyle]
+package org.example.backend.blockchain.solana.transaction.service;
+import ...
 
+@Service
+public class SolanaTransactionService {
+	
+	private final RestTemplate restTemplate;
+	
+	private static final String SOLANA_RPC_URL = "https://api.mainnet-beta.solana.com";
+	
+	public SolanaTransactionService(@Qualifier("restTemplate") RestTemplate restTemplate) {
+		this.restTemplate = restTemplate;
+	}
+	
+	private HttpEntity<String> createRequestBody(String method, Object[] params) {
+		Map<String, Object> body = new HashMap<>();
+		body.put("jsonrpc", "2.0");
+		body.put("id", 1);
+		body.put("method", method);
+		body.put("params", params);
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		try {
+				return new HttpEntity<>(new ObjectMapper().writeValueAsString(body), headers);
+		} catch (JsonProcessingException e) {
+				throw new RuntimeException(e);
+		}
+	}
+	
+	public Optional<SolanaTransactionDto> getTransaction(String transactionSignature) {
+		String method = "getTransaction";
+		Object[] params = new Object[]{transactionSignature};
+		HttpEntity<String> request = createRequestBody(method, params);
+		String response =  restTemplate.postForObject(SOLANA_RPC_URL, request, String.class);
+		SolanaTransaction solanaTransaction= JsonSolanaTransactionMapper.mapJsonToSolanaTransaction(response);
+		return Optional.ofNullable(SolanaTransactionMapper.toDto(solanaTransaction));
+	}
+	...
+}
+\end{lstlisting}
 \noindent \textbf{Repository Pattern~~}
 Wzorzec Repository jest stosowany w backendzie do zarządzania danymi. Repozytoria stanowią abstrakcję nad bazą danych, umożliwiając łatwą wymianę technologii bazodanowej bez zmiany logiki aplikacji. W przypadku korzystania z frameworka Spring Boot, wyróżnia się klasy repozytoriów odpowiedzialne za komunikację z bazą danych. W~implementacji repozytoriów użyto ich do interakcji bazą danych PostreSQL. Pozwoliło to  na łatwą manipulację danymi użytkowników, transakcjami czy innymi encjami. Przykłady klas, w których użyto tego wzorca: \texttt{CategoryRepository}, \texttt{ClientRepository} (odpowiada za dostęp do danych konta użytkownika), \texttt{NFTRepository},   \texttt{CategoryRepository} (obsługuje dane związane z kategoriami), \texttt{CryptocurrencyRepository} (zarządza danymi kryptowalut).\\[-10pt]
+\begin{lstlisting}[language=Java, style=JavaStyle]
+package org.example.backend.nft.repository;
+import ...
 
+@Repository
+public interface CollectionRepository extends CrudRepository<Collection, Long> {
+    Collection findBySlug(String slug);
+
+    List<Collection> findByBlockchain(String blockchain);
+}
+\end{lstlisting}
 \noindent \textbf{Singleton~~}
 Ten wzorzec zapewnia utworzenie współdzielonego obiektu, który istnieje w~aplikacji jako pojedyncza instancja. W backendzie użyto go w serwisach, które zarządzają danymi blockchain, np.\ w usługach odpowiedzialnych za integrację z różnymi blockchainami. Wzorzec ten zapewnia, że obiekt usługi zostanie utworzony tylko raz, a następnie będzie używany w~całej aplikacji, co pozwala na efektywne zarządzanie stanem.\\[-10pt]
+\begin{lstlisting}[language=Java, style=JavaStyle]
+package org.example.backend.blockchain.data.utils;
+import ...
+
+@Configuration
+public class RestTemplateUtil {
+
+    @Bean(name = "restTemplate")
+    public RestTemplate customRestTemplate() {
+        return new RestTemplate();
+    }
+}
+
+\end{lstlisting}
 
 \noindent \textbf{Model~~}
-Modele służą do reprezentowania danych w postaci obiektowej. W aplikacji wyróżniono klasy: \texttt{SolanaAccount}, \texttt{SolanaTransaction}, \texttt{EthereumBlock} (reprezentują one dane związane z blockchainami, głównie do przenoszenia danych) oraz klasy: \texttt{Cryptocurrency}, \texttt{Categories}, \texttt{GlobalMarket}, \texttt{NFT} (reprezentują one dane kryptowalutowe i NFT, kluczowe dla funkcji aplikacji).
+Modele służą do reprezentowania danych w postaci obiektowej. W aplikacji wyróżniono klasy: \texttt{BitcoinAccount}, \texttt{SolanaTransaction}, \texttt{EthereumBlock} (reprezentują one dane związane z blockchainami, głównie do przenoszenia danych) oraz klasy: \texttt{Cryptocurrency}, \texttt{Categories}, \texttt{GlobalMarket}, \texttt{NFT} (reprezentują one dane kryptowalutowe i NFT, kluczowe dla funkcji aplikacji).
+\begin{lstlisting}[language=Java, style=JavaStyle]
+package org.example.backend.blockchain.bitcoin.accounts.entity;
+import ...
 
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+public class BitcoinAccount {
+
+    private String address;
+    private long total_received;
+    private long total_sent;
+    private long balance;
+    private long unconfirmed_balance;
+    private long final_balance;
+    private int n_tx;
+    private int unconfirmed_n_tx;
+    private int final_n_tx;
+    private List<BitcoinTransaction> transactions;
+}
+\end{lstlisting}
 
 \subsection{Opis zaprojektowanych klas}
 W kodzie aplikacji zdefiniowano różne klasy. Odpowiadają one za zarządzanie danymi blockchainowymi, danymi o kryptowalutach, transakcjami, a także za logikę biznesową i interakcje z API i i innymi kontenerami. Poniżej przedstawiono opis klas pełniących kluczowe role.\\[-10pt]
 
 \noindent \textbf{Klasy do obsługi danych blockchainowych~~}
 Podczas implementacji stworzono kilka klas mających pomóc w zarządzaniu danymi blockchainowymi. Umieszczono je w paczce \texttt{blockchain}.
-Choć mają one podobny cel, to jednak różnią się szczegółami implementacyjnymi. Poniżej scharakteryzowano klasy należące do tej paczki.
+Choć mają one podobny cel, to jednak różnią się szczegółami implementacyjnymi. Poniżej scharakteryzowano klasy należące do tej paczki. Dane szczególne różnią się zależnie od blockchainu. Poniższe klasy zostały zaimplementowane do blockchainu Solana.
 \begin{itemize}
-\item \texttt{Account} -- reprezentuje dane konta w blockchainie. Zawiera informacje takie jak adres konta, saldo oraz inne szczegóły konta. 
-\item \texttt{Transaction} -- jest odpowiedzialna za przechowywanie informacji o pojedynczej transakcji w blockchainie. Zawiera dane takie jak identyfikator transakcji, adresy nadawcy i odbiorcy, kwotę oraz status transakcji.
-\item \textbf{\texttt{Block}} -- reprezentuje pojedynczy blok w blockchainie. Zawiera informacje o numerze bloku, dacie utworzenia, liście transakcji zawartych w bloku. 
+\item \texttt{Account} -- reprezentuje dane konta w blockchainie. Zawiera informacje takie jak slot, właściciel, dane, adres konta, czy konto jest wykonywalne, epokę oraz saldo.  
+	\begin{lstlisting}[language=Java, style=JavaStyle]
+package org.example.backend.blockchain.solana.accounts.entity;
+import ...;
+
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class SolanaAccount {
+
+	private Long lamports;
+	private Long slot;
+	private String owner;
+	private String data;
+	private boolean executable;
+	private String rentEpoch;
+}
+	\end{lstlisting}
+\item \texttt{Transaction} -- jest odpowiedzialna za przechowywanie informacji o pojedynczej transakcji w blockchainie. Zawiera dane takie jak czas bloku, slot, listę sygnatur oraz informacje o Message transakcji, adresy nadawcy i odbiorcy, kwotę oraz status transakcji.
+\begin{itemize}
+\item \texttt{SolanaTransaction}
+\begin{lstlisting}[language=Java, style=JavaStyle]
+package org.example.backend.blockchain.solana.transaction.entity.transaction;
+import ...
+
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+public class SolanaTransaction {
+
+	private String blockTime;
+	private String slot;
+	private List<String> signatures;
+	private SolanaTransactionMessage message;
+}
+\end{lstlisting}
+\item \texttt{SolanaTransactionMessage}
+\begin{lstlisting}[language=Java, style=JavaStyle]
+package org.example.backend.blockchain.solana.transaction.entity.transaction.message;
+import ...
+
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+public class SolanaTransactionMessage {
+
+	private List<String> accountKeys;
+	private Header header;
+	private String recentBlockHash;
+	private List<Instruction> instructions;
+	private String blockHash;
+}
+\end{lstlisting}
+\item \texttt{Header}
+\begin{lstlisting}[language=Java, style=JavaStyle]
+package org.example.backend.blockchain.solana.transaction.entity.transaction.message.header;
+import ...
+
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+public class Header {
+
+	private Long numRequiredSignatures;
+	private Long numReadonlySignedAccounts;
+	private Long numReadonlyUnsignedAccounts;
+}
+
+\end{lstlisting}
+\item \texttt{Instruction}
+\begin{lstlisting}[language=Java, style=JavaStyle]
+package org.example.backend.blockchain.solana.transaction.entity.transaction.message.instruction;
+import ...
+
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+public class Instruction {
+
+	private String programIdIndex;
+	private List<String> accounts;
+	private String data;
+	private Integer stackHeight;
+}
+\end{lstlisting}
+\end{itemize}
+\item \textbf{\texttt{Block}} -- reprezentuje pojedynczy blok w blockchainie. Zawiera informacje o numerze bloku, dacie utworzenia, hashu bloku, poprzednim slocie, poprzednim hashu oraz liście transakcji zawartych w bloku.
+\begin{itemize}
+\item \texttt{SolanaBlock}
+\begin{lstlisting}[language=Java, style=JavaStyle]
+package org.example.backend.blockchain.solana.block.entity;
+import ...
+
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+public class SolanaBlock {
+
+	private String blockHeight;
+	private String blockTime;
+	private String blockHash;
+	private String parentSlot;
+	private String previousHash;
+	private Rewards rewards;
+	private List<String> transactions;
+}
+\end{lstlisting}
+\item \texttt{Rewards}
+\begin{lstlisting}[language=Java, style=JavaStyle]
+package org.example.backend.blockchain.solana.block.entity.rewards;
+import ...
+
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+public class Rewards {
+	private String commission;
+	private Long lamports;
+	private String postBalance;
+	private String pubkey;
+	private String rewardType;
+}
+\end{lstlisting}
+\end{itemize}
 \end{itemize}
 
 \noindent \textbf{Klasa do obsługi danych użytkownika~~}
 Klasa \texttt{Client} reprezentuje użytkownika w systemie i zawiera wszystkie istotne informacje o kliencie, takie jak identyfikator, nazwa użytkownika, hasło, klucze publiczne i prywatne oraz saldo konta. Klasa ta implementuje interfejs \texttt{UserDetails}, co oznacza, że jest wykorzystywana w systemie uwierzytelniania i autoryzacji opartym na Spring Security. Wraz z klasą \texttt{ClientDto} pełni rolę obiektu transferu danych (DTO), umożliwiając przesyłanie danych o kliencie pomiędzy warstwami aplikacji.\\[-10pt]
+\begin{lstlisting}[language=Java, style=JavaStyle]
+package org.example.backend.client.client.entity;
+import ...
+
+@Entity
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+public class Client implements UserDetails {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private UUID id;
+	@NotNull
+	private String username;
+	@NotNull
+	private String password;
+	@NotNull
+	private boolean enabled;
+	@NotNull
+	private String publicKey;
+	@NotNull
+	private String privateKey;
+	private Double balance;
+\end{lstlisting}
 
 \noindent \textbf{Klasa do obsługi kryptowalut~~}
 Przetwarzanie danych dotyczących kryptowalut wymagało zaimplementowania paru klas. Ich szczegóły opisano poniżej.
 \begin{itemize}
-	\item \texttt{Cryptocurrency} -- reprezentuje kryptowalutę w systemie, zawierającą szczegółowe informacje o jej identyfikatorze w systemie CoinMarketCap (\texttt{cmcId}), nazwie, symbolu, rankingu, podaży cyrkulującej, cenie, wolumenie oraz procentowej zmianie ceny w różnych okresach (1h, 24h, 7d). Klasa ta posiada również powiązanie z historią cen przez relację \texttt{OneToMany} z klasą \texttt{HistoricalData}, a także z platformą, na której kryptowaluta jest notowana, za pomocą relacji \texttt{OneToOne} z klasą \texttt{Platform}.
-	\item \texttt{Category} -- reprezentuje kategorię kryptowalut w systemie. Zawiera informacje o identyfikatorze kategorii, nazwie, tytule, opisie oraz dodatkowe dane statystyczne, takie jak liczba tokenów, średnia zmiana ceny, kapitalizacja rynkowa i wolumen. Klasa ta jest powiązana z klasą \texttt{Cryptocurrency} poprzez relację \texttt{OneToMany}, co oznacza, że każda kategoria może zawierać wiele kryptowalut. 
-	\item \textbf{Platform} Przechowuje szczegóły platform, na których działają kryptowaluty (np.\ Ethereum, Solana). System powinien obsługiwać mapowanie kryptowalut na platformy.
-	\item \texttt{FearAndGreed} -- reprezentuje dane dotyczące wskaźnika strachu i chciwości, który jest często wykorzystywany w analizach rynków finansowych, w tym kryptowalut. Klasa ta przechowuje informacje o wartości wskaźnika (\texttt{value}), jego klasyfikacji (\texttt{valueClassification}), oraz dacie, kiedy wskaźnik został zmierzony (\texttt{date}).
+	\item \texttt{Cryptocurrency} -- reprezentuje kryptowalutę w systemie, zawierającą szczegółowe informacje o jej identyfikatorze w systemie CoinMarketCap (\texttt{cmcId}), nazwie, symbolu, rankingu, podaży cyrkulującej, cenie, wolumenie oraz procentowej zmianie ceny w różnych okresach (1h, 24h, 7d). Klasa ta posiada również powiązanie z historią cen przez relację \texttt{OneToMany} z~klasą \texttt{HistoricalData}, a także z platformą, na której kryptowaluta jest notowana, za pomocą relacji \texttt{OneToOne} z klasą \texttt{Platform}.
+\begin{itemize}
+\item \texttt{Cryptocurrency}
+\begin{lstlisting}[language=Java, style=JavaStyle]
+package org.example.backend.cryptocurrency.cryptocurrency.entity.currency;
+import ...
+
+@Entity
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+public class Cryptocurrency {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	private Long cmcId;
+	private String name;
+	private Long cmcRank;
+	private String symbol;
+	private String circulatingSupply;
+	private double price;
+	private Long volume24h;
+	private double percentChange1h;
+	private double percentChange24h;
+	private double percentChange7d;
+	private Long marketCap;
+	@OneToMany(mappedBy = "cryptocurrency")
+	@JsonManagedReference
+	private List<HistoricalData> pricesAllTime;
+	@OneToOne
+	private Platform platform;
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Category category;
+}
+\end{lstlisting}
+\item \texttt{HistoricalData}
+\begin{lstlisting}[language=Java, style=JavaStyle]
+package org.example.backend.cryptocurrency.cryptocurrency.entity.historicalData;
+import ...
+
+@Entity
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+public class HistoricalData {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	private Long cmcId;
+	private Double price;
+	private String volume24h;
+	private String circulatingSupply;
+	@Column(name = "date")
+	private String date;
+	private String marketCap;
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Cryptocurrency cryptocurrency;
+}
+\end{lstlisting}
+\end{itemize}
+	\item \texttt{Category} -- reprezentuje kategorię kryptowalut w systemie. Zawiera informacje o identyfikatorze kategorii, nazwie, tytule, opisie oraz dodatkowe dane statystyczne, takie jak liczba tokenów, średnia zmiana ceny, kapitalizacja rynkowa i wolumen. Klasa ta jest powiązana z~klasą \texttt{Cryptocurrency} poprzez relację \texttt{OneToMany}, co oznacza, że każda kategoria może zawierać wiele kryptowalut. 
+\begin{lstlisting}[language=Java, style=JavaStyle]
+package org.example.backend.cryptocurrency.categories.entity;
+import ...
+
+@Entity
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+public class Category {
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@Column(name = "id", nullable = false)
+	private Long id;
+	private String categoryId;
+	private String name;
+	private String title;
+	private String description;
+	private Long numberOfTokens;
+	private Double avgPriceChange;
+	private String marketCap;
+	private String marketCapChange;
+	private String volume;
+	private String volumeChange;
+	@OneToMany(mappedBy = "category")
+	private List<Cryptocurrency> cryptocurrencies;
+}
+
+\end{lstlisting}
+\item \textbf{Platform} Przechowuje szczegóły platform, na których działają kryptowaluty (np.\ Ethereum, Solana). System powinien obsługiwać mapowanie kryptowalut na platformy.
+\begin{lstlisting}[language=Java, style=JavaStyle]
+package org.example.backend.cryptocurrency.cryptocurrency.entity.platform;
+import ...
+
+@Entity
+@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class Platform {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	private Long platformId;
+	private String name;
+	private String symbol;
+	private String tokenAddress;
+	private Long cmcId;
+	@OneToOne
+	private Cryptocurrency cryptocurrency;
+}
+\end{lstlisting}
+\item \texttt{FearAndGreed} -- reprezentuje dane dotyczące wskaźnika strachu i chciwości, który jest często wykorzystywany w analizach rynków finansowych, w tym kryptowalut. Klasa ta przechowuje informacje o wartości wskaźnika (\texttt{value}), jego klasyfikacji (\texttt{valueClassification}), oraz dacie, kiedy wskaźnik został zmierzony (\texttt{date}).
+\begin{lstlisting}[language=Java, style=JavaStyle]
+package org.example.backend.cryptocurrency.globalMarket.entity;
+import ...
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class FearAndGreed {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	private int value;
+	private String valueClassification;
+	private String date;
+}
+\end{lstlisting}
 \end{itemize}
 
 \noindent \textbf{Klasy odpowiedzialne za NFT~~}
@@ -501,9 +947,177 @@ Obsługa NFT wymagała zaimplementowania kilku klas. Ich szczegóły opisano pon
 \begin{itemize}
 	\item \texttt{NFT} -- reprezentuje pojedynczy token NFT (Non-Fungible Token) w systemie, przechowując szczegóły dotyczące tokena, takie jak identyfikator, standard tokena, nazwę, opis, URL do obrazu, animacji, oraz metadanych. Dodatkowo, klasa ta zawiera informacje na temat platformy, statusu tokena (czy jest wyłączony, NSFW, podejrzany), a także jego twórcy.\newline
 Klasa \texttt{NFT} jest powiązana z klasą \texttt{Collection} przez relację \texttt{ManyToOne}, co oznacza, że jeden NFT należy do jednej kolekcji. Ponadto, klasa ta posiada relację \texttt{OneToMany} z klasami \texttt{NFTTrait} i \texttt{NFTOwner}, reprezentującymi cechy i właścicieli tokena, odpowiednio. 
+\begin{itemize}
+\item \texttt{NFT}
+\begin{lstlisting}[language=Java, style=JavaStyle]
+package org.example.backend.nft.entity.nft;
+import ...
+
+@Entity
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class NFT {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
+	private String identifier;
+	private String contract;
+	private String tokenStandard;
+	private String name;
+	@Column(length = 1000)
+	private String description;
+	private String imageUrl;
+	private String displayImageUrl;
+	private String displayAnimationUrl;
+	private String metadataUrl;
+	private String openseaUrl;
+	private String updatedAt;
+	private Boolean isDisabled;
+	private Boolean isNsfw;
+	private Boolean isSuspicious;
+	private String animationUrl;
+	private String creator;
+	@ManyToOne
+	@JoinColumn(name = "collection_id")
+	private Collection collection;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "nft_id")
+	private List<NFTTrait> traits;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "nft_id")
+	private List<NFTOwner> owners;
+	@Embedded
+	private NFTRarity rarity;
+}
+\end{lstlisting}
+
+\item \texttt{NFTTrait}
+\begin{lstlisting}[language=Java, style=JavaStyle]
+package org.example.backend.nft.entity.nft.trait;
+import ...
+
+@Entity
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class NFTTrait {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	private String traitType;
+	private String displayType;
+	private String maxValue;
+	private String value;
+	@ManyToOne
+	@JoinColumn(name = "nft_id")
+	private NFT nft;
+}
+\end{lstlisting}
+\item \texttt{NFTRarity}
+\begin{lstlisting}[language=Java, style=JavaStyle]
+package org.example.backend.nft.entity.nft.rarity;
+import ...
+
+@Embeddable
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class NFTRarity {
+	private String strategyVersion;
+	private int rank;
+	private double score;
+	private String calculatedAt;
+	private int maxRank;
+	private int totalSupply;
+	private int uniqueAttributeCount;
+}
+\end{lstlisting}
+\item \texttt{NFTOwner}
+\begin{lstlisting}[language=Java, style=JavaStyle]
+package org.example.backend.nft.entity.nft.owner;
+import ...
+
+@Entity
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class NFTOwner {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String address;
+    private int quantity;
+
+    @ManyToOne
+    @JoinColumn(name = "nft_id")
+    private NFT nft;
+}
+\end{lstlisting}
+\end{itemize}
+
 	\item \texttt{Collection} -- klasa ta reprezentuje kolekcję NFT, która zawiera szereg informacji o grupie powiązanych tokenów. Klasa ta przechowuje dane takie jak unikalny identyfikator kolekcji, jej nazwę, opis, obrazek kolekcji, adresy kontraktów blockchain oraz linki do zewnętrznych stron, takich jak OpenSea, Discord, Twitter, czy Instagram.
 \newline
 Klasa \texttt{Collection} posiada również flagi opisujące, czy kolekcja jest wyłączona, oraz czy oferowanie przedmiotów (traits) i ofert kolekcji jest włączone. Związana jest z klasą \texttt{NFT} przez relację \texttt{OneToMany}, co oznacza, że kolekcja może zawierać wiele tokenów NFT. Ponadto, lista kontraktów powiązanych z kolekcją jest przechowywana za pomocą adnotacji \texttt{@ElementCollection}.
+\begin{lstlisting}[language=Java, style=JavaStyle]
+package org.example.backend.nft.entity.collection;
+import ...
+
+@Entity
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class Collection {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	private String slug;
+	private String name;
+	@Column(length = 1000)
+	private String description;
+	private String imageUrl;
+	private String bannerImageUrl;
+	private String externalUrl;
+	private String blockchain;
+	private String owner;
+	private String category;
+	private boolean isDisabled;
+	private boolean traitOffersEnabled;
+	private boolean collectionOffersEnabled;
+	private String openseaUrl;
+	private String projectUrl;
+	private String wikiUrl;
+	private String discordUrl;
+	private String telegramUrl;
+	private String twitterUsername;
+	private String instagramUsername;
+	@ElementCollection
+	@Column(name = "contract_address")
+	private List<String> contracts;
+	@Column(length = 100)
+	private String requiredZone;
+	private int totalSupply;
+	@Column(length = 100)
+	private String rarityStrategyVersion;
+	@Column(length = 50)
+	private String createdDate;
+	@OneToMany(mappedBy = "collection", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<NFT> nfts;
+}
+\end{lstlisting}
+
 \end{itemize}
 
 \subsection{Struktura źródeł kodu}
@@ -530,7 +1144,7 @@ Struktura katalogów w aplikacji frontendowej jest zorganizowana w sposób, któ
 
 \noindent \textbf{Skrypty do interakcji z blockchinem Solany~~}
 %działanie, wywoływanie, Dockerfile i biblioteki
-Folder \texttt{solanaScripts} zawiera skrypty odpowiedzialne za interakcję z blockchainem Solany. Umożliwiają one wykonywanie takich operacji, jak tworzenie konta, wykonywanie operacji \texttt{airdrop} oraz symulowanie transakcji. Do obsługi interakcji z blockchainem Solany wykorzystuje się w nich bibliotekę \texttt{@solana/web3.js}
+Folder \texttt{solanaScripts} zawiera skrypty odpowiedzialne za interakcję z~blockchainem Solany \cite{advanced_blockchain_development}. Umożliwiają one wykonywanie takich operacji, jak tworzenie konta, wykonywanie operacji \texttt{airdrop} oraz symulowanie transakcji. Do obsługi interakcji z blockchainem Solany wykorzystuje się w nich bibliotekę \texttt{@solana/web3.js}
 
 Struktura folderu \texttt{solanaScripts} wygląda następująco:
 \begin{lstlisting}[basicstyle=\footnotesize\ttfamily,tabsize=4]

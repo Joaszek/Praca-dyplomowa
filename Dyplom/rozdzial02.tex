@@ -5,7 +5,7 @@ W rozdziale przedstawiono analizę wymagań, od ogólnych założeń po szczegó
 Przystępując do realizacji projektu założono, że budowana platforma będzie oferować użytkownikom szeroki wachlarz funkcji, umożliwiając im nie tylko naukę, ale także interakcję z rzeczywistymi danymi blockchainowymi. Zakres tych interakcji opisano w punktach poniżej.
 \begin{itemize}
 \item \textbf{Wybór konkretnego blockchaina do analiz i operacji:} platforma będzie oferowała możliwość wyboru obsługiwanego blockchaina, czym różnić się będzie od istniejących serwisów, takich jak Etherscan (skoncentrowanego na Ethereum) czy Solscan (dedykowanego Solanie).
-\item \textbf{Sprawdzanie danych z blockchainów}: użytkownicy będą mogli przeglądać aktualne informacje o transakcjach, stanie kont i opłatach w wybranych blockchainach. Dzięki integracji z Alchemy, platforma będzie zapewniała bezpośredni dostęp do danych blockchainowych w~czasie rzeczywistym. 
+\item \textbf{Sprawdzanie danych z blockchainów}: użytkownicy będą mogli przeglądać aktualne informacje o transakcjach, stanie kont i opłatach w wybranych blockchainach. Dzięki integracji z~Alchemy \cite{alchemy_api}, platforma będzie zapewniała bezpośredni dostęp do danych blockchainowych w~czasie rzeczywistym. 
 \item \textbf{Symulacja transakcji na blockchainie Solana}: platforma umożliwi użytkownikom przeprowadzenie symulowanych transakcji, co pozwoli na lepsze zrozumienie mechanizmów przesyłania środków bez ryzyka utraty realnych środków. 
 \item \textbf{Przewidywanie cen kryptowalut}: użytkownicy będą mogli uzyskać prognozy dotyczące cen kryptowalut dzięki wykorzystaniu modeli sztucznej inteligencji, co pomoże im w podejmowaniu decyzji inwestycyjnych. Model ten będzie analizować dane historyczne i bieżące, generując prognozy, które będą udostępniane użytkownikom w aplikacji.
 \item \textbf{Dostęp do materiałów edukacyjnych}: platforma będzie zawierać linki do kursów wideo, artykułów oraz innych materiałów edukacyjnych, które pozwolą użytkownikom poszerzać wiedzę na temat technologii blockchain. 
@@ -20,7 +20,7 @@ Sposób sposobu dostarczenia tych funkcji wymaga dalszego komentarza:
 \item Użytkownicy powinni mieć dostęp do danych związanych z NFT, w tym szczegółowych informacji o kolekcjach i tokenach oraz ich statystykach. System musi również umożliwiać realizację operacji blockchainowych, takich jak symulacje transakcji czy airdropy, które są wykonywane za pomocą dedykowanych skryptów Node.js.
 \end{itemize}
 
-Pod względem niefunkcjonalnym aplikacja musi być wydajna, obsługując wiele równoczesnych zapytań REST bez znaczącego spadku wydajności. Dynamiczne pobieranie danych blockchainowych z zewnętrznych API, takich jak Etherscan czy CoinMarketCap, musi odbywać się w czasie rzeczywistym z minimalnym opóźnieniem. System musi być skalowalny.
+Pod względem niefunkcjonalnym aplikacja musi być wydajna, obsługując wiele równoczesnych zapytań REST bez znaczącego spadku wydajności. Dynamiczne pobieranie danych blockchainowych z zewnętrznych API, takich jak Etherscan \cite{etherscan_api} czy CoinMarketCap \cite{coinmarketcap_api}, musi odbywać się w czasie rzeczywistym z minimalnym opóźnieniem. System musi być skalowalny.
 
 \subsection{Zarys architektury}\label{subsec:ZarysArchitektury}
 Architektura systemu opierać się na modularnym podejściu, z wyraźnym podziałem na frontend i backend, wspierane przez skrypty Node.js i Python oraz bazę danych PostgreSQL. Dzięki konteneryzacji każdy komponent powinien dać się uruchomić w izolowanym środowisku. Interakcje między komponentami odbywać się mają za pomocą protokołu REST, z uwierzytelnieniem opartym na OAuth2 i tokenach JWT.
@@ -37,13 +37,11 @@ Każdy komponent działać ma jako osobny moduł, uruchamiany w odrębnym konten
 
 Bezpieczeństwo aplikacji jest priorytetem. Wszystkie dane przesyłane między frontendem a~backendem muszą być zabezpieczone za pomocą szyfrowania HTTPS, a tokeny JWT muszą być przechowywane w sposób bezpieczny w przeglądarce użytkownika. System musi być odporny na ataki oraz zapewniać ochronę przed nieautoryzowanym dostępem.
 
-Backend, pełniący rolę centralnego punktu przetwarzania danych, zostanie zaimplementowany w Spring Boot 3 z użyciem Javy 21. Do zarządzania danymi użytkowników oraz NFT w bazie PostgreSQL wykorzystany zostanie \texttt{CrudRepository} ze Spring Data JPA. Informacje blockchainowe, takie jak transakcje i dane tokenów, będą pobierane w czasie rzeczywistym z API dostawców, takich jak Etherscan i CoinMarketCap (zakłada się możliwość zamockowania tych API do celów testowania). Backend dodatkowo wykorzystany zostanie Node.js do realizacji zaawansowanych operacji blockchainowych, w tym symulacji transakcji oraz airdropów.
+Backend, pełniący rolę centralnego punktu przetwarzania danych, zostanie zaimplementowany w Spring Boot 3 z użyciem Javy 21. Do zarządzania danymi użytkowników oraz NFT w bazie PostgreSQL wykorzystany zostanie \texttt{CrudRepository} ze Spring Data JPA. Informacje blockchainowe, takie jak transakcje i dane tokenów, będą pobierane w czasie rzeczywistym z~API dostawców, takich jak Etherscan \cite{etherscan_api} i CoinMarketCap \cite{coinmarketcap_api} (zakłada się możliwość zamockowania tych API do celów testowania). Backend dodatkowo wykorzystany zostanie Node.js do realizacji zaawansowanych operacji blockchainowych, w tym symulacji transakcji oraz airdropów.
 
 Frontend, zbudowany w React, działać ma jako aplikacja wielostronicowa MPA (ang.~\emph{Multi-Page Application}). Komunikację z backendem zapewnić ma użycie biblioteki \texttt{axios}. Autoryzacja użytkowników zostanie realizowana za pomocą tokenów JWT przechowywanych w~\texttt{localStorage}, co zapewni bezpieczeństwo sesji oraz ochronę komunikacji między komponentami.
 
 System musi być również łatwy w utrzymaniu. Kod aplikacji musi być zgodny z najlepszymi praktykami programistycznymi. Planowane jest wdrożenie pipeline’u CI/CD do automatyzacji procesu budowy, testowania i wdrażania.
-
-% TO DO: tutaj jeszcze tryb niedokonany - planujemy, co ma być wykonane
 
 \section{Analiza wymagań}
 Na podstawie założeń ogólnych sformułowano wymagania szczegółowe. Zestawiono je poniżej. Stanowią one uzupełnienie do opisanych już założeń ogólnych. 
