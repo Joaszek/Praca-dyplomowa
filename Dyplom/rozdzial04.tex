@@ -56,7 +56,6 @@ package org.example.backend.blockchain.ethereum.block.mapper;
 import ...
 
 public class EthereumBlockMapperTest {
-
     @Test
     public void testMapToEthereumBlockDto() {
         EthereumBlock ethereumBlock = new EthereumBlock();
@@ -72,7 +71,6 @@ public class EthereumBlockMapperTest {
 
         List<Withdrawal> withdrawals = Arrays.asList(withdrawal);
         ethereumBlock.setWithdrawals(withdrawals);
-
         EthereumBlockDto ethereumBlockDto = EthereumBlockMapper.toDto(ethereumBlock);
 
         assertEquals(ethereumBlock.getNumber(), ethereumBlockDto.getNumber());
@@ -81,7 +79,6 @@ public class EthereumBlockMapperTest {
         assertEquals(ethereumBlock.getWithdrawals().size(), ethereumBlockDto.getWithdrawals().size());
         assertEquals(ethereumBlock.getWithdrawals().get(0).getIndex(), ethereumBlockDto.getWithdrawals().get(0).getIndex());
     }
-
     ...
 }
 \end{lstlisting}
@@ -94,7 +91,6 @@ Przykładowy test dla klasy \texttt{SolanaTransactionService}
 import .
 
 public class SolanaTransactionServiceTest {
-
     @Mock
     private RestTemplate restTemplate;
 
@@ -109,18 +105,13 @@ public class SolanaTransactionServiceTest {
     @Test
     public void testGetTransaction_Success() {
         String mockTransactionResponse = "{\"result\": {\"transaction\": {\"signature\": \"...\"}}}";
-
         when(restTemplate.postForObject(anyString(), any(), eq(String.class)))
                 .thenReturn(mockTransactionResponse);
-
         SolanaTransactionDto expectedDto = new SolanaTransactionDto("abcd1234");
-
         Optional<SolanaTransactionDto> result = solanaTransactionService.getTransaction("...");
-
         assertTrue(result.isPresent());
         assertEquals(expectedDto.getSignature(), result.get().getSignature());
     }
-
     ...
 }
 \end{lstlisting}

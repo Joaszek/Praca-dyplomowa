@@ -117,7 +117,7 @@ Backend musi obsługiwać co najmniej 100 równoczesnych zapytań REST bez znacz
 System musi być skalowalny i dostosowany do zwiększającej się liczby użytkowników. Planowane wdrożenie w chmurze AWS z wykorzystaniem Elastic Load Balancer (ELB) umożliwi równoważenie obciążenia oraz dynamiczne zarządzanie zasobami.
 
 \paragraph{Bezpieczeństwo}
-Wszystkie dane przesyłane między frontendem a backendem muszą być zabezpieczone szyfrowaniem HTTPS. Tokeny JWT muszą być bezpiecznie przechowywane w \texttt{localStorage} i weryfikowane przez backend przy każdym zapytaniu. System musi być odporny na ataki CSRF i XSS, a dane użytkowników muszą być chronione przed nieautoryzowanym dostępem.
+Wszystkie dane przesyłane między frontendem a backendem muszą być zabezpieczone szyfrowaniem HTTPS. Tokeny JWT muszą być bezpiecznie przechowywane w~\texttt{localStorage} i weryfikowane przez backend przy każdym zapytaniu. System musi być odporny na ataki CSRF i XSS, a dane użytkowników muszą być chronione przed nieautoryzowanym dostępem.
 
 \paragraph{Niezawodność}
 Aplikacja musi zapewniać 99,9\% dostępności, co zostanie osiągnięte dzięki konteneryzacji oraz planowanemu wdrożeniu na AWS. Mechanizmy monitorowania i powiadamiania o błędach lub awariach muszą zapewnić szybką reakcję na problemy.

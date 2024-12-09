@@ -127,7 +127,7 @@ Kontener frontendowy współpracuje z backendem, który realizuje logikę aplika
 \begin{itemize}
     \item \textbf{Kontener frontendowy i backendowy}: Kontener frontendowy, odpowiedzialny za interfejs użytkownika, wysyła żądania HTTP do kontenera backendowego. Aplikacja frontendowa, napisana w React, korzysta z API udostępnionego przez aplikację backendową za pomocą axios do pobierania i wysyłania danych. Komunikacja odbywa się przez porty udostępnione w konfiguracji Docker Compose.
     \item \textbf{Kontener backendowy i baza danych PostgreSQL}: Aplikacja backendowa komunikuje się z bazą danych PostgreSQL w celu przechowywania i pobierania danych. Backend korzysta z~JPA (Java Persistence API) do wykonywania operacji CRUD na bazie danych.
-    \item \textbf{Kontener backendowy i kontener Node.js}: Kontener Node.js pełni rolę interfejsu między aplikacją backendową a blockchainem Solany w kontekście wykonywania operacji na blockchainie, a nie pobieraniu danych z niego. Backend wysyła zapytania do kontenera Node.js w celu wykonania skryptów Solany, które mogą tworzyć konto, symulować transakcję oraz wykonywać operację airdrop. Kontener Node.js uruchamia odpowiednie skrypty do interakcji z blockchainem, wykorzystując bibliotekę @solana/web3.js.
+    \item \textbf{Kontener backendowy i kontener Node.js}: Kontener Node.js pełni rolę interfejsu między aplikacją backendową a blockchainem Solany w kontekście wykonywania operacji na blockchainie, a nie pobieraniu danych z niego. Backend wysyła zapytania do kontenera Node.js w~celu wykonania skryptów Solany, które mogą tworzyć konto, symulować transakcję oraz wykonywać operację airdrop. Kontener Node.js uruchamia odpowiednie skrypty do interakcji z blockchainem, wykorzystując bibliotekę @solana/web3.js.
 		\item \textbf{Kontener backendowy i kontener ModelContainer}: Aplikacja backendowa wysyła zapytanie na kontener ModelContainer, tak aby uzyskać dane dotyczące przewidzianych cen. 
     \item \textbf{Kontener Node.js i blockchain Solany}: Kontener Node.js, uruchamiający skrypty Solany, komunikuje się z siecią blockchain Solany poprzez RPC endpointy. Skrypty w kontenerze Node.js są odpowiedzialne za tworzenie konta, symulowanie transakcji oraz wykonywanie operacji airdrop. Wyniki tych skryptów są następnie odbierane przez klasę serwisą, i zwracane do kontrolera, który wysyłaja je na frontend.
     \item \textbf{Kontener pgAdmin i baza danych PostgreSQL}: Kontener pgAdmin umożliwia zarządzanie bazą danych PostgreSQL poprzez interfejs graficzny. Administratorzy mogą monitorować, modyfikować oraz zarządzać strukturą bazy danych, korzystając z pgAdmin, który łączy się z kontenerem bazy danych PostgreSQL.
@@ -655,7 +655,7 @@ public class SolanaAccount {
 	private String rentEpoch;
 }
 	\end{lstlisting}
-\item \texttt{Transaction} -- jest odpowiedzialna za przechowywanie informacji o pojedynczej transakcji w blockchainie. Zawiera dane takie jak czas bloku, slot, listę sygnatur oraz informacje o Message transakcji, adresy nadawcy i odbiorcy, kwotę oraz status transakcji.
+\item \texttt{Transaction} -- jest odpowiedzialna za przechowywanie informacji o pojedynczej transakcji w blockchainie. Zawiera dane takie jak czas bloku, slot, listę sygnatur oraz informacje o~\texttt{Message} transakcji, adresy nadawcy i odbiorcy, kwotę oraz status transakcji.
 \begin{itemize}
 \item \texttt{SolanaTransaction}
 \begin{lstlisting}[language=Java, style=JavaStyle]
@@ -1156,9 +1156,9 @@ solanaScripts/
 		|-- Dockerfile # Obraz 
 \end{lstlisting}
 
-Skrypty w folderze \texttt{solanaScripts} są wywoływane z aplikacji backendowej w momencie, gdy użytkownik wysyła odpowiednie zapytanie. Aplikacja backendowa wysyła zapytanie do kontenera Nodejs, który korzystając z biblioteki \texttt{'@solana/web3.js'} uruchamia odpowiednie skrypty Solany. \texttt{@solana/web3.js} to oficjalna biblioteka JavaScript służąca do interakcji z blockchainem Solany.  
+Skrypty w folderze \texttt{solanaScripts} są wywoływane z aplikacji backendowej w momencie, gdy użytkownik wysyła odpowiednie zapytanie. Aplikacja backendowa wysyła zapytanie do kontenera Node.js, który korzystając z biblioteki \texttt{@solana/web3.js} uruchamia odpowiednie skrypty Solany. \texttt{@solana/web3.js} to oficjalna biblioteka JavaScript służąca do interakcji z~blockchainem Solany.  
 
-Poniżej pokazano fragment implementacji skryptu \texttt{airdrop} z wykorzystaniem biblioteki \texttt{'@solana/web3.js'}:
+Poniżej pokazano fragment implementacji skryptu \texttt{airdrop} z wykorzystaniem biblioteki \texttt{@solana/web3.js}:
 \begin{lstlisting}[style=JavaScriptStyle]
 const { Connection, clusterApiUrl, PublicKey, LAMPORTS_PER_SOL } = require('@solana/web3.js');
 const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
