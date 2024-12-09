@@ -606,10 +606,8 @@ Do wytrenowania modelu konieczne było odpowiednie przygotowanie danych. Proces 
 \item \emph{Wyodrębnienie danych} -- z tabel wyodrębniono interesujące kolumny. W omawianym przypadku wybrano kolumnę \texttt{Price}, co miało gwarantować uczenia na bazie cen z każdego dnia.
 \item \emph{Skalowanie danych} -- do skalowania danych zastosowano \texttt{MinMaxScaler}, aby wartości cen zostały przekształcone w przedział \([0, 1]\).
 \item \emph{Przygotowanie sekwencji} -- dane podzielono na sekwencje o długości 60 kroków czasowych, gdzie każda sekwencja \texttt{X} zawiera 60 poprzednich punktów cenowych, a zmienna \texttt{y} zawiera cenę w kolejnym kroku czasowym:
-\begin{itemize}
-    \item \texttt{X} – wejściowe dane dla modelu,
-    \item \texttt{y} – docelowe dane (przewidywana cena).
-\end{itemize}
+\texttt{x} – wejściowe dane dla modelu,
+ \texttt{y} – docelowe dane (przewidywana cena).
 \item \emph{Podział na dane treningowe i testowe} -- dane zostały podzielone w stosunku 80\%/20\%, tak aby można było przetestować model.
 \end{itemize}
 

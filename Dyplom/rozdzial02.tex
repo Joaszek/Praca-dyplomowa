@@ -1,8 +1,7 @@
 \chapter{Analiza wymagań}
-\section{Założenia ogólne}
-% TO DO: tutaj jeszcze tryb niedokonany - planujemy, co ma być wykonane
-%        musiałem sporo przeredagować w tym rodziale, zmieniając jego układ, bo było bardzo dużo powtórzeń.
+W rozdziale przedstawiono analizę wymagań, od ogólnych założeń po szczegóły dotyczące zarówno planowanych funkcji systemu, jak i aspektów technicznych związanych z implementacją. Opisano też kluczowe funkcje platformy, takie jak przeglądanie danych blockchainowych, zarządzanie kryptowalutami i NFT, symulacje transakcji oraz przewidywanie cen z wykorzystaniem modeli AI. Wyróżnikiem aplikacji jest integracja z zewnętrznymi API blockchainowymi, co umożliwia dynamiczne pobieranie danych w czasie rzeczywistym i oferowanie unikalnych funkcji dla użytkowników.
 
+\section{Założenia ogólne}
 Przystępując do realizacji projektu założono, że budowana platforma będzie oferować użytkownikom szeroki wachlarz funkcji, umożliwiając im nie tylko naukę, ale także interakcję z rzeczywistymi danymi blockchainowymi. Zakres tych interakcji opisano w punktach poniżej.
 \begin{itemize}
 \item \textbf{Wybór konkretnego blockchaina do analiz i operacji:} platforma będzie oferowała możliwość wyboru obsługiwanego blockchaina, czym różnić się będzie od istniejących serwisów, takich jak Etherscan (skoncentrowanego na Ethereum) czy Solscan (dedykowanego Solanie).
@@ -24,7 +23,9 @@ Sposób sposobu dostarczenia tych funkcji wymaga dalszego komentarza:
 Pod względem niefunkcjonalnym aplikacja musi być wydajna, obsługując wiele równoczesnych zapytań REST bez znaczącego spadku wydajności. Dynamiczne pobieranie danych blockchainowych z zewnętrznych API, takich jak Etherscan czy CoinMarketCap, musi odbywać się w czasie rzeczywistym z minimalnym opóźnieniem. System musi być skalowalny.
 
 \subsection{Zarys architektury}\label{subsec:ZarysArchitektury}
-Architektura budowanej platformy ma być wielowarstwowa, z wyróżnionymi dwoma głównymi elementami: backendem i frontendem. Zarys tej architektury pokazano na rysunku~\ref{fig:ZarysyArchitekturySystemu}.
+Architektura systemu opierać się na modularnym podejściu, z wyraźnym podziałem na frontend i backend, wspierane przez skrypty Node.js i Python oraz bazę danych PostgreSQL. Dzięki konteneryzacji każdy komponent powinien dać się uruchomić w izolowanym środowisku. Interakcje między komponentami odbywać się mają za pomocą protokołu REST, z uwierzytelnieniem opartym na OAuth2 i tokenach JWT.
+
+Zarys architektury budowanego systemu pokazano na rysunku~\ref{fig:ZarysyArchitekturySystemu}.
 \begin{figure}[htb] %TO DO: proszę zamiast png wygenerować pdf
     \centering
     \includegraphics[width=0.7\linewidth]{Diagram.pdf}
@@ -47,7 +48,7 @@ System musi być również łatwy w utrzymaniu. Kod aplikacji musi być zgodny z
 \section{Analiza wymagań}
 Na podstawie założeń ogólnych sformułowano wymagania szczegółowe. Zestawiono je poniżej. Stanowią one uzupełnienie do opisanych już założeń ogólnych. 
 \subsection{Wymagania dziedzinowe}
-Zebrane poniżej wymagania podzielono na grupy w zależności od ich domeny zastosowania. %Poniżej przedstawiono szczegóły każdej z tych grup.
+Zebrane poniżej wymagania podzielono na grupy w zależności od domeny ich zastosowania. %Poniżej przedstawiono szczegóły każdej z tych grup.
 
 \paragraph{Kategorie i dane rynkowe}
 \begin{itemize}
@@ -88,13 +89,13 @@ Zebrane poniżej wymagania podzielono na grupy w zależności od ich domeny zast
 \end{itemize}
 
 \subsection{Przypadki użycia aplikacji}
-Aplikacja powinna umożliwiać realizację różnych scenariuszy użytkowania, dostosowanych do potrzeb użytkowników zainteresowanych blockchainami, kryptowalutami i NFT. Poniżej przedstawiono główne przypadki jej potencjalnego użycia.
+Aplikacja powinna umożliwiać realizację różnych scenariuszy użytkowania, stosownie do potrzeb użytkowników zainteresowanych blockchainami, kryptowalutami i NFT. Poniżej przedstawiono główne przypadki jej potencjalnego użycia.
 
 \paragraph{Przeglądanie danych blockchainowych}
 Użytkownik loguje się do aplikacji, a następnie może przeglądać szczegółowe dane blockchainowe dotyczące Bitcoin, Ethereum i Solana. Na przykład może wyszukiwać adresy blockchainowe, aby uzyskać historię transakcji, saldo lub dane o blokach, takie jak wysokość i czas utworzenia. Dane są pobierane w czasie rzeczywistym z~zewnętrznych API, co zapewnia aktualność informacji.
 
 \paragraph{Analiza kryptowalut i danych rynkowych}
-Użytkownik może przeglądać kategorie kryptowalut, ich dane historyczne oraz informacje o rynku globalnym, takie jak wskaźnik strachu i~chciwości. Na przykład może analizować historię cen kryptowalut z ostatnich 2 lat lub uzyskać dane o wolumenie obrotu dla wybranej kategorii. Te funkcje wspierają podejmowanie decyzji inwestycyjnych.
+Użytkownik może przeglądać kategorie kryptowalut, ich dane historyczne oraz informacje o rynku globalnym, ze wskaźnikami strachu i~chciwości. Historia cen kryptowalut może objąć 2 ostatnie lata, zaś dane dotyczyć mogą wolumenu obrotu dla wybranej kategorii, co może pomóc w podejmowanie decyzji inwestycyjnych.
 
 \paragraph{Zarządzanie kolekcjami NFT}
 Aplikacja pozwala przeglądać szczegóły dotyczące kolekcji NFT. Użytkownik może również wyszukiwać pojedyncze tokeny i sprawdzać ich metadane oraz historię transakcji. To przydatne dla kolekcjonerów i inwestorów NFT.
@@ -109,7 +110,7 @@ Model AI zintegrowany z aplikacją umożliwi prognozowanie cen kryptowalut. Uży
 Aplikacja pozwala uzyskać dane blockchainowe w czasie rzeczywistym dzięki dynamicznym połączeniom z API dostawców. Użytkownik może np. przeglądać najnowsze transakcje w sieci Solana lub analizować szczegóły tokenów ERC-20 na Ethereum. Funkcjonalność ta jest kluczowa dla osób potrzebujących aktualnych danych.
 
 \subsection{Wymagania niefunkcjonalne}
-Aplikacja powinna być zaprojektowana tak, aby spełnić wymagania co do jej wydajność, skalowalność, bezpieczeństwo oraz łatwość utrzymania zdefiniowane poniżej.
+Wymagania niefunkcjonalne aplikacji koncentrują się na wydajności, skalowalności, bezpieczeństwie oraz łatwości utrzymania. Planowane wdrożenie w chmurze AWS z wykorzystaniem Elastic Load Balancer (ELB) pozwolić ma na dynamiczne zarządzanie zasobami i równoważenie obciążenia. Dodatkowo, zastosowanie pipeline’u CI/CD usprawni procesy związane z utrzymaniem i rozwojem systemu, zapewniając jego długoterminową stabilność. Wymagania te uszczegółowiono poniżej.
 
 \paragraph{Wydajność}
 Backend musi obsługiwać co najmniej 100 równoczesnych zapytań REST bez znaczącego spadku wydajności. Dynamiczne pobieranie danych blockchainowych z zewnętrznych API musi odbywać się w czasie rzeczywistym z minimalnym opóźnieniem, aby zapewnić użytkownikom aktualne informacje.
@@ -130,16 +131,8 @@ Architektura aplikacji musi umożliwiać łatwe dodawanie nowych funkcjonalnośc
 Kod aplikacji musi być zgodny z najlepszymi praktykami, w tym zasadami SOLID i wzorcami projektowymi, co zapewni jego łatwą rozbudowę i utrzymanie. Planowane wdrożenie pipeline'u CI/CD usprawni procesy budowy, testowania i wdrażania.
 
 \paragraph{Zgodność technologiczna}
-Aplikacja musi działać w środowisku obsługującym Dockera. Backend opiera się na Javie 21 i Spring Boot 3, a frontend został zaimplementowany w React, co zapewnia kompatybilność z nowoczesnymi przeglądarkami, takimi jak Chrome, Firefox i Safari.
+Aplikacja musi działać w środowisku obsługującym Dockera. Backend opiera się na Javie 21 i Spring Boot 3, a frontend został zaimplementowany w React, co zapewnia kompatybilność z nowoczesnymi przeglądarkami, takimi jak Chrome, Firefox i Safari.\\
 
-
-\section{Podsumowanie}
-
-W rozdziale przedstawiono analizę wymagań, od ogólnych założeń po szczegóły dotyczące zarówno planowanych funkcji systemu, jak i aspektów technicznych związanych z ich implementacją. Opisano kluczowe funkcje platformy, takie jak przeglądanie danych blockchainowych, zarządzanie kryptowalutami i NFT, symulacje transakcji oraz przewidywanie cen z wykorzystaniem modeli AI. Wyróżnikiem aplikacji jest integracja z zewnętrznymi API blockchainowymi, co umożliwia dynamiczne pobieranie danych w czasie rzeczywistym i oferowanie unikalnych funkcji dla użytkowników.
-
-Architektura systemu opiera się na modularnym podejściu, z wyraźnym podziałem na frontend i backend, wspieranych przez skrypty Node.js i Python oraz bazę danych PostgreSQL. Dzięki konteneryzacji każdy komponent działa w izolowanym środowisku, co zapewnia elastyczność, skalowalność i łatwość utrzymania. Interakcje między komponentami odbywają się za pomocą protokołu REST, z uwierzytelnieniem opartym na OAuth2 i tokenach JWT, co gwarantuje bezpieczeństwo komunikacji.
-
-Wymagania niefunkcjonalne aplikacji koncentrują się na wydajności, skalowalności oraz niezawodności. Planowane wdrożenie w chmurze AWS z wykorzystaniem Elastic Load Balancer (ELB) pozwoli na dynamiczne zarządzanie zasobami i równoważenie obciążenia. Dodatkowo, zastosowanie pipeline’u CI/CD usprawni procesy związane z utrzymaniem i rozwojem systemu, zapewniając jego długoterminową stabilność.
 
 Podsumowując, aplikacja ma być wszechstronnym narzędziem, które dzięki modularnej architekturze i zaawansowanym funkcjom sprosta wymaganiom zarówno inwestorów, jak i entuzjastów blockchainów. System oferować ma wysoką elastyczność i bezpieczeństwo, co uczyni go odpowiednim rozwiązaniem dla dynamicznie zmieniającego się rynku kryptowalut i technologii blockchain.
 
